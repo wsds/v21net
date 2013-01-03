@@ -32,13 +32,63 @@
     <div class="content">
 
         <div class="intro">
-            <div class="articleTitle normalTitle">
-                <h2>数据中心</h2>
+
+            <div class="articleTitle normalTitle"
+                 style="background: #354B66 url(/static/images/openmail/logo_bottom0a54e0.png) bottom no-repeat;">
+                <h2 style="float: left;">数据中心</h2>
+
+                <div class="clr"></div>
+                <div id="login" class="account" tabindex="-1" hidefocus="" style="right: 640px;outline: none;"><a
+                        id="login_toggle" class="account-toggle" href="javascript:;"><span
+                        class="toggle-down"></span> 化妆品产品信息</a>
+
+
+                    <div id="login_menu" class="afterlogin hide" style="left:0px">
+                        <ul class="productlist">
+                            <li><a data-uigroup="dialog" target="_blank"
+                                   href="javascript:;">化妆品产品信息</a></li>
+                            <li><a data-uigroup="dialog" target="_blank"
+                                   href="javascript:;">香烟行业信息</a>
+                            </li>
+                            <li class="loginout"><a
+                                    href="javascript:;">创建一个新的数据中心</a></li>
+                            <ul></ul>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div id="login" class="account" tabindex="-1" hidefocus="" style="outline:none"><a
+                        id="login_toggle" class="account-toggle" href="javascript:;">登录<span class="toggle-down"></span></a>
+
+                    <div id="login_menu" class="afterlogin hide" style="">
+                        <ul class="productlist">
+                            <li><a data-uigroup="dialog" target="_blank"
+                                   href="/cgi-bin/qm_help_mailme?sid=Gi8fcbdOdFm9GBpK&amp;t=open_mailme">获取邮我按钮</a></li>
+                            <li><a data-uigroup="dialog" target="_blank"
+                                   href="/cgi-bin/qm_help_mailme?sid=Gi8fcbdOdFm9GBpK&amp;t=open_share">获取分享按钮</a></li>
+                            <li><a data-uigroup="dialog" target="_blank"
+                                   href="http://list.qq.com/cgi-bin/login?vm=pt&amp;Fun=clientread&amp;httptype=0&amp;from=openmail">开始使用邮件列表</a>
+                            </li>
+                            <li><a data-uigroup="dialog" target="_blank"
+                                   href="/cgi-bin/communication?sid=Gi8fcbdOdFm9GBpK&amp;t=open_communication&amp;action=">开始使用他域互通</a>
+                            </li>
+                            <li><a data-uigroup="dialog" target="_blank"
+                                   href="/cgi-bin/dy_template?sid=Gi8fcbdOdFm9GBpK&amp;t=dy_loginpage">申请接入订阅开放平台</a>
+                            </li>
+                            <li class="loginout"><a onmousedown="location.href='/cgi-bin/logout?sid=Gi8fcbdOdFm9GBpK';"
+                                                    href="javascript:;">退出登录</a></li>
+                            <ul></ul>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
 
             <div class="nav">
                 <ul id="slide_ctrls">
-                    <li><a class="slide-ctrl nav-item-1" href="javascript:;"><span class="nav-item-icon"></span><span>概况</span></a>
+                    <li><a class="slide-ctrl nav-item-1" href="javascript:;"><span
+                            class="nav-item-icon"></span><span>概况</span></a>
                     </li>
                     <li><a class="slide-ctrl nav-item-2" href="javascript:;"><span class="nav-item-icon"></span><span>元数据</span></a>
                     </li>
@@ -51,94 +101,35 @@
                 </ul>
             </div>
             <div class="main" id="slide_contents">
-                <div class="slide-content main-content main-mailme">
-                    <div class="main-content-info">
-                        <h2>打造专业的反馈邮箱</h2>
-
-                        <p>“邮我”组件可以生成“给我写信”的快捷方式，可放置于您的网站或博客上，作为反馈邮箱。除了比文字链接更美观外，“邮我”组件还可以避免邮箱地址泄漏、被“网络爬虫”自动收集等问题。</p>
-
-                        <p class="btn"><a data-uigroup="dialog" class="button-blue" target="_blank"
-                                          href="http://open.mail.qq.com/cgi-bin/qm_help_mailme?sid=EybMV5HijaB_WlgI&t=open_mailme">获取邮我按钮</a>
-                        </p>
-                    </div>
+                <div class="slide-content main-content main-feedback">
                     <div class="main-content-pic">
-                        <img src="./QQ邮箱开放平台_files/open_mailme0a54e0.png">
-                        <a class="mailto-albert" target="_blank"
-                           href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=vdjU087J2NTT-czMk97S0A"></a>
-                    </div>
-                </div>
-                <div class="slide-content main-content main-share">
-                    <div class="main-content-info">
-                        <h2>提供分享内容的渠道</h2>
-
-                        <p>“分享”组件可以生成“分享给好友”的快捷方式，可放置于您网站或博客的内容页面内。“分享”组件提供了一个主动传播的渠道，访问者可以点此按钮，将感兴趣的内容及时邮件分享给好友。</p>
-
-                        <p class="btn"><a data-uigroup="dialog" class="button-blue" target="_blank"
-                                          href="http://open.mail.qq.com/cgi-bin/qm_help_mailme?sid=EybMV5HijaB_WlgI&t=open_share">获取分享按钮</a>
-                        </p>
-                    </div>
-                    <div class="main-content-pic">
-                        <img src="./QQ邮箱开放平台_files/open_share0a54e0.png">
-                    </div>
-                </div>
-                <div class="slide-content main-content main-maillist">
-                    <div class="main-content-info">
-                        <h2>给我的订户发送文章</h2>
-
-                        <p>“邮件列表”是用于给订阅用户批量发信的免费服务。在网站或者博客上创建订阅入口，便可获得您的订户。</p>
-
-                        <p class="btn"><a data-uigroup="dialog" class="button-blue" target="_blank"
-                                          href="http://list.qq.com/cgi-bin/login?vm=pt&Fun=clientread&httptype=0&from=openmail">开始使用</a>
-                        </p>
-                    </div>
-                    <div class="main-content-pic">
-                        <img src="./QQ邮箱开放平台_files/open_maillist0a54e0.png">
-                    </div>
-                </div>
-                <div class="slide-content main-content main-connect current">
-                    <div class="main-content-info">
-                        <h2>获取来信到达质量</h2>
-
-                        <p>“他域互通”是为他域邮箱管理员提供的一项服务，可以籍此查询每天发往QQ邮箱的邮件到达数据，用户的阅读、删除和投诉数据，还可以进行相应的反垃圾管理。</p>
-
-                        <p class="btn"><a data-uigroup="dialog" class="button-blue" target="_blank"
-                                          href="http://open.mail.qq.com/cgi-bin/communication?sid=EybMV5HijaB_WlgI&t=open_communication&action=">开始使用</a>
-                        </p>
-                    </div>
-                    <div class="main-content-pic">
-                        <img src="./QQ邮箱开放平台_files/open_connect0a54e0.png">
-                    </div>
-                </div>
-                <div class="slide-content main-content main-magazine">
-                    <div class="main-content-info">
-                        <h2>与QQ邮箱共享数亿用户</h2>
-
-                        <p>“订阅开放平台”是QQ邮箱免费的内容接入平台。依托QQ邮箱海量用户群体以及强大的技术运营支持，接入优质的订阅内容，可迅速找到目标用户群体，提升自身品牌价值。</p>
-
-                        <p class="btn"><a data-uigroup="dialog" class="button-blue" target="_blank"
-                                          href="http://open.mail.qq.com/cgi-bin/dy_template?sid=EybMV5HijaB_WlgI&t=dy_loginpage">申请接入</a>
-                        </p>
-                    </div>
-                    <div class="main-content-pic">
-                        <img src="./QQ邮箱开放平台_files/open_magazine0a54e0.png">
+                        <img src="/static/images/open_connect0a54e0.png">
                     </div>
                 </div>
                 <div class="slide-content main-content main-feedback">
-                    <div class="main-content-info">
-                        <h2>垃圾邮件举报反馈系统</h2>
-
-                        <p>
-                            垃圾邮件反馈服务是提供给电子邮件管理员的一项服务，反馈QQ邮箱用户举报您所管理的电子邮件域的垃圾邮件。通过垃圾邮件反馈服务，可以更好的发现您的电子邮件域下，被QQ邮箱用户举报的垃圾邮件，从而帮助您减少这些邮件的发送。
-                        </p>
-
-                        <p class="btn"><a data-uigroup="dialog" class="button-blue" target="_blank"
-                                          href="http://open.mail.qq.com/cgi-bin/feedback_loop?sid=EybMV5HijaB_WlgI&check=false&t=open_feedback_2&action=">进入反馈服务</a>
-                        </p>
-                    </div>
                     <div class="main-content-pic">
-                        <img src="./QQ邮箱开放平台_files/open_feedback0fbe33.png">
+                        <img src="/static/images/open_feedback0fbe33.png">
                     </div>
                 </div>
+                <div class="slide-content main-content main-feedback">
+
+                    <div class="main-content-pic">
+                        <img src="/static/images/open_magazine0a54e0.png">
+                    </div>
+                </div>
+                <div class="slide-content main-content main-feedback">
+
+                    <div class="main-content-pic">
+                        <img src="/static/images/open_maillist0a54e0.png">
+                    </div>
+                </div>
+                <div class="slide-content main-content main-feedback">
+
+                    <div class="main-content-pic">
+                        <img src="/static/images/open_mailme0a54e0.png">
+                    </div>
+                </div>
+
             </div>
             <div class="articleContent normalContent">
                 <div class="section">
@@ -147,6 +138,13 @@
                 </div>
             </div>
         </div>
+
+        <select id="default-search-engine" class="weakrtl">
+            <option value="0">Google</option>
+            <option value="1">中国雅虎</option>
+            <option value="2">Bing</option>
+            <option value="3">百度</option>
+        </select>
 
     </div>
 

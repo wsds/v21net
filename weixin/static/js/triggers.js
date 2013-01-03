@@ -9,5 +9,17 @@ $(document).ready(function () {
                 $($(".slide-content")[index]).addClass("current");
             }
         );
+
+        $(".normalTitle #login").click(function () {
+                if($(this).hasClass("drop")){
+                    $(this).removeClass("drop");
+                    $("#login_menu",$(this)).addClass("hide");
+                }
+                else{
+                    $(this).addClass("drop");
+                    $("#login_menu",$(this)).removeClass("hide");
+                }
+            }
+        );
     }
 );
