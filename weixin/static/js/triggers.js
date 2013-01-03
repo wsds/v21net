@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
         $("#slide_ctrls li a").click(function () {
                 window.scrollTo(0,100);
                 $("#slide_ctrls li a").removeClass("current");
@@ -10,14 +11,14 @@ $(document).ready(function () {
             }
         );
 
-        $(".normalTitle #login").click(function () {
+        $(".normalTitle .account").click(function () {
                 if($(this).hasClass("drop")){
                     $(this).removeClass("drop");
-                    $("#login_menu",$(this)).addClass("hide");
+                    $(".afterlogin",$(this)).addClass("hide");
                 }
                 else{
                     $(this).addClass("drop");
-                    $("#login_menu",$(this)).removeClass("hide");
+                    $(".afterlogin",$(this)).removeClass("hide");
                 }
             }
         );
