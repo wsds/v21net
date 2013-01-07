@@ -22,5 +22,9 @@ $(document).ready(function () {
                 }
             }
         );
+	$(".normalTitle h2").click(function () {
+                $(".nav").slideToggle("fast");
+            }
+        );
     }
 );
