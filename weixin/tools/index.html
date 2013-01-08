@@ -2,34 +2,63 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf8"/>
-    <title>微客网络</title>
+    <title>微博发布工具</title>
 
     <link rel="stylesheet" type="text/css" href="/static/css/open.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/SpryCollapsiblePanel.css"/>
     <link href="/static/css/mobiscroll-2.3.1.custom.min.css" rel="stylesheet" type="text/css"/>
 
 </head>
-<body>
+<body style="background: #ebedf0 url(../images/bg1.png) repeat-x 0 -33px;">
 <div class="messagelist"></div>
 <div class="container">
-    <div class="header">
-        <div class="logo"><a href="/"><img src="/static/images/logo_tools.png"/></a></div>
-        <ul class="navigator">
-            <li><a href="/tools/" class="navDataCenter  current "><img src="/static/images/spacer.gif"
-                                                                       alt="微博发布工具"/>微博发布工具</a></li>
-            <li><a href="/tools/" class="navDocument "><img src="/static/images/spacer.gif" alt="关于我们"/>关于我们</a>
-            </li>
-        </ul>
-        <div class="clr"></div>
-    </div>
 
     <div class="content">
         <div class="intro">
             <div class="articleTitle normalTitle">
-                <h2>微博发布工具</h2>
+                <h3>微博发布工具</h3>
             </div>
-            <div class="loginContent panelContent">
+            <div class="appContent normalContent">
+
+                <div class="section">
+                    <h2>定时发布列表</h2>
+                </div>
+                <div class="content form holder" id="post-list-holder" template="post-list">
+                    <div class="row-section">
+                        <div class="row columnDisplay">
+                            <label>发布时间</label>
+                            <label> 01/07/2013 04:31 PM</label>
+                            <span>微博内容</span>
+
+                            <div class="clr"></div>
+                            <div class="tag">
+                                <label>等待发送</label>
+                                <label>还剩：213分钟</label>
+                            </div>
+                            <a style="margin: 0 10px 0 0;" href="/" class="delAppBtn delapptype">删除</a>
+                        </div>
+                    </div>
+                    <div class="row-section">
+                        <div class="row columnDisplay">
+                            <label>发布时间</label>
+                            <label> 01/07/2013 04:31 PM</label>
+                            <span>微博内容</span>
+
+                            <div class="clr"></div>
+                            <div class="tag">
+                                <label>等待发送</label>
+                                <label>还剩：213分钟</label>
+                            </div>
+                            <a style="margin: 0 10px 0 0;" href="/" class="delAppBtn delapptype">删除</a>
+                        </div>
+                    </div>
+
+                    <div class="clr"></div>
+                </div>
+
+
                 <div class="loginPanel innerPanel">
+
 
                     <div class="login_operate" style="display:block" id="web_login">
                         <form id="loginform" onsubmit="return QMLogin.checkInput();" method="post" name="loginform"
@@ -53,7 +82,7 @@
                                 <div class="column">
 
 
-                                    <textarea id="description" name="description"
+                                    <textarea id="sendtext" name="description"
                                               class="text textMiddle inputQ ajaxvalidator editable"
                                               style="margin-top: 0px; margin-bottom: 0px; height: 130px;"> </textarea>
                                 </div>
@@ -79,27 +108,61 @@
     </div>
 
     <div class="footer">
-        <div class="indexBottom">
-            <img src="/static/images/line.png"/>
-
-            <div class="clr" style="height:22px"></div>
-            <!--<img src="/static/images/logo_gray.png"/>-->
-        </div>
-        <p style="margin:0 auto 10px; width: 166px;">
-            <span class="contect_us"></span>
-            <!--<a href="mailto:wsds888@qq.com">联系我们</a>-->
-            <a style="margin-right:10px;" href="mailto:wsds888@qq.com">商务合作</a>
-            <a href="mailto:wsds888@qq.com">技术咨询</a>
-        </p>
 
         <p class="copyright textGray">&copy; 2012 - 2015 SLZD All Rights Reserved.</p>
     </div>
 </div>
+<div class="templates">
+    <div class="template">
+        <div class="feed-list" id="feed-list">
+            <?js for (var i = 0, l = it.length; i < l; i++) { ?>
+            <div class="feed-txt-full rich-content">
+                <div class="feed-txt-summary">
+                    <p>#{ it[i] }</p>
+                </div>
+            </div>
+            <?js } ?>
+        </div>
+    </div>
+    <div class="template">
+        <div class="post-list" id="post-list">
+            <?js for (var i = 0, l = it.length; i < l; i++) { ?>
+            <div class="row-section">
+                <div class="row columnDisplay">
+                    <label>发布时间</label>
+                    <label>#{ it[i].time }</label>
+                    <span>#{ it[i].text }</span>
+
+                    <div class="clr"></div>
+                    <div class="tag">
+                        <?js if(it[i].status=="published") { ?>
+                        <label>发送成功</label>
+                        <?js }else if(it[i].status=="publishing") { ?>
+                        <label>等待发送</label>
+                        <?js }else if(it[i].status=="failed") { ?>
+                        <label>发送失败</label>
+                        <?js } ?>
+                        <?js if(it[i].remainTime 比较符号大于 0) { ?>
+                        <label>还剩：#{ it[i].remainTime }分钟</label>
+                        <?js } ?>
+                    </div>
+                    <a style="margin: 0 10px 0 0;" href="javascript:;" class="delAppBtn delapptype" postID="#{ i }">删除</a>
+                </div>
+            </div>
+            <?js } ?>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/nTenjin.js"></script>
 <script type="text/javascript" src="/static/js/tools.js"></script>
 <script type="text/javascript" src="/static/js/tools_function.js"></script>
 <script type="text/javascript" src="/static/js/base.js"></script>
 
 <script src="js/mobiscroll-2.3.1.custom.min.js" type="text/javascript"></script>
+
+
 </body>
 </html>

@@ -1,10 +1,10 @@
 $(document).ready(function () {
 
         $("#slide_ctrls li a").click(function () {
-                window.scrollTo(0,100);
+                window.scrollTo(0, 100);
                 $("#slide_ctrls li a").removeClass("current");
                 $(this).addClass("current");
-                var index=$("#slide_ctrls li a").index($(this));
+                var index = $("#slide_ctrls li a").index($(this));
 //                window.alert(index);
                 $(".slide-content").removeClass("current");
                 $($(".slide-content")[index]).addClass("current");
@@ -12,17 +12,17 @@ $(document).ready(function () {
         );
 
         $(".normalTitle .account").click(function () {
-                if($(this).hasClass("drop")){
+                if ($(this).hasClass("drop")) {
                     $(this).removeClass("drop");
-                    $(".afterlogin",$(this)).addClass("hide");
+                    $(".afterlogin", $(this)).addClass("hide");
                 }
-                else{
+                else {
                     $(this).addClass("drop");
-                    $(".afterlogin",$(this)).removeClass("hide");
+                    $(".afterlogin", $(this)).removeClass("hide");
                 }
             }
         );
-	$(".normalTitle h2").click(function () {
+        $(".normalTitle h2").click(function () {
                 $(".nav").slideToggle("fast");
             }
         );

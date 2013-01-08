@@ -1,13 +1,13 @@
 $(document).ready(function () {
 
-        $("#btsend").click(function () {
-                var text = $("#sendtext").val();
-                window.alert(text);
-                opts.url += "__rnd=" + ("__rnd", +(new Date));
-                opts.args.text=text;
-                addweibo(opts);
-            }
-        );
+//        $("#btsend").click(function () {
+//                var text = $("#sendtext").val();
+//                window.alert(text);
+//                opts.url += "__rnd=" + ("__rnd", +(new Date));
+//                opts.args.text=text;
+//                addweibo(opts);
+//            }
+//        );
 //        $ = STK;
     }
 );
