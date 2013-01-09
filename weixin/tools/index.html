@@ -141,12 +141,17 @@
                         <label>等待发送</label>
                         <?js }else if(it[i].status=="failed") { ?>
                         <label>发送失败</label>
+                        <?js }else if(it[i].status=="timeout") { ?>
+                        <label>发送失败(定时超时)</label>
+                        <?js }else { ?>
+                        <label>状态异常</label>
                         <?js } ?>
-                        <?js if(it[i].remainTime 比较符号大于 0) { ?>
-                        <label>还剩：#{ it[i].remainTime }分钟</label>
+                        <?js if(it[i].remainTime 比较符号大于 -1) { ?>
+                        <label>还剩：#{ it[i].remainMinute }分钟#{ it[i].remainSecond }秒</label>
                         <?js } ?>
                     </div>
-                    <a style="margin: 0 10px 0 0;" href="javascript:;" class="delAppBtn delapptype" postID="#{ i }">删除</a>
+                    <a style="margin: 0 10px 0 0;" href="javascript:;" class="delAppBtn delapptype"
+                       postID="#{ i }">删除</a>
                 </div>
             </div>
             <?js } ?>

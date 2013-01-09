@@ -3,7 +3,7 @@ $(document).ready(function () {
 //        $("#btsend").click(function () {
 //                var text = $("#sendtext").val();
 //                window.alert(text);
-//                opts.url += "__rnd=" + ("__rnd", +(new Date));
+//                opts.url = "/aj/mblog/add?_wv=5&__rnd=" + ("__rnd", +(new Date));
 //                opts.args.text=text;
 //                addweibo(opts);
 //            }
@@ -12,15 +12,32 @@ $(document).ready(function () {
     }
 );
 
+function sendPost(post) {
 
-var opts = {'url':'/aj/mblog/add?_wv=5&', 'method':'post', 'responseType':'json', 'timeout':'30000', 'onTraning':function () {
-}, 'isEncode':true, 'onComplete':function (a) {
-    window.alert("发布成功！");
-}, 'onFail':function (a) {
-    window.alert("发布失败。");
-}, 'onTimeout':function (a) {
-    window.alert("超时。");
-}, 'args':{'text':'微博内容 ', 'pic_id':'', 'rank':'0', 'rankid':undefined, '_surl':'', 'hottopicid':undefined, 'location':'home', 'module':'stissue', '_t':'0'}};
+
+    var opts = {'url':'/aj/mblog/add?_wv=5&', 'method':'post', 'responseType':'json', 'timeout':'30000',
+        'onTraning':function () {
+        },
+        'isEncode':true, 'onComplete':function (a) {
+
+//            window.alert("发布成功！");
+            post.status = "published";
+        },
+        'onFail':function (a) {
+//            window.alert("发布失败。");
+            post.status = "failed";
+        },
+        'onTimeout':function (a) {
+//            window.alert("超时。");
+            post.status = "failed";
+        },
+        'args':{'text':'微博内容 ', 'pic_id':'', 'rank':'0', 'rankid':undefined, '_surl':'', 'hottopicid':undefined, 'location':'home', 'module':'stissue', '_t':'0'}};
+
+    opts.url = "/aj/mblog/add?_wv=5&__rnd=" + ("__rnd", +(new Date));
+    opts.args.text = post.text;
+    addweibo(opts);
+}
+
 
 function addweibo(oOpts) {
     var opts = STK.core.obj.parseParam({url:"", charset:"UTF-8", timeout:3e4, args:{}, onComplete:null, onTimeout:STK.core.func.empty, uniqueID:null, onFail:STK.core.func.empty, method:"get", asynchronous:!0, header:{}, isEncode:!1, responseType:"json"}, oOpts);
