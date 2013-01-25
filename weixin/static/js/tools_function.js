@@ -48,10 +48,16 @@ $(document).ready(function () {
                 }
                 var publishTimeString = $("#time_picker").val();
 
-                addPost(publishTimeString, text)
+                var post=addPost(publishTimeString, text)
 
                 renderTemplate();
                 $("#sendtext").val("");
+                $("#thumbs").empty();
+                if(tools.pid=="uploading"){
+                    uploadPic(post);
+                    tools.pid="none";
+                }
+
             }
         );
 
@@ -59,15 +65,17 @@ $(document).ready(function () {
 //            alert('hello');
             resolvePostList();
             renderTemplate();
-            addClockPostPerDay();
+//            addClockPostPerDay();
         }, 1000 * 1);// check the postList every 1 second.
         renderTemplate();
     }
 );
 
-
+var tools={
+    pid:"none"//none uploading pidID
+};
 var postList = [
-    {time:"2013/01/23 12:21:6", status:"failed", text:"微博内容1", remainTime:28},
+    {time:"2013/01/23 12:21:6", status:"failed", text:"微博内容1", remainTime:28, pid:"917b445fjw1e15tbi1dtkj"},
     {time:"2013/01/23 11:22:6", status:"published", text:"微博内容2", remainTime:-88},
     {time:"2013/01/23 10:31:6", status:"publishing", text:"微博内容3", remainTime:76},
     {time:"2013/01/23 12:41:6", status:"publishing or published or failed or timeout", text:"微博内容4", remainTime:66}
@@ -134,10 +142,12 @@ function addPost(publishTimeString, text) {
     post.time = getShortDateTimeString(publishTime);
     post.status = "publishing";
     post.text = text;
+    post.pid="none";
     post.remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000));
     post.remainMinute = Math.floor(post.remainTime / 60);
     post.remainSecond = post.remainTime % 60;
     postList.push(post);
+    return post;
 }
 
 function getShortDateTimeString(date) {   //如：2011-07-29 13:30:50
@@ -203,6 +213,7 @@ function getPostList() {
     }
 }
 function renderTemplate() {
+//    return;
     $('#post-list-holder').html();
     var post_list = getTemplate("post-list");
     $('#post-list-holder').html(post_list.render(postList));

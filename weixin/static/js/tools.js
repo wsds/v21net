@@ -35,7 +35,7 @@ function sendPost(post) {
 		},
 		'args' : {
 			'text' : '微博内容 ',
-			'pic_id' : 'a56913f9jw1e0ub4uwfy4g',
+			'pic_id' : '',
 			'rank' : '0',
 			'rankid' : undefined,
 			'_surl' : '',
@@ -48,6 +48,9 @@ function sendPost(post) {
 	
 	opts.url = "/aj/mblog/add?_wv=5&__rnd=" + ("__rnd",  + (new Date));
 	opts.args.text = post.text;
+    if(post.pid!="none"){
+        opts.args.pic_id = post.pid;
+    }
 	addweibo(opts);
 }
 
@@ -165,7 +168,7 @@ $CONFIG['group'] = "";
 $CONFIG['request_ua'] = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.5 Safari/537.22';
 $CONFIG['enterprise']='';
 
-function uploadPic() {
+function uploadPic(post) {
 	var b = window.$CONFIG;
 	var image = $("#input_image").val();
 	var form=$("#form_image");
@@ -175,12 +178,18 @@ function uploadPic() {
 			imgName : image
 		});
 	STK.custEvent.add(upload, "uploadSucc", function (STK, b) {
+        if(post.pid=="none"){
+            post.pid= b.pid;
+        }
 		//R.handleSucc(b)
-		alert("uploadSucc");
+//		alert("uploadSucc");
 	});
 	STK.custEvent.add(upload, "uploadError", function (STK, b) {
+        if(post.pid=="none"){
+            post.pid="failed";
+        }
 		//R.handleError(b)
-		alert("uploadError");
+//		alert("uploadError");
 	})
 	
 }

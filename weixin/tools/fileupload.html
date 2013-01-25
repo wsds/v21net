@@ -60,6 +60,46 @@ TD{font-family: Arial, Helvetica, sans-serif; font-size: 8pt;}
         border:0px; 
         margin:15px 15px 0 0; 
 }
+
+
+.laPic_btnmore {
+    float: left;
+    padding: 0 20px 15px 0;
+    vertical-align: top;
+    text-align: center;
+    height: 30px;
+    overflow: hidden;
+}
+
+.layer_send_pic .W_btn_e {
+    overflow: hidden;
+    position: relative;
+}
+
+.W_btn_e, .W_btn_e span, .W_btn_f, .W_btn_f span, .W_btn_g, .W_btn_g span, .W_btn_e_disable, .W_btn_e_disable span, .W_btn_f_disable, .W_btn_f_disable span, .W_btn_g_disable, .W_btn_g_disable span {
+    cursor: pointer;
+    display: inline-block;
+    background: url("../../../images/common/bg_btn.png?id=1356076046513") no-repeat;
+    _background-image: url("../../../images/common/bg_btn.gif?id=1356076046513");
+    padding: 0 0 0 2px;
+    height: 30px;
+    line-height: 29px;
+    line-height: 32px	9;
+    overflow: hidden;
+}
+
+input, textarea, keygen, select, button, isindex {
+    margin: 0em;
+    font: -webkit-small-control;
+    color: initial;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+}
 -->
 </style>
 
@@ -113,9 +153,10 @@ function dropIt(e) {
 <tr>
 <td align="center">
 <p>Drag & drop or choose images from your local file system: 
-<form id="form_image" node-type="form" action-type="form" id="pic_upload" name="pic_upload" target="upload_target" enctype="multipart/form-data" method="POST" action="" >                                   
-<input class="input_f" name="pic1" id="input_image" type="file" onchange="imagesSelected(this.files)" multiple="true">
+<form hidden="true" id="form_image" node-type="form" action-type="form" id="pic_upload" name="pic_upload" target="upload_target" enctype="multipart/form-data" method="POST" action="" >
+<input class="input_f"  name="pic1" id="input_image" type="file" onchange="imagesSelected(this.files)" multiple="true">
 </form>
+    <a href="javascript:void(0);" id="addPicButton" class="W_btn_e" node-type="inputCover">选择图片</a>
 </td>
 </tr>
 </table>
