@@ -130,7 +130,7 @@
             <div class="row-section">
                 <div class="row columnDisplay">
                     <label>发布时间</label>
-                    <label>#{ it[i].time }</label>
+                    <label style="cursor: pointer;" class="posttime">#{ it[i].time }</label>
                     <span>#{ it[i].text }</span>
 
                     <div class="clr"></div>
@@ -160,13 +160,15 @@
 </div>
 
 
+<form node-type="form" action-type="form" id="pic_upload" name="pic_upload" target="upload_target" enctype=<form node-type="form" action-type="form" id="pic_upload" name="pic_upload" target="STK_iframe_1358151082789107" enctype="multipart/form-data" method="POST" action="http://picupload.service.weibo.com/interface/pic_upload.php?cb=http%3A%2F%2Fweibo.com%2Faj%2Fstatic%2Fupimgback.html%3Fcallback%3DSTK_ijax_1358151082789108&amp;url=weibo.com%2Fu%2F2775127033&amp;markpos=1&amp;logo=1&amp;nick=%40%E5%BE%88%E7%A0%B4%E7%9A%84%E4%B8%80%E5%8F%A3%E9%92%9F&amp;marks=1&amp;app=miniblog&amp;s=rdxt">                                    <input class="input_f" name="pic1" type="file"></form>
+
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/js/nTenjin.js"></script>
 <script type="text/javascript" src="/static/js/tools.js"></script>
 <script type="text/javascript" src="/static/js/tools_function.js"></script>
 <script type="text/javascript" src="/static/js/base.js"></script>
 
-<script src="js/mobiscroll-2.3.1.custom.min.js" type="text/javascript"></script>
+<script src="/static/js/mobiscroll-2.3.1.custom.min.js" type="text/javascript"></script>
 
 
 </body>

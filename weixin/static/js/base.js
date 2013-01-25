@@ -5965,6 +5965,148 @@ STK.register("comp.content.changeLanguage", function(a) {
         return c
     }
 });
+
+STK.register("kit.extra.upload", function(a) {
+    var b = a.kit.extra.language;
+    return function(c) {
+        var d = {}, e = window.location.href, f;
+        c = a.parseParam({type: "common",form: null,base64Str: "",imgName: "",uploadArgs: {}}, c);
+        a.custEvent.define(d, ["uploadError", "uploadSucc"]);
+        var g = {base64form: null,upload: function(b) {
+                var d, e = b, h = "weibo.com/", i = window.$CONFIG, j = c.type;
+                if (j === "common")
+                    d = c.form;
+                else if (j === "base64") {
+                    d = a.C("form");
+                    g.base64form = d;
+                    d.method = "POST";
+                    var k = a.C("input");
+                    k.name = "b64_data";
+                    k.type = "hidden";
+                    k.value = c.base64Str;
+                    d.appendChild(k);
+                    document.body.appendChild(d)
+                }
+                var l = {marks: 1,app: "miniblog",s: "rdxt"};
+                c.type === "common" || c.type === "base64" ? l = a.kit.extra.merge({url: e.domain == "1" ? h + (i && i.watermark || i.domain) : 0,markpos: e.position || "",logo: e.logo || "",nick: e.nickname == "1" ? "@" + (i && i.nick) : 0}, l) : c.type === "custom" && (l = a.kit.extra.merge(c.uploadArgs, l));
+                j === "base64" && (l = a.kit.extra.merge({mime: "image/jpeg",data: "base64"}, l));
+                f = a.core.io.ijax({url: "http://picupload.service.weibo.com/interface/pic_upload.php",form: d,abaurl: "http://" + document.domain + "/aj/static/upimgback.html",abakey: "cb",timeout: 18e5,onComplete: g.handle,onTimeout: g.handle,args: l})
+            },sendError: function(b) {
+                var c = new Image, d = encodeURIComponent(navigator.userAgent), f = window.$CONFIG, g = a.kit.extra.merge(b, {ua: d,rnd: (new Date).getTime(),uid: f ? f.uid : 0,referer: encodeURIComponent(e)});
+                g = a.core.json.jsonToQuery(g);
+                g = "http://ww1.sinaimg.cn/do_not_delete/fc.html?" + g;
+                c.setAttribute("src", g)
+            },handle: function(e) {
+                a.removeNode(g.base64form);
+                g.base64form = null;
+                var f = Math.abs(e.ret);
+                if (!e || e.ret < 0) {
+                    var h = "";
+                    switch (f) {
+                        case 1:
+                            h = "#L{没有登录}";
+                            break;
+                        case 4:
+                        case 9:
+                            h = "#L{请上传5M以内的JPG、GIF、PNG图片。}";
+                            break;
+                        default:
+                            h = "#L{上传图片超时}"
+                    }
+                    e ? g.sendError({ret: e.ret}) : g.sendError({ret: "none"});
+                    a.custEvent.fire(d, "uploadError", {code: f,msg: b(h)})
+                } else {
+                    var i = new Date, j = function(a) {
+                        return a < 10 ? "0" + a : a
+                    }, k;
+                    if (c.type === "common")
+                        k = c.imgName;
+                    else if (c.type === "base64") {
+                        var l = [i.getFullYear(), j(i.getMonth() + 1), j(i.getDate()), j(i.getHours()), j(i.getMinutes()), j(i.getSeconds())].join("");
+                        k = b("#L{微博桌面截图}") + l + ".jpg"
+                    }
+                    a.custEvent.fire(d, "uploadSucc", {pid: e.pid,imgName: k})
+                }
+            },init: function() {
+                c.type === "common" || c.type === "base64" ? a.kit.extra.watermark(function(a) {
+                    g.upload(a)
+                }) : g.upload()
+            },destroy: function() {
+                a.custEvent.undefine(d);
+                a.removeNode(g.base64form)
+            }};
+        g.init();
+        d.destroy = g.destroy;
+        d.abort = function() {
+            if (f)
+                try {
+                    f.abort()
+                } catch (a) {
+                }
+        };
+        return d
+    }
+});
+
+
+STK.register("kit.extra.watermark", function(a) {
+    var b = {trans: null,conf: null,success: function(a, c) {
+            b.conf = a.data
+        }};
+    return function(c) {
+        if (typeof c == "function")
+            if (b.conf)
+                c(b.conf);
+            else {
+                b.trans || (b.trans = a.common.trans.editor.getTrans("waterMark", {onSuccess: function() {
+                        b.success.apply(null, arguments);
+                        c(b.conf)
+                    },onError: a.funcEmpty,onFail: a.funcEmpty}));
+                b.trans.abort();
+                b.trans.request()
+            }
+    }
+});
+
+
+STK.register("common.trans.editor", function(a) {
+    var b = a.kit.io.inter(), c = b.register;
+    c("face", {url: "/aj/mblog/face?type=face&_wv=5"});
+    c("magicFace", {url: "/aj/mblog/face?type=ani&_wv=5"});
+    c("getTopic", {url: "/aj/mblog/trend?_wv=5"});
+    c("cartoon", {url: "/aj/mblog/face?type=cartoon&_wv=5"});
+    c("suggestMusic", {url: "/aj/mblog/music/suggest?_wv=5",requestMode: "jsonp"});
+    c("searchMusic", {url: "http://music.weibo.com/t/port/ajax_search_music_song.php",method: "get",requestMode: "jsonp"});
+    c("addMusic", {url: "/aj/mblog/music/submit?_wv=5",requestMode: "jsonp"});
+    c("parseMusic", {url: "/aj/mblog/music/parse?_wv=5",requestMode: "jsonp"});
+    c("parseVideo", {url: "/aj/mblog/video?_wv=5"});
+    c("waterMark", {url: "/aj/account/watermark?_wv=5"});
+    c("publishToWeiqun", {url: "/aj/weiqun/add?_wv=5",method: "post"});
+    c("rectopic", {url: "/aj/mblog/rectopic?_wv=5"});
+    c("interactive", {url: "/aj/mblog/interactive?_wv=5",method: "post"});
+    c("plugin", {url: "/aj/publishplug/plug?_wv=5",method: "post"});
+    c("favSongSearch", {url: "http://music.weibo.com/yueku/port/sina_t_getcollect.php",method: "get",requestMode: "jsonp"});
+    c("getOutlinkInfo", {url: "http://api.weibo.com/widget/info.json",varkey: "callback",method: "get",requestMode: "jsonp"});
+    c("tabLog", {url: "http://music.weibo.com/t/port/ajax_log_action.php",method: "get",requestMode: "jsonp"});
+    c("getPublish", {url: "/aj/top/usergroup?_wv=5",method: "get"});
+    c("getTvLink", {url: "/aj/proxy/thirdapi?_wv=5",method: "get"});
+    c("getuserlist", {url: "/aj/gift/getuserlist?_wv=5",method: "get"});
+    c("getlist", {url: "/aj/gift/getlist?_wv=5",method: "post"});
+    c("sendGift", {url: "/aj/gift/send?_wv=5",method: "post"});
+    return b
+});
+
+STK.register("kit.extra.merge", function(a) {
+    return function(a, b) {
+        var c = {};
+        for (var d in a)
+            c[d] = a[d];
+        for (var d in b)
+            c[d] = b[d];
+        return c
+    }
+});
+
 STK.pageletM.register("pl.content.changeLanguage", function(a) {
     var b = a.E("pl_content_changeLanguage"), c = a.comp.content.changeLanguage(b);
     return c

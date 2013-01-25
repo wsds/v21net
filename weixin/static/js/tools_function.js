@@ -21,6 +21,7 @@ $(document).ready(function () {
         });
 
 
+   
         $('#show_picker').mouseover(function () {
             var time = $('#time_picker').val();
             if (time != "") {
@@ -107,12 +108,12 @@ function addClockPost() {
         var todayStr = getShortDateString(now) + " " + i + ":01:00";
         var text = "";
         var count = i;
-        var noon="上午";
+		var noon="上午";
         if (count > 12) {
             count = count - 12;
-            noon="下午";
+			noon="下午";
         }
-        var text = "【"+noon+count+"点整】";
+		var text = "【"+noon+count+"点整】";
         for (var j = 0; j < count; j++) {
             text = text + "哐~";
         }
@@ -210,6 +211,10 @@ function renderTemplate() {
         var postID = $(this).attr("postid");
         postList.splice(postID, 1);
         renderTemplate();
+    });
+	
+	$(".posttime", $('#post-list-holder')).dblclick(function () {
+		window.alert("双击");
     });
 }
 
