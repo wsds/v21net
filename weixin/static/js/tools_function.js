@@ -21,7 +21,7 @@ $(document).ready(function () {
         });
 
 
-   
+
         $('#show_picker').mouseover(function () {
             var time = $('#time_picker').val();
             if (time != "") {
@@ -223,7 +223,7 @@ function renderTemplate() {
         postList.splice(postID, 1);
         renderTemplate();
     });
-	
+
 	$(".posttime", $('#post-list-holder')).dblclick(function () {
 		window.alert("双击");
     });
