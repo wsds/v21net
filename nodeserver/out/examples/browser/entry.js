@@ -1,4 +1,4 @@
-var weibo = require('../../../.');
+var weibo = require('../../../');
 
 // change appkey to yours
 var appkey = 'your appkey';

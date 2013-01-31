@@ -8595,7 +8595,7 @@ module.exports = function oauth(options) {
 
 });
 
-require.define("/examples/browser/entry.js",function(require,module,exports,__dirname,__filename,process,global){var weibo = require('../../../.');
+require.define("/examples/browser/entry.js",function(require,module,exports,__dirname,__filename,process,global){var weibo = require('../../../');
 
 // change appkey to yours
 var appkey = 'your appkey';
