@@ -1,0 +1,295 @@
+﻿<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf8">
+    <title>微博发布工具(离线多账号)</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/openContent.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/open.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/SpryCollapsiblePanel.css">
+
+</head>
+<body style="background: #ebedf0 url(../images/bg1.png) repeat-x 0 -33px;">
+<div class="messagelist"></div>
+<div class="container">
+
+    <div class="content">
+
+        <div class="intro">
+
+            <div class="articleTitle normalTitle"
+                 style="background: #354B66 url(/static/images/openmail/logo_bottom0a54e0.png) bottom no-repeat;">
+                <h2 style="float: left;cursor:pointer" href="javascript:;">微博发布工具(离线多账号) </h2>
+
+                <div class="clr"></div>
+                <div id="owned_weibo_container">
+                </div>
+                <div id="login_bar_container">
+                </div>
+            </div>
+
+            <div class="nav">
+                <ul id="slide_ctrls">
+                    <li><a class="slide-ctrl nav-item-1" href="javascript:;"><span
+                            class="nav-item-icon"></span><span>离线发布工具</span></a>
+                    </li>
+                    <li><a class="slide-ctrl nav-item-2 current" href="javascript:;"><span
+                            class="nav-item-icon"></span><span>定时发布列表</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="main" id="slide_contents">
+                <div class="slide-content main-content main-feedback">
+                    <div class="appContent normalContent">
+                        <div class="loginPanel innerPanel">
+
+
+                            <div class="login_operate" style="display:block" id="web_login">
+                                <div class="form_title">
+                                    <a class="label_publish">发布内容</a>
+
+                                    <div style="display: none;" id="switch" class="lineright"
+                                         onmouseup="QMLogin.switchMode()"></div>
+                                    <div style="float:right;">
+                                        <a style=" float:right;margin: 0 10px 0 0;" href="javascript:" id="show_picker"
+                                           class="operatorBtnGreen"> 定时发布 </a>
+                                        <input style="float:right;" id="time_picker" name="i"/>
+                                    </div>
+                                </div>
+                                <div class="content form">
+                                    <div class="columnTip">
+                                        <div id="msgContainer" style="display:none;" class="tip errorTip"></div>
+                                    </div>
+
+                                    <div class="column">
+
+                                        <textarea id="sendtext" name="description"
+                                                  class="text textMiddle inputQ ajaxvalidator editable"
+                                                  style="margin-top: 0px; margin-bottom: 0px; height: 130px;"> </textarea>
+                                    </div>
+
+
+                                </div>
+                                <div class="operatorBar2">
+                                    <output id="thumbs">
+                                    </output>
+                                </div>
+                                <div class="operatorBar2">
+                                    <a href="javascript:" class="operatorBtnGreen" id="addPicButton">
+                                        添加图片 </a>
+
+                                    <form hidden="true" id="form_image" node-type="form" action-type="form"
+                                          id="pic_upload" name="pic_upload" target="upload_target"
+                                          enctype="multipart/form-data" method="POST" action="">
+                                        <input class="input_f" name="pic1" id="input_image" type="file" onchange=""
+                                               multiple="true">
+                                    </form>
+                                    <a href="javascript:" class="operatorBtnOrange">
+                                        素材库 </a>
+
+                                </div>
+                                <div class="operator">
+                                    <a href="javascript:;" class="login_btn_wrapper">
+                                        <input id="btsend" name="btlogin" type="" value="发布" class="login_btn">
+                                    </a>
+
+                                    <div style="display: none;" id="switch2" class="lineright"
+                                         onmouseup="QMLogin.switchMode()"></div>
+                                    <a class="minorLink" target="_blank" href="/support/">意见反馈</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clr"></div>
+                </div>
+                <div class="slide-content main-content main-feedback">
+                    <div class="appContent normalContent">
+
+                    </div>
+                </div>
+                <div class="slide-content main-content main-feedback current">
+
+                    <div class="appContent normalContent">
+                        <div class="loginPanel innerPanel">
+                            <div class="title">
+                                <h3>登录</h3>
+                                <p>以开发者身份登录离线发布服务</p>
+                                <div class="clr"></div>
+                            </div>
+                            <div class="login_operate" style="display:block" id="web_auth">
+                                <div class="content form">
+                                    <div class="columnTip">
+                                        <div id="authTip" style="display:none;" class="tip errorTip">登录失败</div>
+                                    </div>
+                                    <div class="column">
+                                        <label>账号</label>
+                                        <input class="text textMiddle inputQ" id="auth_account">
+                                    </div>
+                                    <div class="column">
+                                        <label>密码</label>
+                                        <input type="password" class="text textMiddle inputQ" id="auth_password">
+                                    </div>
+                                </div>
+                                <div class="operator">
+                                    <a href="javascript:;" class="login_btn_wrapper">
+                                        <input id="auth_login" name="btlogin" type="submit" value="登录"
+                                               class="login_btn">
+                                    </a>
+
+                                    <div style="display: none;" id="switch1" class="lineright"></div>
+                                    <a class="minorLink" target="_blank" href="/support/">意见反馈</a>
+                                    <a class="minorLink">|</a>
+                                    <a class="minorLink" target="_blank" href="/support/">注册新账号</a>
+                                    <a class="minorLink">|</a>
+                                    <a class="minorLink" target="_blank" href="/support/">忘记密码？</a>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clr"></div>
+                    </div>
+                </div>
+                <div class="slide-content main-content main-feedback">
+
+                    <div class="main-content-pic">
+                        <img src="/static/images/open_mailme0a54e0.png">
+                    </div>
+                </div>
+                <div class="slide-content main-content main-feedback">
+
+                    <div class="main-content-pic">
+                        <img src="/static/images/open_mailme0a54e0.png">
+                    </div>
+                </div>
+
+                <div class="clr"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="footer">
+    <p class="copyright textGray">&copy; 2012 - 2015 SLZD All Rights Reserved.</p>
+</div>
+
+<div class="templates">
+    <div class="template">
+        <div class="login-bar" id="login-bar-success">
+            <div id="login" class="account" tabindex="-1" hidefocus="" style="right: 265px;outline: none;">
+                <a id="login_toggle" class="account-toggle" href="javascript:;">#{ it }, 已登录<span
+                        class="toggle-down"></span></a>
+
+                <div id="login_menu" class="afterlogin hide" style="">
+                    <ul class="productlist">
+                        <li><a data-uigroup="dialog" target="_blank"
+                               href="javascript:;">账号管理</a></li>
+                        <li><a data-uigroup="dialog" target="_blank"
+                               href="javascript:;">修改密码</a></li>
+                        <li class="loginout"><a id="auth_logout" href="javascript:">退出登录</a></li>
+                        <ul></ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="template">
+        <div class="login-bar" id="login-bar">
+            <div id="login1" class="account" tabindex="-1" hidefocus="" style="right: 265px;outline: none;">
+                <a id="login_toggle1" class="account-toggle" href="javascript:;">登录<span class="toggle-down"></span></a>
+
+                <div id="login_menu1" class="afterlogin hide" style="">
+                    <ul class="productlist">
+                        <li><a data-uigroup="dialog" target="_blank"
+                               href="javascript:;">注册新账号</a></li>
+                        <li><a data-uigroup="dialog" target="_blank"
+                               href="javascript:;">忘记密码</a></li>
+                        <ul></ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="template">
+        <div class="owned_weibo" id="owned_weibo">
+            <div id="data" class="account" tabindex="-1" hidefocus="" style="right: 660px;outline: none;"><a
+                    id="data_toggle" class="account-toggle" href="javascript:;"><span
+                    class="toggle-down"></span>
+                <?js if (it==null) { ?>
+                    添加授权管理微博账号
+                <?js } ?>
+                <?js for (var ownedWeibo in it) { ?>
+                    #{ ownedWeibo }
+                <?js break; ?>
+                <?js } ?>
+                <img src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/></a>
+                <div id="data_menu" class="afterlogin hide" style="left:0px">
+                    <ul class="productlist">
+                        <?js for (var ownedWeibo in it) { ?>
+                        <li><a data-uigroup="dialog" target="_blank" href="javascript:;"><img
+                                src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/>#{ ownedWeibo }</a></li>
+                        <?js } ?>
+                        <li class="loginout"><a href="javascript:;">添加授权管理微博账号</a></li>
+                        <ul></ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="template">
+        <div class="post-list" id="asa">
+            <?js for (var i = 0, l = it.length; i < l; i++) { ?>
+            <div class="row-section">
+                <div style="position: absolute;">
+                    <a class="" href="javascript:">
+                        <?js if(it[i].pid=="none") { ?>
+                        <img class="images" src="/static/images/logo.png">
+                        <?js }else { ?>
+                        <img class="images" src="http://ww3.sinaimg.cn/small/#{ it[i].pid }.png">
+                        <?js } ?>
+                    </a>
+                </div>
+
+                <div class="row columnDisplay" style="padding-left:150px;height: 128px;">
+                    <label>发布时间</label>
+                    <label style="cursor: pointer;" class="posttime">#{ it[i].time }</label>
+                    <span>#{ it[i].text }</span>
+
+                    <div class="clr"></div>
+                    <div class="tag">
+                        <?js if(it[i].status=="published") { ?>
+                        <label>发送成功</label>
+                        <?js }else if(it[i].status=="publishing") { ?>
+                        <label>等待发送</label>
+                        <?js }else if(it[i].status=="failed") { ?>
+                        <label>发送失败</label>
+                        <?js }else if(it[i].status=="timeout") { ?>
+                        <label>发送失败(定时超时)</label>
+                        <?js }else { ?>
+                        <label>状态异常</label>
+                        <?js } ?>
+                        <?js if(it[i].remainTime 比较符号大于 -1) { ?>
+                        <label>还剩：#{ it[i].remainMinute }分钟#{ it[i].remainSecond }秒</label>
+                        <?js } ?>
+                    </div>
+                    <a style="margin: 0 10px 0 0;" href="javascript:;" class="delAppBtn delapptype"
+                       postID="#{ i }">删除</a>
+                </div>
+            </div>
+            <?js } ?>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/nTenjin.js"></script>
+<script type="text/javascript" src="/static/js/triggers.js"></script>
+<script type="text/javascript" src="/static/js/offline.js"></script>
+
+
+</body>
+</html>

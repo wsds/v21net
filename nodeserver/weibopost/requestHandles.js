@@ -78,10 +78,23 @@ requestHandles.addAccount = function (request, response, pathObject, getParam) {
     accounts.addAccount(accountName, password, response);
 };
 
-requestHandles.addAccountOwnedWeibo = function (request, response, pathObject, getParam) {
+requestHandles.authAccount = function (request, response, pathObject, getParam) {
     var accountName = getParam["account"];
-    var ownedWeibo = getParam["ownedWeibo"];
-    accounts.addAccountOwnedWeibo(accountName, ownedWeibo, response);
+    var password = getParam["password"];
+    accounts.authAccount(accountName, password, response);
+};
+
+requestHandles.accountOwnedWeibo = function (request, response, pathObject, getParam) {
+    var operation = pathObject["operation"];
+    if (operation == "add") {
+        var accountName = getParam["account"];
+        var ownedWeibo = getParam["ownedWeibo"];
+        accounts.addAccountOwnedWeibo(accountName, ownedWeibo, response);
+    } else if (operation == "getall") {
+        var accountName = getParam["account"];
+        accounts.getallAccountOwnedWeibo(accountName, response);
+    }
+
 };
 
 
@@ -90,6 +103,14 @@ requestHandles.getTokenInfo = function (request, response, pathObject, getParam)
     weibo_post.getTokenInfo(weibo_user, response);
 
 };
+
+requestHandles.getPostlist = function (request, response, pathObject, getParam) {
+    var weibo_user = getParam["weibo_user"];
+    var start = getParam["start"];
+    var end = getParam["end"];
+    postlist.getPostlist(weibo_user, start, end, response);
+};
+
 
 requestHandles.test = function (request, response, pathObject, getParam) {
     response.write(JSON.stringify({"a":"666", b:"888"}));

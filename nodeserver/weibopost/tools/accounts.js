@@ -36,6 +36,40 @@ accounts.addAccount = function (accountName, password, response) {
     }
 }
 
+
+accounts.authAccount = function (accountName, password, response) {
+    response.asynchronous = 1;
+    client.hget("weibo_tools_accounts", accountName, function (err, accountStr) {
+        if (accountStr == null) {
+            response.write(JSON.stringify({
+                "提示信息":"用户不存在",
+                "key":"00001111"
+            }));
+            response.end();
+        }
+        else {
+            var account = JSON.parse(accountStr);
+            if (account.password == password) {
+                var now = new Date();
+                account.key = "key:" + now.getTime();
+                client.hset(["weibo_tools_accounts", accountName, JSON.stringify(account)], redis.print);
+                response.write(JSON.stringify({
+                    "提示信息":"登录成功",
+                    "key":account.key
+                }));
+                response.end();
+            }
+            else {
+                response.write(JSON.stringify({
+                    "提示信息":"密码错误",
+                    "key":"00001112"
+                }));
+                response.end();
+            }
+        }
+    });
+}
+
 accounts.addAccountOwnedWeibo = function (accountName, ownedWeibo, response) {
     var account = globaldata.accounts[accountName];
     if (account == null) {
@@ -51,6 +85,25 @@ accounts.addAccountOwnedWeibo = function (accountName, ownedWeibo, response) {
             response.write(JSON.stringify({"提示信息":"授权管理微博账号已添加，请勿重复操作"}));
         }
     }
+}
+
+
+accounts.getallAccountOwnedWeibo = function (accountName, response) {
+    response.asynchronous = 1;
+    client.hget("weibo_tools_accounts", accountName, function (err, accountStr) {
+        if (accountStr == null) {
+            response.write(JSON.stringify({
+                "提示信息":"用户不存在",
+                "ownedWeibo":"null"
+            }));
+            response.end();
+        }
+        else {
+            var account = JSON.parse(accountStr);
+            response.write(JSON.stringify({ "ownedWeibo":account.ownedWeibo}));
+            response.end();
+        }
+    });
 }
 
 module.exports = accounts;

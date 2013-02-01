@@ -31,7 +31,9 @@ http.createServer(
 
         i++;
         console.log("服务器访问被访问次数: i = " + i);
-        response.end();
+        if(response.asynchronous==null){
+            response.end();
+        }
 
     }).listen(8061);
 

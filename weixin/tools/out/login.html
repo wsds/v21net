@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf8"/>
+    <title>微客网络</title>
+
+    <link rel="stylesheet" type="text/css" href="/static/css/open.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/SpryCollapsiblePanel.css"/>
+
+</head>
+<body>
+<div class="messagelist"></div>
+<div class="container">
+    <div class="header">
+        <div class="logo"><a href="/"><img src="/static/images/logo.png"/></a></div>
+
+        <ul class="navigator">
+            <li><a href="/" class="navHome "><img src="/static/images/spacer.gif" alt="首页"/>首页</a></li>
+            <li><a href="/intro/" class="navIntro"><img src="/static/images/spacer.gif" alt="了解微客网络"/>简介</a>
+            </li>
+            <li><a href="/developer" class="navDeveloper "><img src="/static/images/spacer.gif" alt="开发者"/>开发者</a>
+            </li>
+            <li><a href="/datacenter" class="navDataCenter  current "><img src="/static/images/spacer.gif"
+                                                                            alt="数据中心"/>数据中心</a></li>
+            <li><a href="/faq/" class="navDocument "><img src="/static/images/spacer.gif" alt="FAQ"/>关于我们</a>
+            </li>
+
+        </ul>
+        <div class="clr"></div>
+    </div>
+
+    <div class="content">
+
+        <div class="intro">
+            <div class="articleTitle normalTitle">
+                <h2>数据中心</h2>
+            </div>
+            <div class="loginContent panelContent">
+                <div class="loginPanel innerPanel">
+                    <div class="title">
+                        <h3>登录</h3>
+                        <p>以开发者身份登录微客网络</p>
+                        <div class="clr"></div>
+                    </div>
+                    <div class="login_operate" style="display:block" id="web_login">
+                        <form id="loginform" onsubmit="return QMLogin.checkInput();" method="post" name="loginform"
+                              target="_self" autocomplete="on">
+                            <div class="content form">
+                                <div class="columnTip">
+                                    <div id="msgContainer" style="display:none;" class="tip errorTip"></div>
+                                </div>
+                                <div class="column">
+                                    <label for="quin">邮箱账号</label>
+                                    <input onblur="QMLogin.judgeVC()" tabindex="1" id="u" name="u" type="text"
+                                           class="text textMiddle inputQ">
+                                </div>
+                                <div class="column">
+                                    <label for="quin">密码</label>
+                                    <input onfocus="QMLogin.judgeVC()" tabindex="2" id="p" name="p" type="password"
+                                           class="text textMiddle inputQ">
+                                </div>
+                            </div>
+                            <div class="operator">
+                                <a href="javascript:;" class="login_btn_wrapper">
+                                    <input id="btlogin" name="btlogin" type="submit" value="登录" class="login_btn">
+                                </a>
+                                <div style="display: none;" id="switch" class="lineright"
+                                     onmouseup="QMLogin.switchMode()"></div>
+                                <a class="minorLink" target="_blank" href="/support/">意见反馈</a>
+                                <a class="minorLink">|</a>
+                                <a class="minorLink" target="_blank" href="/support/">注册新账号</a>
+                                <a class="minorLink">|</a>
+                                <a class="minorLink" target="_blank" href="/support/">忘记密码？</a>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="loginContent panelContent">
+                <div class="loginPanel innerPanel">
+                    <div class="title">
+                        <h3>注册</h3>
+                        <p>注册新的开发者账号</p>
+                        <div class="clr"></div>
+                    </div>
+                    <div class="login_operate" style="display:block" id="web_login">
+                        <form id="loginform" onsubmit="return QMLogin.checkInput();" method="post" name="loginform"
+                              target="_self" autocomplete="on">
+                            <div class="content form">
+                                <div class="columnTip">
+                                    <div id="msgContainer" style="display:none;" class="tip errorTip"></div>
+                                </div>
+                                <div class="column">
+                                    <label for="quin">邮箱账号</label>
+                                    <input onblur="QMLogin.judgeVC()" tabindex="1" id="u" name="u" type="text"
+                                           class="text textMiddle inputQ">
+                                </div>
+                                <div class="column">
+                                    <label for="quin">密码</label>
+                                    <input onfocus="QMLogin.judgeVC()" tabindex="2" id="p" name="p" type="password"
+                                           class="text textMiddle inputQ">
+                                </div>
+                                <div class="column">
+                                    <label for="quin">重复密码</label>
+                                    <input onfocus="QMLogin.judgeVC()" tabindex="2" id="p" name="p" type="password"
+                                           class="text textMiddle inputQ">
+                                </div>
+                            </div>
+                            <div class="operator">
+                                <a href="javascript:;" class="login_btn_wrapper">
+                                    <input id="btlogin" name="btlogin" type="submit" value="立即注册" class="login_btn">
+                                </a>
+                                <div style="display: none;" id="switch" class="lineright"
+                                     onmouseup="QMLogin.switchMode()"></div>
+                                <a class="minorLink" target="_blank" href="/support/">意见反馈</a>
+                                <a class="minorLink">|</a>
+                                <a class="minorLink" target="_blank" href="/support/">直接登录</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="indexBottom">
+            <img src="/static/images/line.png"/>
+
+            <div class="clr" style="height:22px"></div>
+            <!--<img src="/static/images/logo_gray.png"/>-->
+        </div>
+        <p style="margin:0 auto 10px; width: 166px;">
+            <span class="contect_us"></span>
+            <!--<a href="mailto:wsds888@qq.com">联系我们</a>-->
+            <a style="margin-right:10px;" href="mailto:wsds888@qq.com">商务合作</a>
+            <a href="mailto:wsds888@qq.com">技术咨询</a>
+        </p>
+
+        <p class="copyright textGray">&copy; 2012 - 2015 v21net All Rights Reserved.</p>
+    </div>
+</div>
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/triggers.js"></script>
+</body>
+</html>
