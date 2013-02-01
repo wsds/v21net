@@ -27,10 +27,18 @@ function route(routemap, url, request, response, queryobj) {
     for (var pathvalue in handlemethod) {
         //console.log("key="+pathvalue+",value="+handle.get[pathvalue]);
         pathObject = routepath(pathvalue, url);
-        if (pathObject != null && typeof routemap.get[pathvalue] === 'function') {
+        if (pathObject != null && typeof handlemethod[pathvalue] === 'function') {
             err = false;
             var getParam = parseUrl(url);
-            routemap.get[pathvalue](request, response, pathObject, getParam);
+            getPostData(request, response, function (postData) {
+                if (request.method == "GET") {
+                    handlemethod[pathvalue](request, response, pathObject, getParam);
+                } else if (request.method == "POST") {
+                    handlemethod[pathvalue](request, response, pathObject, postData);
+                }
+
+            })
+
             break;
         }
     }
@@ -98,6 +106,46 @@ function parseUrl(url) {
         return getParam;
     }
     return null;
+}
+
+var maxData = 2 * 1024 * 1024; //prevent mass post data
+var querystring = require( 'querystring');
+
+function getPostData(request, response, next) {
+    if (request.method == "POST") {
+
+        var postData = '';
+        request.on('data',function (chunk) {
+//            console.log('data receiving');
+            postData += chunk;
+            if (postData.length > maxData) {
+                pstData = '';
+                this.pause;//stop further data
+                response.writeHead(413);
+                response.end('Request too large');
+            }
+        }).on('end', function () {
+//                console.log('data received');
+//                console.log(postData);
+//                console.log('show data');
+                if (!postData) {
+                    response.end();
+                    return;
+                }//prevent empty post
+                var postDataObject = querystring.parse(postData);
+                next(postDataObject);
+
+//                //print postData to console
+//                console.log('User Posted: \n', postData);
+//
+//                //response with postDataObject
+//                response.end('You Posted: \n' + util.inspect(postDataObject));
+            });
+    }
+    else {
+        next(null);
+    }
+
 }
 
 module.exports = route;

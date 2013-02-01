@@ -13,7 +13,7 @@ root.globaldata={};
 
 var http = require("http");
 var route = require("./lib/route");
-var routemap = require("./lib/routemap");
+var routemap = require("./routemap");
 
 
 

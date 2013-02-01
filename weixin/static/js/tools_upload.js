@@ -25,8 +25,8 @@ $(document).ready(function () {
 //                    document.getElementById('thumbs').insertBefore(span, null);
                     $("#thumbs").empty();
                     $("#thumbs").append(span);
-                    if(tools.pid="none"){
-                        tools.pid="uploading";
+                    if(postlist.pid="none"){
+                        postlist.pid="uploading";
                     }
                     $('.images_a', $(span)).click(function () {
                         if ($(this).hasClass("drop")) {

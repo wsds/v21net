@@ -13,12 +13,14 @@ var weibo = require('weibo');
 var fs = require('fs');
 
 var tools = require('./lib/tools');
-
+var ajax = require('./lib/ajax');
 /**
  * init weibo api settings
  */
 
 weibo.init('weibo', '2445517113', 'c50cd576bd3b7ba0228998831ff5f267', '');
+
+//weibo.init('weibo', '3098146785', '26341ce28c3b9cfc913b8d7f8ab13cf9', '');
 weibo.init('github', '8e14edfda73a71f1f226', '1796ac639a8ada0dff6acfee2d63390440ca0f3b');
 weibo.init('tqq', '801196838', '9f1a88caa8709de7dccbe3cae4bdc962');
 
@@ -169,9 +171,7 @@ app.use('/', function (req, res, next) {
     var user = req.session.oauthUser;
     res.writeHeader(200, { 'Content-Type':'text/html' });
     if (!user) {
-        res.end('Login with <a href="/login?type=weibo">Weibo</a> | \
-      <a href="/login?type=tqq">QQ</a> | \
-      <a href="/login?type=github">Github</a>');
+        res.end('Login with <a href="/login?type=weibo">Weibo</a> ');
         return;
     }
     else {
@@ -180,6 +180,16 @@ app.use('/', function (req, res, next) {
         for (weibo_user in weibo_users) {
             response += (weibo_user + "has logoed in!\n");
         }
+        response += JSON.stringify(user);
+        ajax.ajax( {
+            data: {"weibo_user": JSON.stringify(user)},
+            success: function(data){
+                console.log(data);
+            },
+            type: 'POST',
+            url: "http://127.0.0.1:8061/api/weibouseradd/2"
+        });
+
         res.end(response);
 //        res.end('Hello, <img src="' + user.profile_image_url + '" />\
 //    <a href="' + user.t_url +

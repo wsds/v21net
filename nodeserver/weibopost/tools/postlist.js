@@ -1,25 +1,24 @@
 /**
- * Created with JetBrains WebStorm.
- * User: Administrator
  * Date: 13-1-29
- * Time: 上午10:24
  * To change this template use File | Settings | File Templates.
  */
 
 
-var tools = {};
+var postlist = {};
 var redis = require("redis");
 var client = redis.createClient();
 
-tools.initializePostlist = function () {
+postlist.initializePostlist = function () {
     root.globaldata.postlist = {};
-    client.hgetall("postlist", function (err, obj) {
-        root.globaldata.postlist = obj;
-        console.dir(obj);
+    client.hgetall("weibo_tools_postlist", function (err, postlistStr) {
+        for(postID in postlistStr){
+            root.globaldata.postlist[postID]= JSON.parse(postlistStr[postID]);
+        }
+        console.log("postlist initialized.")
     });
 };
 
-tools.addPost = function (weibo_user, text, publishTimeString, postlist) {
+postlist.addPost = function (weibo_user_name, text, publishTimeString, postlist) {
     var post = {};
 
     var now = new Date();
@@ -28,7 +27,7 @@ tools.addPost = function (weibo_user, text, publishTimeString, postlist) {
     if (publishTimeString != "") {
         publishTime = new Date(publishTimeString);
     }
-    post.id = weibo_user + now.getTime();
+    post.id = weibo_user_name + now.getTime();
     post.time = getShortDateTimeString(publishTime);
     post.status = "publishing";
     post.text = text;
@@ -36,8 +35,8 @@ tools.addPost = function (weibo_user, text, publishTimeString, postlist) {
     //post.remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000));
     //post.remainMinute = Math.floor(post.remainTime / 60);
     //post.remainSecond = post.remainTime % 60;
-    post.weibo_user = weibo_user;
-    client.hset(["postlist", post.id, JSON.stringify(post)], redis.print);
+    post.weibo_user = weibo_user_name;
+    client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
     postlist[post.id] = post;
     return post;
 }
@@ -66,4 +65,4 @@ function getShortDateTimeString(date) {   //如：2011-07-29 13:30:50
 }
 
 
-module.exports = tools;
+module.exports = postlist;
