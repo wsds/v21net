@@ -5,7 +5,7 @@ $(document).ready(function () {
             minDate:new Date(now.getFullYear(), now.getMonth(), now.getDate()),
             theme:'default',
             display:'modal',
-            animate:'slidehorizontal',
+            animate:'slideup',
             mode:'mixed'
         });
         $('#show_picker').click(function () {

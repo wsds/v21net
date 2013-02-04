@@ -49,14 +49,22 @@ requestHandles.postSend = function (request, response, pathObject, getParam) {
 };
 
 
-requestHandles.postAdd = function (request, response, pathObject, getParam) {
-    var text = getParam["text"];
-    var weibo_user = getParam["weibo_user"];
-    var time = getParam["time"];
-    var pic = getParam["pic"];
-    var post = postlist.addPost(weibo_user, text, time, globaldata.postlist);
-    responseJSON = {"提示信息":"定时发布成功", "post":post}
-    response.write(JSON.stringify(responseJSON));
+requestHandles.post = function (request, response, pathObject, getParam) {
+    var operation = pathObject["operation"];
+    if (operation == "add") {
+        var text = getParam["text"];
+        var weibo_user = getParam["weibo_user"];
+        var time = getParam["time"];
+        var pic = getParam["pic"];
+        var post = postlist.addPost(weibo_user, text, time, globaldata.postlist);
+        responseJSON = {"提示信息":"定时发布成功", "post":post}
+        response.write(JSON.stringify(responseJSON));
+    }else if (operation == "del") {
+        var weibo_user = getParam["weibo_user"];
+        var postid = getParam["postid"];
+        var post = postlist.delPost(weibo_user, postid, globaldata.postlist);
+    }
+
 };
 
 requestHandles.postList = function (request, response, pathObject, getParam) {

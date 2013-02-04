@@ -100,7 +100,7 @@ accounts.getallAccountOwnedWeibo = function (accountName, response) {
         }
         else {
             var account = JSON.parse(accountStr);
-            response.write(JSON.stringify({ "ownedWeibo":account.ownedWeibo}));
+            response.write(JSON.stringify({ "ownedWeiboList":account.ownedWeibo, "currentWeibo":null}));
             response.end();
         }
     });

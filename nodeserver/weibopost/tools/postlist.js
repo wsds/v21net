@@ -42,22 +42,45 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, postlist)
     return post;
 }
 
+postlist.delPost = function (weibo_user_name, postid, postlist) {
+    postlist[postid] = undefined;
+    client.hdel(["weibo_tools_postlist", postid], redis.print);
+    client.lrem("postlist_" + weibo_user_name, 1, postid);
+}
+
+
+function getAllPostlist(weibo_user_name, start, end, next) {
+    if (end == -1) {
+        client.llen("postlist_" + weibo_user_name, function (err, length) {
+            end = length;
+            start = 0;
+            next(start, end);
+        });
+    }
+    else {
+        next(start, end);
+    }
+}
+
 postlist.getPostlist = function (weibo_user_name, start, end, response) {
     var weibo_user_postlist = {};
     response.asynchronous = 1;
+    getAllPostlist(weibo_user_name, start, end, function (start, end) {
+        client.lrange("postlist_" + weibo_user_name, start, end, function (err, postlistIDs) {
 
-    client.lrange("postlist_" + weibo_user_name, start, end, function (err, postlistIDs) {
+                client.hmget("weibo_tools_postlist", postlistIDs, function (err, postlistStr) {
+                    for (postID in postlistStr) {
+                        weibo_user_postlist[postID] = JSON.parse(postlistStr[postID]);
+                    }
+                    response.write(JSON.stringify(weibo_user_postlist));
+                    response.end();
+                });
+            }
+        );
 
-            client.hmget("weibo_tools_postlist", postlistIDs, function (err, postlistStr) {
-                for (postID in postlistStr) {
-                    weibo_user_postlist[postID] = JSON.parse(postlistStr[postID]);
-                }
-                response.write(JSON.stringify(weibo_user_postlist));
-                response.end();
-            });
-        }
+    });
 
-    );
+
 }
 
 function getShortDateTimeString(date) {   //如：2011-07-29 13:30:50
