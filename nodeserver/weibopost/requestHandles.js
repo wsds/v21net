@@ -35,7 +35,7 @@ requestHandles.postSend = function (request, response, pathObject, getParam) {
     var time = getParam["time"];
     var pic = getParam["pic"];
 
-    weibo_post.post(weibo_user, text);
+    weibo_post.postText(weibo_user, text);
 
     responseJSON = {"提示信息":"发布成功"}
     response.write(JSON.stringify(responseJSON));

@@ -116,8 +116,14 @@ function registerMainEvent() {
                     time = "now";
                 }
             } else {
-                publishTime = new Date(time);
-                publishTime.setTime( publishTime.getTime()+1000*60*(120+parseInt(Math.random()*(20+20)-20)));
+                var publishTime = new Date(time);
+                var now = new Date();
+                var remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000*60));
+                if(remainTime<1){
+                    window.alert("请将定时设置在1分钟之后。");
+//                    return;
+                }
+                publishTime.setTime(publishTime.getTime() + 1000 * 60 * (120 + parseInt(Math.random() * (20 + 20) - 20)));
                 $('#time_picker').val(getShortDateTimeString(publishTime));
             }
 

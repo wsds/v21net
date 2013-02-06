@@ -8,11 +8,40 @@ var postlist = {};
 var redis = require("redis");
 var client = redis.createClient();
 
+var weibo_post = require('./../tools/weibo_post');
+
+var globaldata = root.globaldata;
+
+var nextPostTime = new Date("2020/01/28 18:28:18");
+var nextPostlist = {};
+
+
 postlist.initializePostlist = function () {
     root.globaldata.postlist = {};
     client.hgetall("weibo_tools_postlist", function (err, postlistStr) {
+        var now = new Date();
+        nextPostTime = new Date("2020/01/28 18:28:18");
+        nextPostlist = {};
         for (postID in postlistStr) {
-            root.globaldata.postlist[postID] = JSON.parse(postlistStr[postID]);
+            var post = JSON.parse(postlistStr[postID]);
+            globaldata.postlist[postID] = post;
+            console.log(JSON.stringify(post));
+            if (post.status == "publishing") {
+                var publishTime = new Date(post.time);
+                post.remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000));
+                if (post.remainTime < 0) {
+                    post.status = "timeout";
+                    client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
+                    continue;
+                }
+                if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) <= 0) {
+                    if(parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) < 0){
+                        nextPostlist={};
+                    }
+                    nextPostTime = publishTime;
+                    nextPostlist[postID] = post;
+                }
+            }
         }
         console.log("postlist initialized.")
     });
@@ -22,12 +51,19 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, postlist)
     var post = {};
 
     var now = new Date();
-    var publishTime = now;
-    publishTime.setSeconds(publishTime.getSeconds() + 2);
+    post.id = weibo_user_name + now.getTime();
+
     if (publishTimeString != "") {
         publishTime = new Date(publishTimeString);
+        if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) <= 0) {
+            if(parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) < 0){
+                nextPostlist={};
+            }
+            nextPostTime = publishTime;
+            nextPostlist[post.id] = post;
+        }
     }
-    post.id = weibo_user_name + now.getTime();
+
     post.time = getShortDateTimeString(publishTime);
     post.status = "publishing";
     post.text = text;
@@ -46,6 +82,10 @@ postlist.delPost = function (weibo_user_name, postid, postlist) {
     postlist[postid] = undefined;
     client.hdel(["weibo_tools_postlist", postid], redis.print);
     client.lrem("postlist_" + weibo_user_name, 1, postid);
+
+    if(nextPostlist[postid]!=null){
+        this.initializePostlist();
+    }
 }
 
 
@@ -79,8 +119,6 @@ postlist.getPostlist = function (weibo_user_name, start, end, response) {
         );
 
     });
-
-
 }
 
 function getShortDateTimeString(date) {   //如：2011-07-29 13:30:50
@@ -104,6 +142,28 @@ function getShortDateTimeString(date) {   //如：2011-07-29 13:30:50
     }
     var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
     return str;
+}
+
+
+var timer_alert = setInterval(function () {
+    resolvePostList();
+}, 1000 * 1);// check the postList every 1 second.
+
+function resolvePostList() {
+    var now = new Date();
+    var remainTime = parseInt((nextPostTime.getTime() - now.getTime()) / (1000));
+    console.log("还剩：" + remainTime+"     nextPostTime:"+getShortDateTimeString(nextPostTime)+"    nextPostlist:"+JSON.stringify(nextPostlist));
+    if (remainTime == 0) {
+        for (var index in nextPostlist) {
+            var post = nextPostlist[index];
+            sendPost(post);
+        }
+    }
+}
+
+function sendPost(post) {
+    weibo_post.post(post, postlist);
+    console.log(JSON.stringify(post) + " has been posted!");
 }
 
 

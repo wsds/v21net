@@ -9,6 +9,9 @@ var weibo_post = {};
 var weibo = require('weibo');
 weibo.init('weibo', '2445517113', 'c50cd576bd3b7ba0228998831ff5f267', '');
 
+var redis = require("redis");
+var client = redis.createClient();
+
 var ajax = require('./../lib/ajax');
 
 //var redis = require("redis");
@@ -17,12 +20,26 @@ var ajax = require('./../lib/ajax');
 var globaldata = root.globaldata;
 
 
-weibo_post.post = function (weibo_user_name, text) {
+weibo_post.postText = function (weibo_user_name, text) {
     weibo_user = globaldata.weibo_users[weibo_user_name];
     if (weibo_user != null) {
         weibo.update(weibo_user, text, function (err, status) {
             console.log(err);
             console.log(status);
+//        client.hset(["weibo_tools_postlist_success", post.id, JSON.stringify(post)], redis.print);
+        });
+    }
+}
+
+weibo_post.post = function (post, postlist) {
+    weibo_user = globaldata.weibo_users[post.weibo_user];
+    if (weibo_user != null) {
+        weibo.update(weibo_user, post.text, function (err, status) {
+            console.log(err);
+            console.log(status);
+            post.status="published";
+            client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
+            postlist.initializePostlist();
 //        client.hset(["weibo_tools_postlist_success", post.id, JSON.stringify(post)], redis.print);
         });
     }
