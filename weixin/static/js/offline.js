@@ -7,7 +7,6 @@ window.onbeforeunload = function () {
 function saveSettings() {
     window.localStorage.settings = JSON.stringify(settings);
 }
-;
 
 $(document).ready(function () {
         if (window.localStorage.settings != null) {
@@ -39,7 +38,6 @@ $(document).ready(function () {
                 else {
                     renderMain();
                 }
-
             }
         );
 
@@ -50,6 +48,7 @@ $(document).ready(function () {
 
     }
 );
+
 function registerMainEvent() {
 
     //登录界面
@@ -92,7 +91,6 @@ function registerMainEvent() {
         }
     );
 
-
     //离线发布工具
     registerUploadImageEvent();
     registerTimerEvent();
@@ -102,7 +100,6 @@ function registerMainEvent() {
             $("#btsend").trigger("click");
         }
     });
-
 
     $("#btsend").click(function () {
             var text = $("#sendtext").val().trim();
@@ -115,14 +112,17 @@ function registerMainEvent() {
                 var sendDirectly = confirm("不设置定时将直接发布，确定？");
                 if (sendDirectly == false) {
                     return;
+                } else {
+                    time = "now";
                 }
+            } else {
+                publishTime = new Date(time);
+                publishTime.setTime( publishTime.getTime()+1000*60*(120+parseInt(Math.random()*(20+20)-20)));
+                $('#time_picker').val(getShortDateTimeString(publishTime));
             }
-            var publishTimeString = $("#time_picker").val();
 
-            var post = addPost(publishTimeString, text)
-//            alert(publishTimeString+text);
+            var post = addPost(time, text);
 
-//            renderTemplate();
             $("#sendtext").val("");
             $("#thumbs").empty();
 //            if(tools.pid=="uploading"){
@@ -153,7 +153,30 @@ function registerMainEvent() {
 
 }
 
-function addPost(publishTimeString, text) {
+function getShortDateTimeString(date) {   //如：2011/07/29 13:30
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    var day = date.getDate();
+    month = month + 1;
+    if (month < 10) month = '0' + month;
+    if (day < 10) day = '0' + day;
+    var hour = date.getHours();
+    if (hour < 10) {
+        hour = '0' + hour;
+    }
+    var minute = date.getMinutes();
+    if (minute < 10) {
+        minute = '0' + minute;
+    }
+    var second = date.getSeconds();
+    if (second < 10) {
+        second = '0' + second;
+    }
+    var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute;
+    return str;
+}
+
+function addPost(time, text) {
     $.ajax({
         success:function (data) {
 //            alert(JSON.stringify(data));
@@ -163,7 +186,7 @@ function addPost(publishTimeString, text) {
             }
         },
         type:'GET',
-        url:("http://www.weibo.com/api2/post/add?text=" + text + "&weibo_user=" + settings.ownedWeibo.currentWeibo + "&time=" + publishTimeString + "&pic=23125215214")
+        url:("http://www.weibo.com/api2/post/add?text=" + text + "&weibo_user=" + settings.ownedWeibo.currentWeibo + "&time=" + time + "&pic=23125215214")
     });
 }
 
@@ -183,17 +206,23 @@ function delPost(postid) {
 
 function registerTimerEvent() {
     var now = new Date();
+
     $('#time_picker').mobiscroll().datetime({
         minDate:new Date(now.getFullYear(), now.getMonth(), now.getDate()),
         theme:'default',
         display:'modal',
         animate:'slidehorizontal',
         mode:'mixed'
+
     });
     $('#show_picker').click(function () {
 
         var time = $('#time_picker').val();
         if (time == "") {
+
+//            setTime = new Date();
+//            setTime.setTime( setTime.getTime()+1000*60*5);
+//            $('#time_picker').val(getShortDateTimeString(setTime));
             $('#time_picker').mobiscroll('show');
         }
         else {
@@ -337,7 +366,7 @@ function renderOwnedWeibo() {
                         for (var ownedWeibo in settings.ownedWeibo.ownedWeiboList) {
                             if (settings.ownedWeibo.ownedWeiboList[ownedWeibo] != undefined) {
 
-                               alert (settings.ownedWeibo.currentWeibo[ownedWeibo]);
+                                alert(settings.ownedWeibo.currentWeibo[ownedWeibo]);
                                 settings.ownedWeibo.currentWeibo = ownedWeibo;
                                 break;
                             }
