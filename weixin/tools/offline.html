@@ -62,9 +62,9 @@
 
                 <div id="login_menu" class="afterlogin hide" style="">
                     <ul class="productlist">
-                        <li><a data-uigroup="dialog" target="_blank"
+                        <li class="login_bar_li" operation="weibo_management"><a data-uigroup="dialog" target="_blank"
                                href="javascript:;">账号管理</a></li>
-                        <li><a data-uigroup="dialog" target="_blank"
+                        <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
                                href="javascript:;">修改密码</a></li>
                         <li class="loginout"><a id="auth_logout" href="javascript:">退出登录</a></li>
                         <ul></ul>
@@ -81,9 +81,9 @@
 
                 <div id="login_menu1" class="afterlogin hide" style="">
                     <ul class="productlist">
-                        <li><a data-uigroup="dialog" target="_blank"
+                        <li class="login_bar_li"><a data-uigroup="dialog" target="_blank"
                                href="javascript:;">注册新账号</a></li>
-                        <li><a data-uigroup="dialog" target="_blank"
+                        <li class="login_bar_li"><a data-uigroup="dialog" target="_blank"
                                href="javascript:;">忘记密码</a></li>
                         <ul></ul>
                     </ul>
@@ -111,13 +111,14 @@
                     <ul class="productlist">
                         <?js if (it!=null) { ?>
                         <?js for (var ownedWeibo in it.ownedWeiboList) { ?>
+                        <?js if(it.ownedWeiboList[ownedWeibo]==null){continue;} ?>
                         <li class="owned_weibo_li" weibo="#{ ownedWeibo }"><a href="javascript:;"><img
-                                src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/>#{ ownedWeibo }<img class="owned_weibo_del "  style="margin: 15px 0 0 0;float:right;" src="/static/images/close_small.png"></a>
+                                src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/>#{ ownedWeibo }<img class="owned_weibo_del hide"   weibo="#{ ownedWeibo }" style="margin: 15px 0 0 0;float:right;" src="/static/images/close_small.png"></a>
                             <!--<a class="images_close_a" href="javascript:"><img class="images_close"  style="vertical-align: top;" src="/static/images/close_middle.png"></a>-->
                         </li>
                         <?js } ?>
                         <?js } ?>
-                        <li class="loginout"><a href="javascript:;">添加授权管理微博账号</a></li>
+                        <li class="loginout"><a target ="_blank" href="http://login.sina.com.cn/sso/logout.php?entry=openapi&r=https%3A%2F%2Fapi.weibo.com%2Foauth2%2Fauthorize%3Fredirect_uri%3Dhttp%253A%252F%252Foffline.weibo.com%252Foauth%252Fcallback%26client_id%3D2445517113%26state%3D#{ settings.account }%26response_type%3Dcode%23">添加授权管理微博账号</a></li>
                         <ul></ul>
                     </ul>
                 </div>

@@ -8,6 +8,7 @@
  *http://127.0.0.1:8061/api2/gettokeninfo/a?weibo_user=很破滴一口钟
  *http://127.0.0.1:8061/api2/addaccount/a?account=u1Z&password=123456
  *http://127.0.0.1:8061/api2/accountownedweibo/add?account=u1Z&ownedWeibo=很破滴一口钟
+ * *http://127.0.0.1:8061/api2/accountownedweibo/del?account=u1Z&ownedWeibo=很破滴一口钟
  *http://127.0.0.1:8061/api2/accountownedweibo/getall?account=u1Z
  *http://127.0.0.1:8061/api2/getpostlist/a?weibo_user=很破滴一口钟&start=0&end=10
  *http://127.0.0.1:8061/api2/authaccount/a?account=u1Z&password=123456

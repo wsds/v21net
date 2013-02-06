@@ -24,7 +24,8 @@ function renderAll() {
 
 $(document).ready(function () {
         settings.main = "main_login";
-        renderAll();
+        resolveOwnedWeibo();
+
         $("body").click(function () {
 //            window.alert("click");
         });
@@ -32,10 +33,10 @@ $(document).ready(function () {
                 $("#slide_ctrls li a").removeClass("current");
                 $(this).toggleClass("current");
                 settings.main = $(this).attr("slide");
-                if(settings.main=="main_offline_post_list"){
+                if (settings.main == "main_offline_post_list") {
                     resolvePostlist();
                 }
-                else{
+                else {
                     renderMain();
                 }
 
@@ -140,7 +141,7 @@ function registerMainEvent() {
 //        renderTemplate();
 //        window.alert(postID);
         delPost(postID);
-        if(settings.main=="main_offline_post_list"){
+        if (settings.main == "main_offline_post_list") {
             resolvePostlist();
         }
     });
@@ -268,12 +269,16 @@ function resolvePostlist() {
             renderMain();
         },
         type:'GET',
-        url:("http://www.weibo.com/api2/getpostlist/a?weibo_user="+settings.ownedWeibo.currentWeibo+"&start=0&end=-1")
+        url:("http://www.weibo.com/api2/getpostlist/a?weibo_user=" + settings.ownedWeibo.currentWeibo + "&start=0&end=-1")
     });
 }
 
 
 function resolveOwnedWeibo() {
+    if (settings.key == null || settings.account == null) {
+        renderAll();
+        return;
+    }
     $.ajax({
         success:function (data) {
             settings.ownedWeibo = data;
@@ -299,7 +304,12 @@ function renderOwnedWeibo() {
     var owned_weibo = getTemplate("owned_weibo");
     $('#owned_weibo_container').html(owned_weibo.render(settings.ownedWeibo));
 
-    $(".account", $('#owned_weibo_container')).click(function () {
+    $(".account", $('#owned_weibo_container')).click(function (event, management) {
+            if (management == null) {
+                $(".owned_weibo_del", $('#owned_weibo_container')).addClass("hide");
+            } else {
+                $(".owned_weibo_del", $('#owned_weibo_container')).removeClass("hide");
+            }
             $(this).toggleClass("drop");
             $(".afterlogin", $(this)).toggleClass("hide");
         }
@@ -308,15 +318,39 @@ function renderOwnedWeibo() {
     $(".owned_weibo_li", $('#owned_weibo_container')).click(function () {
             settings.ownedWeibo.currentWeibo = $(this).attr("weibo");
             renderOwnedWeibo();
-            if(settings.main=="main_offline_post_list"){
+            if (settings.main == "main_offline_post_list") {
                 resolvePostlist();
             }
         }
     );
 
     $(".owned_weibo_del", $('#owned_weibo_container')).click(function () {
-            alert("del");
-            return false;
+
+            var willDel = confirm("删除授权管理微博账号，确定？");
+            if (willDel == false) {
+                return false;
+            } else {
+                var delWeibo = $(this).attr("weibo");
+                $.ajax({
+                    success:function (data) {
+                        settings.ownedWeibo.ownedWeiboList[delWeibo] = undefined;
+                        for (var ownedWeibo in settings.ownedWeibo.ownedWeiboList) {
+                            if (settings.ownedWeibo.ownedWeiboList[ownedWeibo] != undefined) {
+
+                               alert (settings.ownedWeibo.currentWeibo[ownedWeibo]);
+                                settings.ownedWeibo.currentWeibo = ownedWeibo;
+                                break;
+                            }
+                        }
+                        renderOwnedWeibo();
+                        $(".account", $('#owned_weibo_container')).trigger("click", ["management"]);
+                    },
+                    type:'GET',
+                    url:("http://www.weibo.com/api2/accountownedweibo/del?account=" + settings.account + "&ownedWeibo=" + delWeibo)
+                });
+
+                return false;
+            }
         }
     );
 }
@@ -381,6 +415,15 @@ function renderLoginBar() {
         saveSettings();
         renderAll();
     });
+
+
+    $(".login_bar_li", $('#login_bar_container')).click(function () {
+            var operation = $(this).attr("operation");
+            if (operation == "weibo_management") {
+                $(".account", $('#owned_weibo_container')).trigger("click", ["management"]);
+            }
+        }
+    );
 }
 
 function getTemplate(id) {

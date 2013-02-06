@@ -59,10 +59,12 @@ requestHandles.post = function (request, response, pathObject, getParam) {
         var post = postlist.addPost(weibo_user, text, time, globaldata.postlist);
         responseJSON = {"提示信息":"定时发布成功", "post":post}
         response.write(JSON.stringify(responseJSON));
-    }else if (operation == "del") {
+    } else if (operation == "del") {
         var weibo_user = getParam["weibo_user"];
         var postid = getParam["postid"];
         var post = postlist.delPost(weibo_user, postid, globaldata.postlist);
+        responseJSON = {"提示信息":"删除成功", "post":post}
+        response.write(JSON.stringify(responseJSON));
     }
 
 };
@@ -77,6 +79,7 @@ requestHandles.weiboUserAdd = function (request, response, pathObject, postData)
 
     users.addUser(weibo_user, globaldata.weibo_users);
     response.write(JSON.stringify({"提示信息":"微博账号添加成功"}));
+    response.end();
 };
 
 
@@ -101,6 +104,10 @@ requestHandles.accountOwnedWeibo = function (request, response, pathObject, getP
     } else if (operation == "getall") {
         var accountName = getParam["account"];
         accounts.getallAccountOwnedWeibo(accountName, response);
+    } else if (operation == "del") {
+        var accountName = getParam["account"];
+        var ownedWeibo = getParam["ownedWeibo"];
+        accounts.delAccountOwnedWeibo(accountName, ownedWeibo, response);
     }
 
 };

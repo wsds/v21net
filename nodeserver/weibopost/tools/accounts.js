@@ -77,12 +77,29 @@ accounts.addAccountOwnedWeibo = function (accountName, ownedWeibo, response) {
     }
     else {
         if (account.ownedWeibo[ownedWeibo] == null) {
-            account.ownedWeibo[ownedWeibo] = "true"
+            account.ownedWeibo[ownedWeibo] = "true";
             client.hset(["weibo_tools_accounts", account.accountName, JSON.stringify(account)], redis.print);
             response.write(JSON.stringify({"提示信息":"添加授权管理微博账号成功"}));
         }
         else {
             response.write(JSON.stringify({"提示信息":"授权管理微博账号已添加，请勿重复操作"}));
+        }
+    }
+}
+
+accounts.delAccountOwnedWeibo = function (accountName, ownedWeibo, response) {
+    var account = globaldata.accounts[accountName];
+    if (account == null) {
+        response.write(JSON.stringify({"提示信息":"账户权限错误"}));
+    }
+    else {
+        if (account.ownedWeibo[ownedWeibo] != null) {
+            account.ownedWeibo[ownedWeibo] = undefined;
+            client.hset(["weibo_tools_accounts", account.accountName, JSON.stringify(account)], redis.print);
+            response.write(JSON.stringify({"提示信息":"删除授权管理微博账号成功"}));
+        }
+        else {
+            response.write(JSON.stringify({"提示信息":"授权管理微博账号已删除，请勿重复操作"}));
         }
     }
 }

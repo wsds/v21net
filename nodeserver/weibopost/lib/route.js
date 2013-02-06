@@ -113,7 +113,7 @@ var querystring = require( 'querystring');
 
 function getPostData(request, response, next) {
     if (request.method == "POST") {
-
+        response.asynchronous = 1;
         var postData = '';
         request.on('data',function (chunk) {
 //            console.log('data receiving');

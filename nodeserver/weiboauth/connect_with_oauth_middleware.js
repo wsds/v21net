@@ -177,17 +177,25 @@ app.use('/', function (req, res, next) {
     else {
         weibo_users[user.screen_name] = user;
         var response = "";
-        for (weibo_user in weibo_users) {
-            response += (weibo_user + "has logoed in!\n");
-        }
-        response += JSON.stringify(user);
+//        for (weibo_user in weibo_users) {
+//            response += (weibo_user + "has logoed in!\n");
+//        }
+        response += '授权管理微博账号已经添加成功，<a href="javascript:self.close()">关闭窗口</a>';
+//        response += JSON.stringify(user);
         ajax.ajax( {
             data: {"weibo_user": JSON.stringify(user)},
             success: function(data){
-                console.log(data);
+                console.log("weibouseradd: "+data);
+                ajax.ajax( {
+                    success: function(data){
+                        console.log("accountownedweibo: "+data);
+                    },
+                    type: 'GET',
+                    url: "http://127.0.0.1:8061/api2/accountownedweibo/add?account="+"user1"+"&ownedWeibo="+user.screen_name
+                });
             },
             type: 'POST',
-            url: "http://127.0.0.1:8061/api/weibouseradd/2"
+            url: "http://127.0.0.1:8061/api2/weibouseradd/2"
         });
 
         res.end(response);
