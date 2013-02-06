@@ -9,7 +9,7 @@
 
 
 </head>
-<body style="background: #ebedf0 url(../images/bg1.png) repeat-x 0 -33px;">
+<body style="background: #ebedf0 repeat-x 0 -33px;">
 <div class="messagelist"></div>
 <div class="container">
 
@@ -238,7 +238,7 @@
 
 
     <div class="template">
-        <div class="main_offline_post_list" id="main_offline_post_list">
+        <div class="main_offline_post_list form" id="main_offline_post_list">
             <?js for (var index in it) { ?>
                 <?js post=it[index]; ?>
                 <?js if(post==null) { ?>
@@ -261,26 +261,33 @@
                     <span>#{ post.text }</span>
 
                     <div class="clr"></div>
-                    <div class="tag">
-                        <?js if(post.status=="published") { ?>
-                        <label>发送成功</label>
-                        <?js }else if(post.status=="publishing") { ?>
-                        <label>等待发送</label>
-                        <?js }else if(post.status=="failed") { ?>
-                        <label>发送失败</label>
-                        <?js }else if(post.status=="timeout") { ?>
-                        <label>发送失败(定时超时)</label>
-                        <?js }else { ?>
-                        <label>状态异常</label>
-                        <?js } ?>
-                        <?js if(post.remainTime 比较符号大于 -1) { ?>
-                        <label>还剩：#{post.remainMinute }分钟#{ post.remainSecond }秒</label>
-                        <?js } ?>
+                    <div class="post_status_tag_holder" status="#{ post.status }" publishTime="#{ post.time }">
+
                     </div>
                     <a style="margin: 0 10px 0 0;" href="javascript:;" class="delAppBtn delapptype"
                        postID="#{ post.id }">删除</a>
                 </div>
             </div>
+            <?js } ?>
+        </div>
+    </div>
+
+    <div class="template">
+        <div class="tag post_status_tag" id="post_status_tag">
+            <?js var post=it; ?>
+            <?js if(post.status=="published") { ?>
+            <label>发送成功</label>
+            <?js }else if(post.status=="publishing") { ?>
+            <label>等待发送</label>
+            <?js }else if(post.status=="failed") { ?>
+            <label>发送失败</label>
+            <?js }else if(post.status=="timeout") { ?>
+            <label>发送失败(定时超时)</label>
+            <?js }else { ?>
+            <label>状态异常</label>
+            <?js } ?>
+            <?js if(post.remainTime 比较符号大于 -1) { ?>
+            <label>还剩：#{post.remainMinute }分钟#{ post.remainSecond }秒</label>
             <?js } ?>
         </div>
     </div>

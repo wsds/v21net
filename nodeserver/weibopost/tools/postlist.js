@@ -25,7 +25,7 @@ postlist.initializePostlist = function () {
         for (postID in postlistStr) {
             var post = JSON.parse(postlistStr[postID]);
             globaldata.postlist[postID] = post;
-            console.log(JSON.stringify(post));
+//            console.log(JSON.stringify(post));
             if (post.status == "publishing") {
                 var publishTime = new Date(post.time);
                 post.remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000));
@@ -152,7 +152,7 @@ var timer_alert = setInterval(function () {
 function resolvePostList() {
     var now = new Date();
     var remainTime = parseInt((nextPostTime.getTime() - now.getTime()) / (1000));
-    console.log("还剩：" + remainTime+"     nextPostTime:"+getShortDateTimeString(nextPostTime)+"    nextPostlist:"+JSON.stringify(nextPostlist));
+//    console.log("还剩：" + remainTime+"     nextPostTime:"+getShortDateTimeString(nextPostTime)+"    nextPostlist:"+JSON.stringify(nextPostlist));
     if (remainTime == 0) {
         for (var index in nextPostlist) {
             var post = nextPostlist[index];
@@ -163,7 +163,7 @@ function resolvePostList() {
 
 function sendPost(post) {
     weibo_post.post(post, postlist);
-    console.log(JSON.stringify(post) + " has been posted!");
+//    console.log(JSON.stringify(post) + " has been posted!");
 }
 
 

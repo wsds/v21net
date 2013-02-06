@@ -49,6 +49,32 @@ $(document).ready(function () {
     }
 );
 
+$(document).ready(function () {
+    var timer_alert = setInterval(function () {
+        resolvePostlistStatus();
+    }, 1000 * 1);// check the postList every 1 second.
+});
+
+function resolvePostlistStatus() {
+    var now = new Date();
+    $(".container .post_status_tag_holder").each(function(){
+        var holder = this;
+        var post={};
+        post.status=$(holder).attr("status");
+        post.time=$(holder).attr("publishTime");
+        var publishTime = new Date(post.time);
+        post.remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000));
+        post.remainMinute = Math.floor(post.remainTime / 60);
+        post.remainSecond = post.remainTime % 60;
+        if(post.remainTime==0){
+            resolvePostlist();
+            return false;
+        }
+        var postStatusTag = getTemplate("post_status_tag");
+        $(holder).html(postStatusTag.render(post));
+    });
+}
+
 function registerMainEvent() {
 
     //登录界面
@@ -118,8 +144,8 @@ function registerMainEvent() {
             } else {
                 var publishTime = new Date(time);
                 var now = new Date();
-                var remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000*60));
-                if(remainTime<1){
+                var remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000 * 60));
+                if (remainTime < 1) {
                     window.alert("请将定时设置在1分钟之后。");
 //                    return;
                 }

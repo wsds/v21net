@@ -66,7 +66,7 @@ $(document).ready(function () {
             resolvePostList();
             renderTemplate();
 //            addClockPostPerDay();
-        }, 1000 * 1);// check the postList every 1 second.
+        }, 1000 * 100);// check the postList every 1 second.
         renderTemplate();
     }
 );
