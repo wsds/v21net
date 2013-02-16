@@ -84,6 +84,10 @@ function registerMainEvent() {
         }
     });
 
+    $(".switch_login_register").click(function () {
+        $("#register_account", $('#login_bar_container')).trigger("click");
+    });
+
     $("#auth_login").click(function () {
 
             var account = $("#auth_account").val();
@@ -113,6 +117,59 @@ function registerMainEvent() {
                 },
                 type:'GET',
                 url:("http://www.weibo.com/api2/authaccount/a?account=" + account + "&password=" + password)
+            });
+        }
+    );
+
+
+    //注册
+    $("#auth_register").click(function () {
+
+            var account = $("#main_register_auth_account").val();
+            var password1 = $("#main_register_auth_password1").val();
+            var password2 = $("#main_register_auth_password2").val();
+            var invite = $("#main_register_invite_code").val();
+            if(account.length<3){
+                $("#main_register_authTip").show();
+                $("#main_register_authTip").html("注册失败：" + "非法用户名。");
+                return;
+            }
+            if (password2.length<6) {
+                $("#main_register_authTip").show();
+                $("#main_register_authTip").html("注册失败：" + "密码必须大于6位。");
+                return;
+            }
+            if (password1 != password2) {
+                $("#main_register_authTip").show();
+                $("#main_register_authTip").html("注册失败：" + "密码不一致。");
+                return;
+            }
+
+//                window.alert("hello" + account + password);
+            $.ajax({
+                data:{"weibo_user":"tester"},
+                success:function (data) {
+                    if (data["提示信息"] == "账户注册成功") {
+                        settings.key = data.key;
+                        settings.authTip = data["提示信息"];
+                        settings.account = account;
+                        saveSettings();
+                        resolveOwnedWeibo();
+                        renderLoginBar();
+                    }
+                    else {
+                        settings.key = undefined;
+                        settings.account = undefined;
+                        settings.authTip = data["提示信息"];
+                        $("#main_register_authTip").show();
+                        $("#main_register_authTip").html("注册失败：" + settings.authTip);
+                        saveSettings();
+                        renderLoginBar();
+                    }
+//                        window.alert("data" + JSON.stringify(data));
+                },
+                type:'GET',
+                url:("http://www.weibo.com/api2/addaccount/a?account=" + account + "&password=" + password1 + "&invite=" + invite)
             });
         }
     );
@@ -449,10 +506,14 @@ function renderOwnedWeibo() {
 
 function renderMain() {
     if (settings.key == null || settings.account == null) {
-        settings.main = "main_login"
+        if (settings.main == "main_register") {
+            settings.main = "main_register";
+        } else {
+            settings.main = "main_login";
+        }
     }
     else {
-        if (settings.main == "main_login") {
+        if (settings.main == "main_login" ||settings.main == "main_register") {
             settings.main = "main_offline_post";
         }
     }
@@ -494,6 +555,16 @@ function renderLoginBar() {
             $(".afterlogin", $(this)).toggleClass("hide");
         }
     );
+
+    $("#register_account", $('#login_bar_container')).click(function () {
+        if (settings.main == "main_login") {
+            settings.main = "main_register";
+        } else {
+            settings.main = "main_login";
+        }
+
+        renderAll();
+    });
 
     $("#auth_logout", $('#login_bar_container')).click(function () {
 //        window.alert("click");

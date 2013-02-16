@@ -86,7 +86,15 @@ requestHandles.weiboUserAdd = function (request, response, pathObject, postData)
 requestHandles.addAccount = function (request, response, pathObject, getParam) {
     var accountName = getParam["account"];
     var password = getParam["password"];
-    accounts.addAccount(accountName, password, response);
+    var invite = getParam["invite"];
+    if(invite=="slzd2013"){
+        accounts.addAccount(accountName, password, response);
+    }
+    else{
+        response.write(JSON.stringify({"提示信息":"邀请码不正确。"}));
+        response.end();
+    }
+
 };
 
 requestHandles.authAccount = function (request, response, pathObject, getParam) {

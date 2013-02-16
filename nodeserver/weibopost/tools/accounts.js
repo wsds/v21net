@@ -27,9 +27,14 @@ accounts.addAccount = function (accountName, password, response) {
             "password":password,
             "ownedWeibo":{}
         }
+        var now = new Date();
+        account.key = "key:" + now.getTime();
         client.hset(["weibo_tools_accounts", account.accountName, JSON.stringify(account)], redis.print);
         globaldata.accounts[accountName] = account;
-        response.write(JSON.stringify({"提示信息":"账户注册成功"}));
+        response.write(JSON.stringify({
+            "提示信息":"账户注册成功",
+            "key":account.key
+        }));
     }
     else {
         response.write(JSON.stringify({"提示信息":"账户名已被占用"}));
@@ -82,6 +87,7 @@ accounts.addAccountOwnedWeibo = function (accountName, ownedWeibo, response) {
             response.write(JSON.stringify({"提示信息":"添加授权管理微博账号成功"}));
         }
         else {
+            console.log(JSON.stringify( account.ownedWeibo));
             response.write(JSON.stringify({"提示信息":"授权管理微博账号已添加，请勿重复操作"}));
         }
     }

@@ -176,6 +176,7 @@ app.use('/', function (req, res, next) {
     }
     else {
         weibo_users[user.screen_name] = user;
+        var account=req.url.replace("/oauth/", "");
         var response = "";
 //        for (weibo_user in weibo_users) {
 //            response += (weibo_user + "has logoed in!\n");
@@ -191,7 +192,7 @@ app.use('/', function (req, res, next) {
                         console.log("accountownedweibo: "+data);
                     },
                     type: 'GET',
-                    url: "http://127.0.0.1:8061/api2/accountownedweibo/add?account="+"user1"+"&ownedWeibo="+user.screen_name
+                    url: "http://127.0.0.1:8061/api2/accountownedweibo/add?account="+account+"&ownedWeibo="+user.screen_name
                 });
             },
             type: 'POST',

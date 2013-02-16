@@ -6,7 +6,7 @@
  * http://127.0.0.1:8061/api2/post/del?postid=abcc&weibo_user=u1
  *http://127.0.0.1:8061/api2/postsend/a?text=abcc&weibo_user=u1&time=2013/01/28%2016:22:22&pic=23125215214
  *http://127.0.0.1:8061/api2/gettokeninfo/a?weibo_user=很破滴一口钟
- *http://127.0.0.1:8061/api2/addaccount/a?account=u1Z&password=123456
+ *http://127.0.0.1:8061/api2/addaccount/a?account=u1Z&password=123456&invite=slzd2013
  *http://127.0.0.1:8061/api2/accountownedweibo/add?account=u1Z&ownedWeibo=很破滴一口钟
  * *http://127.0.0.1:8061/api2/accountownedweibo/del?account=u1Z&ownedWeibo=很破滴一口钟
  *http://127.0.0.1:8061/api2/accountownedweibo/getall?account=u1Z
