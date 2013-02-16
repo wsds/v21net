@@ -17,7 +17,7 @@ function loadTest() {
                 alert("reader.onload");
                 var urlData = this.result;
                 $.ajax({
-                    data:{filename:"1.png",image:urlData},
+                    data:{filename:"1.png",image:urlData, weibo_user:settings.ownedWeibo.currentWeibo},
                     success:function (data) {
                         alert(data);
                     },

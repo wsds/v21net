@@ -13,12 +13,12 @@ function start(route, handle) {
         request.addListener("data", function(postDataChunk) {
             postData += postDataChunk;
             console.log("Received POST data chunk '"+
-                postDataChunk + "'.");
+                postDataChunk.length + "'.");
         });
 
         request.addListener("end", function() {
             var postDataObject = querystring.parse(postData);
-            console.log(JSON.stringify(postDataObject));
+//            console.log(JSON.stringify(postDataObject));
             route(pathname, response, postDataObject);
         });
 

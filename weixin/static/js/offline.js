@@ -57,16 +57,16 @@ $(document).ready(function () {
 
 function resolvePostlistStatus() {
     var now = new Date();
-    $(".container .post_status_tag_holder").each(function(){
+    $(".container .post_status_tag_holder").each(function () {
         var holder = this;
-        var post={};
-        post.status=$(holder).attr("status");
-        post.time=$(holder).attr("publishTime");
+        var post = {};
+        post.status = $(holder).attr("status");
+        post.time = $(holder).attr("publishTime");
         var publishTime = new Date(post.time);
         post.remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000));
         post.remainMinute = Math.floor(post.remainTime / 60);
         post.remainSecond = post.remainTime % 60;
-        if(post.remainTime==0){
+        if (post.remainTime == 0) {
             resolvePostlist();
             return false;
         }
@@ -147,24 +147,20 @@ function registerMainEvent() {
                 var remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000 * 60));
                 if (remainTime < 1) {
                     window.alert("请将定时设置在1分钟之后。");
-//                    return;
+                    return;
                 }
                 publishTime.setTime(publishTime.getTime() + 1000 * 60 * (120 + parseInt(Math.random() * (20 + 20) - 20)));
                 $('#time_picker').val(getShortDateTimeString(publishTime));
             }
 
-            var post = addPost(time, text);
+            uploadPic(function (pic) {
+                var post = addPost(time, text, pic);
+            });
 
             $("#sendtext").val("");
             $("#thumbs").empty();
-//            if(tools.pid=="uploading"){
-//                uploadPic(post);
-//                tools.pid="none";
-//            }
-
         }
     );
-
 
     //定时发布列表
     $(".delAppBtn", $('#main_container')).click(function () {
@@ -208,7 +204,38 @@ function getShortDateTimeString(date) {   //如：2011/07/29 13:30
     return str;
 }
 
-function addPost(time, text) {
+
+function uploadPic(next) {
+    if (settings.uploadStatus == "uploading") {
+        var file = $("#input_image")[0].files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+//            alert("reader.onload");
+            var urlData = this.result;
+            $.ajax({
+                data:{filename:"1.png", image:urlData, weibo_user:settings.ownedWeibo.currentWeibo},
+                success:function (data) {
+                    var filename = data.filename;
+                    if (filename == null) {
+                        alert(JSON.stringify(data));
+                    } else {
+                        next(filename);
+                    }
+                },
+                type:'POST',
+                url:("http://www.weibo.com/upload2/")
+            });
+        };
+
+        settings.uploadStatus = "none";
+    }
+    else {
+        next("none")
+    }
+}
+
+function addPost(time, text, pic) {
     $.ajax({
         success:function (data) {
 //            alert(JSON.stringify(data));
@@ -218,7 +245,7 @@ function addPost(time, text) {
             }
         },
         type:'GET',
-        url:("http://www.weibo.com/api2/post/add?text=" + text + "&weibo_user=" + settings.ownedWeibo.currentWeibo + "&time=" + time + "&pic=23125215214")
+        url:("http://www.weibo.com/api2/post/add?text=" + text + "&weibo_user=" + settings.ownedWeibo.currentWeibo + "&time=" + time + "&pic=" + pic)
     });
 }
 
@@ -279,7 +306,7 @@ function registerTimerEvent() {
 function registerUploadImageEvent() {
     $('#addPicButton').click(function () {
 
-//        alert("testButton");
+        $("#input_image").val("");
         $("#input_image").trigger("click");
     });
 
@@ -295,8 +322,8 @@ function registerUploadImageEvent() {
 //                    document.getElementById('thumbs').insertBefore(span, null);
                     $("#thumbs").empty();
                     $("#thumbs").append(span);
-                    if (postlist.pid = "none") {
-                        postlist.pid = "uploading";
+                    if (settings.uploadStatus = "none") {
+                        settings.uploadStatus = "uploading";
                     }
                     $('.images_a', $(span)).click(function () {
                         if ($(this).hasClass("drop")) {
@@ -308,6 +335,9 @@ function registerUploadImageEvent() {
                             $(this).append('<a class="images_close_a" href="javascript:"><img class="images_close"  style="vertical-align: top;" src="/static/images/close_small.png"></a>')
                             $('.images_close_a', $(this)).click(function () {
                                     $(span).remove();
+                                    if (settings.uploadStatus = "uploading") {
+                                        settings.uploadStatus = "none";
+                                    }
                                 }
                             );
                         }

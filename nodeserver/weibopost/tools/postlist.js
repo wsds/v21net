@@ -35,8 +35,8 @@ postlist.initializePostlist = function () {
                     continue;
                 }
                 if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) <= 0) {
-                    if(parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) < 0){
-                        nextPostlist={};
+                    if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) < 0) {
+                        nextPostlist = {};
                     }
                     nextPostTime = publishTime;
                     nextPostlist[postID] = post;
@@ -47,7 +47,7 @@ postlist.initializePostlist = function () {
     });
 };
 
-postlist.addPost = function (weibo_user_name, text, publishTimeString, postlist) {
+postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, postlist) {
     var post = {};
 
     var now = new Date();
@@ -56,8 +56,8 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, postlist)
     if (publishTimeString != "") {
         publishTime = new Date(publishTimeString);
         if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) <= 0) {
-            if(parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) < 0){
-                nextPostlist={};
+            if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) < 0) {
+                nextPostlist = {};
             }
             nextPostTime = publishTime;
             nextPostlist[post.id] = post;
@@ -67,7 +67,7 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, postlist)
     post.time = getShortDateTimeString(publishTime);
     post.status = "publishing";
     post.text = text;
-    post.pid = "none";
+    post.pid = pic;
     //post.remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000));
     //post.remainMinute = Math.floor(post.remainTime / 60);
     //post.remainSecond = post.remainTime % 60;
@@ -83,7 +83,7 @@ postlist.delPost = function (weibo_user_name, postid, postlist) {
     client.hdel(["weibo_tools_postlist", postid], redis.print);
     client.lrem("postlist_" + weibo_user_name, 1, postid);
 
-    if(nextPostlist[postid]!=null){
+    if (nextPostlist[postid] != null) {
         this.initializePostlist();
     }
 }
