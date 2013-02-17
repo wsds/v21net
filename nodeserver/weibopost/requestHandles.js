@@ -120,6 +120,15 @@ requestHandles.accountOwnedWeibo = function (request, response, pathObject, getP
 
 };
 
+requestHandles.accountOwnedWeiboPost = function (request, response, pathObject, postData) {
+    var operation = pathObject["operation"];
+    if (operation == "add") {
+        var accountName = postData["account"];
+        var ownedWeibo = postData["ownedWeibo"];
+        accounts.addAccountOwnedWeibo(accountName, ownedWeibo, response);
+        response.end();
+    }
+}
 
 requestHandles.getTokenInfo = function (request, response, pathObject, getParam) {
     var weibo_user = getParam["weibo_user"];

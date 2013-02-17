@@ -31,7 +31,8 @@ var routemap = {
     },
     "post":{
         "/api2/test/*":requestHandles.test,
-        "/api2/weibouseradd/*":requestHandles.weiboUserAdd
+        "/api2/weibouseradd/*":requestHandles.weiboUserAdd,
+        "/api2/accountownedweibo/:operation":requestHandles.accountOwnedWeiboPost
     },
     "put":{
     },

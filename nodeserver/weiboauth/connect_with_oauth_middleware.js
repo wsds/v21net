@@ -188,11 +188,12 @@ app.use('/', function (req, res, next) {
             success: function(data){
                 console.log("weibouseradd: "+data);
                 ajax.ajax( {
+                    data: {"account": account, "ownedWeibo": user.screen_name},
                     success: function(data){
                         console.log("accountownedweibo: "+data);
                     },
-                    type: 'GET',
-                    url: "http://127.0.0.1:8061/api2/accountownedweibo/add?account="+account+"&ownedWeibo="+user.screen_name
+                    type: 'POST',
+                    url: "http://127.0.0.1:8061/api2/accountownedweibo/add"
                 });
             },
             type: 'POST',
