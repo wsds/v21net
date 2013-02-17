@@ -509,8 +509,7 @@ function renderOwnedWeibo() {
 
 function renderMain() {
     if (settings.key == null || settings.account == null) {
-        if (settings.main == "main_register") {
-            settings.main = "main_register";
+        if (settings.main == "main_register" || settings.main == "main_password" ) {
         } else {
             settings.main = "main_login";
         }
@@ -560,13 +559,7 @@ function renderLoginBar() {
     );
 
     $("#register_account", $('#login_bar_container')).click(function () {
-        if (settings.main == "main_login") {
-            settings.main = "main_register";
-        } else {
-            settings.main = "main_login";
-        }
 
-        renderAll();
     });
 
     $("#auth_logout", $('#login_bar_container')).click(function () {
@@ -586,6 +579,18 @@ function renderLoginBar() {
             var operation = $(this).attr("operation");
             if (operation == "weibo_management") {
                 $(".account", $('#owned_weibo_container')).trigger("click", ["management"]);
+            }
+            else if (operation == "change_password") {
+                settings.main = "main_password";
+                renderAll();
+            }
+            else if (operation == "register_account") {
+                if (settings.main == "main_login") {
+                    settings.main = "main_register";
+                } else {
+                    settings.main = "main_login";
+                }
+                renderAll();
             }
         }
     );
