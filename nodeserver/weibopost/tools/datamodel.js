@@ -1,9 +1,11 @@
 HSET "weibo_tools_acount:"
-        acountname : {"accountName":accountName,  "password":password, "ownedWeibo":{ownedWeibo:"true"}, "key": key}
+        acountname : {"accountID":acountID, "accountName":accountName,  "password":password, "ownedWeibo":{ownedWeibo:"true"}, "key": key}
 
+HSET "weibo_tools_acount_id:"
+        acountID : acountname
 
 HSET "weibo_users:"
-        weibo_user.name : weibo_user
+        weibo_user.uid : weibo_user
 
 
 HSET "weibo_tools_postlist:"
