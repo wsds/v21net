@@ -54,7 +54,13 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, post
     post.id = weibo_user_name + now.getTime();
 
     if (publishTimeString != "") {
-        publishTime = new Date(publishTimeString);
+        var publishTime = now;
+        if (publishTimeString == "now") {
+            publishTime.setSeconds(publishTime.getSeconds() + 10);
+        }
+        else {
+            publishTime = new Date(publishTimeString);
+        }
         if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) <= 0) {
             if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) < 0) {
                 nextPostlist = {};

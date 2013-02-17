@@ -135,7 +135,7 @@ function addPost(publishTimeString, text) {
 
     var now = new Date();
     var publishTime = now;
-    publishTime.setSeconds(publishTime.getSeconds() + 2);
+    publishTime.setSeconds(publishTime.getSeconds() + 5);
     if (publishTimeString != "") {
         publishTime = new Date(publishTimeString);
     }

@@ -67,7 +67,9 @@ function resolvePostlistStatus() {
         post.remainMinute = Math.floor(post.remainTime / 60);
         post.remainSecond = post.remainTime % 60;
         if (post.remainTime == 0) {
-            resolvePostlist();
+            setTimeout(function () {
+                resolvePostlist();
+            }, 1000 * 5);
             return false;
         }
         var postStatusTag = getTemplate("post_status_tag");
@@ -129,12 +131,12 @@ function registerMainEvent() {
             var password1 = $("#main_register_auth_password1").val();
             var password2 = $("#main_register_auth_password2").val();
             var invite = $("#main_register_invite_code").val();
-            if(account.length<3){
+            if (account.length < 3) {
                 $("#main_register_authTip").show();
                 $("#main_register_authTip").html("注册失败：" + "非法用户名。");
                 return;
             }
-            if (password2.length<6) {
+            if (password2.length < 6) {
                 $("#main_register_authTip").show();
                 $("#main_register_authTip").html("注册失败：" + "密码必须大于6位。");
                 return;
@@ -294,6 +296,7 @@ function uploadPic(next) {
 
 function addPost(time, text, pic) {
     $.ajax({
+        data:{"text":text, "weibo_user":settings.ownedWeibo.currentWeibo, "time":time, "pic":pic},
         success:function (data) {
 //            alert(JSON.stringify(data));
             if (data["提示信息"] == "成功") {
@@ -301,8 +304,8 @@ function addPost(time, text, pic) {
             else {
             }
         },
-        type:'GET',
-        url:("http://www.weibo.com/api2/post/add?text=" + text + "&weibo_user=" + settings.ownedWeibo.currentWeibo + "&time=" + time + "&pic=" + pic)
+        type:'POST',
+        url:("http://www.weibo.com/api2/post/add")
     });
 }
 
@@ -513,7 +516,7 @@ function renderMain() {
         }
     }
     else {
-        if (settings.main == "main_login" ||settings.main == "main_register") {
+        if (settings.main == "main_login" || settings.main == "main_register") {
             settings.main = "main_offline_post";
         }
     }
