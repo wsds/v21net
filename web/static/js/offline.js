@@ -7,7 +7,6 @@ window.onbeforeunload = function () {
 function saveSettings() {
     window.localStorage.settings = JSON.stringify(settings);
 }
-;
 
 $(document).ready(function () {
         if (window.localStorage.settings != null) {
@@ -21,7 +20,6 @@ function renderAll() {
     renderOwnedWeibo();
     renderMain();
 }
-;
 
 $(document).ready(function () {
         settings.main = "main_login";
@@ -171,7 +169,6 @@ function registerMainEvent() {
                 return;
             }
 
-//                window.alert("hello" + account + password);
             $.ajax({
                 data:{"account":account, "password":password1, "invite":invite},
                 success:function (data) {
@@ -717,6 +714,8 @@ function renderLoginBar() {
         }
     );
 }
+
+//todo buffer template to enhance the render effiency.
 
 function getTemplate(id) {
     var tenjin = nTenjin;

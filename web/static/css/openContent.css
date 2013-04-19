@@ -219,6 +219,7 @@ a:hover {
 }
 
 .productlist li {
+    text-align: left;
 }
 
 .productlist li a {
