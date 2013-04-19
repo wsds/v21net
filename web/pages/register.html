@@ -1,0 +1,182 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf8">
+    <title>微博发布工具(离线多账号)</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/openContent.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/open.css">
+</head>
+<body>
+<div class="messageList"></div>
+<div class="container">
+
+
+    <div class="intro">
+
+        <div class="articleTitle normalTitle">
+            <h2 href="javascript:;">微博发布工具(离线多账号) </h2>
+
+            <div class="templateContainer" template="owned_weibo" status="Hide" statusset="Hide Show">
+                <div id="data" class="account" tabindex="-1" hidefocus="" style="left: 290px;outline: none;"><a
+                        id="data_toggle" class="account-toggle" href="javascript:;"><span class="toggle-down"></span>
+
+
+                    很破滴一口钟
+
+
+                    <img src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"></a>
+
+                    <div id="data_menu" class="afterlogin hide" style="left:0px">
+                        <ul class="productlist">
+
+
+                            <li class="owned_weibo_li" weibo="很破滴一口钟"><a href="javascript:;"><img
+                                    src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0">很破滴一口钟<img
+                                    class="owned_weibo_del hide" weibo="很破滴一口钟" style="margin: 15px 0 0 0;float:right;"
+                                    src="/static/images/close_small.png"></a>
+                            </li>
+
+
+                            <li class="owned_weibo_li" weibo="希尔伯特的空间"><a href="javascript:;"><img
+                                    src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0">希尔伯特的空间<img
+                                    class="owned_weibo_del hide" weibo="希尔伯特的空间" style="margin: 15px 0 0 0;float:right;"
+                                    src="/static/images/close_small.png"></a>
+                            </li>
+
+
+                            <li class="owned_weibo_li" weibo="周易研究院"><a href="javascript:;"><img
+                                    src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0">周易研究院<img
+                                    class="owned_weibo_del hide" weibo="周易研究院" style="margin: 15px 0 0 0;float:right;"
+                                    src="/static/images/close_small.png"></a>
+                            </li>
+
+
+                            <li class="owned_weibo_li" weibo="html5研究院"><a href="javascript:;"><img
+                                    src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0">html5研究院<img
+                                    class="owned_weibo_del hide" weibo="html5研究院"
+                                    style="margin: 15px 0 0 0;float:right;" src="/static/images/close_small.png"></a>
+                            </li>
+
+
+                            <li class="loginout"><a target="_blank"
+                                                    href="http://login.sina.com.cn/sso/logout.php?entry=openapi&amp;r=https%3A%2F%2Fapi.weibo.com%2Foauth2%2Fauthorize%3Fredirect_uri%3Dhttp%253A%252F%252Fwww.weibo.com%252Foauth%252Fcallback%26client_id%3D2445517113%26state%3Dwsds%26response_type%3Dcode%23">添加授权管理微博账号</a>
+                            </li>
+                            <ul></ul>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="templateContainer" template="login_bar" status="LoggedIn" statusset="NotLoggedIn LoggedIn">
+                <div id="login" class="account drop" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
+                    <a id="login_toggle" class="account-toggle" href="javascript:;">wsds, 已登录<span
+                            class="toggle-down"></span></a>
+
+                    <div id="login_menu" class="afterlogin">
+                        <ul class="productlist">
+                            <li class="login_bar_li" operation="weibo_management"><a data-uigroup="dialog"
+                                                                                     target="_blank"
+                                                                                     href="javascript:;">账号管理</a></li>
+                            <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog"
+                                                                                    target="_blank" href="javascript:;">修改密码</a>
+                            </li>
+                            <li class="loginout"><a id="auth_logout" href="javascript:">退出登录</a></li>
+                            <ul></ul>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="clr"></div>
+        </div>
+
+        <div class="nav">
+            <ul id="slide_ctrls">
+                <li><a slide="main_offline_post" class="slide-ctrl nav-item-1" href="javascript:;"><span
+                        class="nav-item-icon"></span><span>离线发布工具</span></a>
+                </li>
+                <li><a slide="main_offline_post_list" class="slide-ctrl nav-item-2" submenu="subshow"
+                       href="javascript:;"><span class="nav-item-icon"></span><span>定时发布列表</span></a>
+                </li>
+                <li><a slide="main_register" class="slide-ctrl nav-item-5 current" href="javascript:;"><span
+                        class="nav-item-icon"></span><span>定时转发</span></a>
+                </li>
+            </ul>
+            <b class="icon16 subnavpoint_af" style="display:none;"></b>
+        </div>
+        <div class="main" id="slide_contents">
+            <div class="subnav" style="display:none;">
+                <ul>
+                    <li><a href="#" class="itemclick">发送记录</a></li>
+                    <li><a href="#">转发记录</a></li>
+                </ul>
+
+            </div>
+            <div class="appContent normalContent">
+                <div class="templateContainer" template="main_panel" status="main_register"
+                     statusset="main_login main_register">
+                    <div class="main_register" id="main_register">
+                        <div class="loginPanel innerPanel">
+                            <div class="title">
+                                <h3>注册</h3>
+
+                                <p>注册新的开发者账号</p>
+
+                                <div class="clr"></div>
+                            </div>
+                            <div class="login_operate" style="display:block" id="main_register_auth">
+                                <div class="content form">
+                                    <div class="columnTip">
+                                        <div id="main_register_authTip" style="display:none;" class="tip errorTip">
+                                            注册失败
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <label>账号</label>
+                                        <input class="text textMiddle inputQ" id="main_register_auth_account">
+                                    </div>
+                                    <div class="column">
+                                        <label>密码</label>
+                                        <input type="password" class="text textMiddle inputQ"
+                                               id="main_register_auth_password1">
+                                    </div>
+                                    <div class="column">
+                                        <label>重复密码</label>
+                                        <input type="password" class="text textMiddle inputQ"
+                                               id="main_register_auth_password2">
+                                    </div>
+                                    <div class="column">
+                                        <label>邀请码</label>
+                                        <input class="text textMiddle inputQ" id="main_register_invite_code">
+                                    </div>
+                                </div>
+                                <div class="operator">
+                                    <a href="javascript:;" class="login_btn_wrapper">
+                                        <input id="auth_register" name="btlogin" type="submit" value="立即注册"
+                                               class="login_btn">
+                                    </a>
+
+                                    <div style="display: none;" id="switch3" class="lineright"></div>
+                                    <a class="minorLink" target="_blank" href="mailto:wsds888@qq.com">意见反馈</a>
+                                    <a class="minorLink">|</a>
+                                    <a class="minorLink switch_login_register" target="_blank"
+                                       href="javascript:;">直接登录</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clr"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p class="copyright textGray">© 2012 - 2015 SLZD All Rights Reserved.</p>
+</div>
+
+
+<div>
+    <object id="ClCache" click="sendMsg" host="" width="0" height="0"></object>
+</div>
+</body>
+</html>
