@@ -27,7 +27,7 @@
                 <li><a slide="main_offline_post" class="slide-ctrl nav-item-1 current" href="javascript:;"><span
                         class="nav-item-icon"></span><span>离线发布工具</span></a>
                 </li>
-                <li><a slide="main_login" class="slide-ctrl nav-item-2" submenu="subshow"
+                <li><a slide="main_offline_post_list" class="slide-ctrl nav-item-2" submenu="subshow"
                        href="javascript:;"><span
                         class="nav-item-icon"></span><span>定时发布列表</span></a>
                 </li>
@@ -271,7 +271,7 @@
         <div id="facePanel" class="facePanel" style="display:none;">
             <div class="defaultFacePanel">
                 <?js for (var index=1;index<data.faceTitles.length;index++) { ?>
-                <a class="face_a" href="javascript:void(0);" text="[#{data.faceTitles[index]}]" onClick="checkFace(this)" title="#{data.faceTitles[index]}"></a>
+                <a class="face_a" href="javascript:void(0);" text="[#{data.faceTitles[index]}]"  title="#{data.faceTitles[index]}"></a>
                 <?js }?>
             </div>
         </div>
@@ -359,6 +359,78 @@
 </div>
 </div>
 
+
+
+<div class="template"  template="main_panel" status="main_offline_post_list" eventPool="main_offline_post_list">
+    <div class="main_offline_post_list form" id="main_offline_post_list">
+        <?js for (var index in data.postlist) { ?>
+        <?js post=data.postlist[index]; ?>
+        <?js if(post==null) { ?>
+        <?js continue; ?>
+        <?js } ?>
+        <div class="row-section">
+            <b class="icon16 ag_listpoint" style="width:18px;height:20px;"></b>
+            <div style="float:left;">
+                <a class="" href="javascript:">
+                    <?js if(post.pid=="none") { ?>
+                    <img class="images" src="/static/images/logo_tools.png">
+                    <?js }else { ?>
+                    <img class="images" src="http://images.weibo.com/#{ post.pid }.png">
+                    <?js } ?>
+                </a>
+            </div>
+            <div class="row columnDisplay">
+                <div class="postcontent">
+                    <span>#{ post.text }</span>
+                    <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
+                </div>
+                <div class="sendtime">
+                    <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;" class="posttime">#{ post.time }</label>
+                    <span class="post_status_tag_holder" status="#{ post.status }" publishTime="#{ post.time }"></span>
+                    <div style="float:right;margin-top:-3px;">
+                        <a style="color:#fff;" class="ok_button size46" href="#">保存</a>&nbsp;&nbsp;<a style="color:#fff;" class="cancel_button size46" href="#">取消</a>
+                        <a href="#" class="changedate">修改</a><span>|</span>
+                        <a class="deletedate" href="javascript:;"  postID="#{ post.id }">删除</a>
+                    </div>
+                </div>
+                <div class="clr"></div>
+            </div>
+        </div>
+        <?js } ?>
+
+        <div class="row columnDisplay">
+            <div class="postcontent">
+                <p>
+                    <span class="forwardWeibo">转发<em>老习</em>微博</span>
+                            <span class="forwardTime">
+                                <b class="icon16 forwardTime_an"></b><label>转发时间:</label><label class="posttime">2013/04/07 18:45:00</label>
+                            </span>
+                    <a href="#" class="conternhref" >查看原文</a>
+                </p>
+                <div class="clr"></div>
+                <p>转发夺去夺在转发夺去夺在转发夺去夺在转发夺去夺在转发夺去夺在</p>
+                <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
+            </div>
+            <div class="sendtime">
+                    	<span publishtime="2013/04/07 18:45:00" status="published" class="post_status_tag_holder">
+                            <div id="post_status_tag" class="tag post_status_tag"></div>
+                        </span>
+            </div>
+            <div class="clr"></div>
+        </div>
+        <div class="timing_forwarding">
+            <div class="weibo_face">
+                <img src="/static/images/face.jpg"/>
+            </div>
+            <div class="weiboContent">
+                <div>英式美品笑话</div>
+                <div>在美国动物收容所内，一名义工摄影师举着相机，流着泪，在替一个即将安乐死的狗狗拍照。然而镜头前的狗，不知道自己的生命即将终止，于是面对镜头仍露出了灿烂的笑容。。。</div>
+                <a href="#" class="ok_button size46" style="color:#fff;">定时转发</a>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 </div>
 

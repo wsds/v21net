@@ -82,7 +82,7 @@ eventPool.main_login = function (status, area) {
 
 
 eventPool.main_register = function (status, area) {
-    console.log(status);
+//    console.log(status);
     //注册
     $("#auth_register").click(function () {
 
@@ -290,3 +290,52 @@ eventPool.main_offline_post = function (status, area) {
 
 
 };
+
+
+
+eventPool.main_offline_post_list = function (status, area) {};
+
+
+
+
+
+
+
+
+
+
+//textarea字数变化显示
+function textareaChange() {
+    var content = document.getElementById("sendtext").value;
+    var contentLength = getCharLength(content);
+    var trueLength = parseInt(contentLength / 2);
+    //alert(content);
+    if (contentLength < 281) {
+        document.getElementById("textLength").innerHTML = 140 - trueLength;
+    } else {
+        document.getElementById("sendtext").value = document.getElementById("sendtext").value.substr(0, 281);
+        document.getElementById("textLength").innerHTML = 0;
+    }
+
+}
+function getCharLength(str) {
+    var charLen = 0;
+    for (var i = 0, len = str.length; i < len; i++) {
+        if (str.charCodeAt(i) > 255) {
+            charLen += 2;
+        } else {
+            charLen += 1;
+        }
+    }
+    return charLen;
+}
+function checkMaxLength(textArea, maxLength) {
+    var currentStr = "";
+    for (var i = 0, len = textArea.value.length; i < len; i++) {
+        currentStr += textArea.value.charAt(i);
+        if (getCharLength(currentStr) > maxLength) {
+            area.value = textArea.value.substr(0, i);
+            return;
+        }
+    }
+}
