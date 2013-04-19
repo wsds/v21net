@@ -5,7 +5,7 @@ eventPool.body = function (status, area) {
             $("#slide_ctrls li a").removeClass("current");
             $(this).toggleClass("current");
             var main_panel = $(this).attr("slide");
-            var main_panel_container = $(".templateContainer[template='main_panel']")
+            var main_panel_container = $(".templateContainer[template='main_panel']");
             main_panel_container.attr("status", main_panel);
             renderTemplate(main_panel_container);
         }
@@ -133,4 +133,160 @@ eventPool.main_register = function (status, area) {
             });
         }
     );
+};
+
+
+eventPool.main_offline_post = function (status, area) {
+
+    $("#sendtext").keyup(function () {
+        if (event.ctrlKey && event.keyCode == 13 || event.keyCode == 10) {
+            $("#btsend").trigger("click");
+        }
+    });
+
+    $("#btsend").click(function () {
+            var text = $("#sendtext").val().trim();
+            if (text == "") {
+                window.alert("发布内容不能为空的。");
+                return;
+            }
+            var time = $('#time_picker').val();
+            if (time == "") {
+                var sendDirectly = confirm("不设置定时将直接发布，确定？");
+                if (sendDirectly == false) {
+                    return;
+                } else {
+                    time = "now";
+                }
+            } else {
+                var publishTime = new Date(time);
+                var now = new Date();
+                var remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000 * 60));
+                if (remainTime < 1) {
+                    window.alert("请将定时设置在1分钟之后。");
+                    return;
+                }
+                publishTime.setTime(publishTime.getTime() + 1000 * 60 * (120 + parseInt(Math.random() * (20 + 20) - 20)));
+                $('#time_picker').val(getShortDateTimeString(publishTime));
+            }
+
+            uploadPic(function (pic) {
+                var post = addPost(time, text, pic);
+            });
+
+            $("#sendtext").val("");
+            $("#thumbs").empty();
+        }
+    );
+    function addEvent(obj, eventType, func) {
+        if (obj.attachEvent) {
+            obj.attachEvent("on" + eventType, func);
+        }
+        else {
+            obj.addEventListener(eventType, func, false)
+        }
+    }
+
+    function clickOtherClose(el) {
+        thisObj = el.target ? el.target : event.srcElement;
+        do {
+            if (thisObj.id == "select_year_list" || thisObj.id == "select_month_list" || thisObj.id == "select_day_list" || thisObj.id == "select_hour_list" || thisObj.id == "select_minute_list" || thisObj.id == "facePanel") {
+                return;
+            }
+            if (thisObj.tagName == "BODY") {
+                noneAllPopmenu();
+                return;
+            }
+            ;
+            thisObj = thisObj.parentNode;
+        } while (thisObj.parentNode);
+    }
+
+    function noneAllPopmenu() {
+        $(".time_object ul", $('#main_container')).hide();
+        $("#facePanel").hide();
+        $(".sharpTop").hide();
+    }
+
+    $(".btn_gray").click(function () {
+        var id = $(this).attr("id");
+        var isshow = ($("#" + id + "_list").css("display") == "none");
+        $(".time_object ul", $('#main_container')).hide();
+        if (isshow) {
+            $("#" + id + "_list").show();
+            addEvent(document.body, "mousedown", clickOtherClose);
+        } else {
+            $("#" + id + "_list").hide();
+        }
+    });
+    $(".timelist").click(function () {
+        var content = $(this).attr("number");
+        var timetype = $(this).attr("timetype");
+        var id = $(this).parent().attr("id");
+        $(".btn_gray" + " [timetype='" + timetype + "']").html(content);
+
+
+        if ($(".btn_gray" + " [timetype='day']")) {
+            monthShow();
+        }
+        var year = $(".btn_gray" + " [timetype='year']").html();
+        var month = $(".btn_gray" + " [timetype='month']").html();
+        var day = $(".btn_gray" + " [timetype='day']").html();
+        var hour = $(".btn_gray" + " [timetype='hour']").html();
+        var minute = $(".btn_gray" + " [timetype='minute']").html();
+        settings.time.public_time = year + "年" + month + "月" + day + "日" + hour + "时" + minute + "分";
+        $("#public_time").html(settings.time.public_time);
+        $(".time_object ul", $('#main_container')).hide();
+    });
+    $(".aa_face").click(function () {
+        $(".facePanel").toggle();
+        $(".sharpTop").toggle();
+        addEvent(document.body, "mousedown", clickOtherClose);
+
+    });
+    $(".face_a").click(function () {
+        var content = $(this).attr("text");
+        var sendtext = document.getElementById("sendtext").value;
+
+        var lenght2 = getCharLength(content);
+        var lenght = getCharLength(sendtext);
+
+        if (lenght + lenght2 < 281) {
+            $('#sendtext').insertAtCaret(content);
+            document.getElementById("textLength").innerHTML = 140 - parseInt((lenght + lenght2) / 2);
+            $("#facePanel").hide();
+            $(".sharpTop").hide();
+        } else {
+            $('#sendtext').insertAtCaret('');
+        }
+    });
+    (function ($) {
+        $.fn.insertAtCaret = function (tagName) {
+            return this.each(function () {
+                if (document.selection) {
+                    //IE support
+                    this.focus();
+                    sel = document.selection.createRange();
+                    sel.text = tagName;
+                    this.focus();
+                } else if (this.selectionStart || this.selectionStart == '0') {
+                    //MOZILLA/NETSCAPE support
+                    startPos = this.selectionStart;
+                    endPos = this.selectionEnd;
+                    scrollTop = this.scrollTop;
+                    this.value = this.value.substring(0, startPos) + tagName + this.value.substring(endPos, this.value.length);
+                    this.focus();
+                    this.selectionStart = startPos + tagName.length;
+                    this.selectionEnd = startPos + tagName.length;
+                    this.scrollTop = scrollTop;
+                } else {
+                    this.value += tagName;
+                    this.focus();
+                }
+            });
+        };
+    })(jQuery);
+
+
+
 };
