@@ -1,11 +1,9 @@
-﻿<html>
-<head>
+﻿<html><head>
     <meta http-equiv="content-type" content="text/html;charset=utf8">
     <title>微博发布工具(离线多账号)</title>
     <link rel="stylesheet" type="text/css" href="/static/css/openContent.css">
     <link rel="stylesheet" type="text/css" href="/static/css/open.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/SpryCollapsiblePanel.css">
-    <link href="/static/css/mobiscroll-2.3.1.custom.min.css" rel="stylesheet" type="text/css"/>
+
 
 
 </head>
@@ -32,12 +30,23 @@
                     <li><a slide="main_offline_post" class="slide-ctrl nav-item-1 current" href="javascript:;"><span
                             class="nav-item-icon"></span><span>离线发布工具</span></a>
                     </li>
-                    <li><a slide="main_offline_post_list" class="slide-ctrl nav-item-2 " href="javascript:;"><span
+                    <li><a slide="main_offline_post_list" class="slide-ctrl nav-item-2" submenu = "subshow" href="javascript:;"><span
                             class="nav-item-icon"></span><span>定时发布列表</span></a>
                     </li>
+                    <li><a slide="main_offline_post_list2" class="slide-ctrl nav-item-5 " href="javascript:;"><span
+                            class="nav-item-icon"></span><span>定时转发</span></a>
+                    </li>
                 </ul>
+                <b class="icon16 subnavpoint_af" style="display:none;"></b>
             </div>
             <div class="main" id="slide_contents">
+                <div class="subnav" style="display:none;">
+                    <ul>
+                        <li><a href="#" class="itemclick">发送记录</a></li>
+                        <li><a href="#">转发记录</a></li>
+                    </ul>
+
+                </div>
                 <div class="appContent normalContent">
                     <div id="main_container">
                     </div>
@@ -53,345 +62,630 @@
 </div>
 
 <div class="templates">
-    <div class="template">
-        <div class="login-bar" id="login-bar-success">
-            <div id="login" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
-                <a id="login_toggle" class="account-toggle" href="javascript:;">#{ it }, 已登录<span
-                        class="toggle-down"></span></a>
+<div class="template">
+    <div class="login-bar" id="login-bar-success">
+        <div id="login" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
+            <a id="login_toggle" class="account-toggle" href="javascript:;">#{ it }, 已登录<span
+                    class="toggle-down"></span></a>
 
-                <div id="login_menu" class="afterlogin hide" style="">
-                    <ul class="productlist">
-                        <li class="login_bar_li" operation="weibo_management"><a data-uigroup="dialog" target="_blank"
-                               href="javascript:;">账号管理</a></li>
-                        <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
-                               href="javascript:;">修改密码</a></li>
-                        <li class="loginout"><a id="auth_logout" href="javascript:">退出登录</a></li>
-                        <ul></ul>
-                    </ul>
-                </div>
+            <div id="login_menu" class="afterlogin hide" style="">
+                <ul class="productlist">
+                    <li class="login_bar_li" operation="weibo_management"><a data-uigroup="dialog" target="_blank"
+                                                                             href="javascript:;">账号管理</a></li>
+                    <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
+                                                                            href="javascript:;">修改密码</a></li>
+                    <li class="loginout"><a id="auth_logout" href="javascript:">退出登录</a></li>
+                    <ul></ul>
+                </ul>
             </div>
-        </div>
-    </div>
-
-    <div class="template">
-        <div class="login-bar" id="login-bar">
-            <div id="login1" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
-                <a id="login_toggle1" class="account-toggle" href="javascript:;">登录<span class="toggle-down"></span></a>
-
-                <div id="login_menu1" class="afterlogin hide" style="">
-                    <ul class="productlist">
-                        <li class="login_bar_li" operation="register_account"><a id="register_account" data-uigroup="dialog" target="_blank"
-                               href="javascript:;" >注册新账号</a></li>
-                        <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
-                               href="javascript:;">忘记密码</a></li>
-                        <ul></ul>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="template">
-        <div class="owned_weibo" id="owned_weibo">
-            <div id="data" class="account" tabindex="-1" hidefocus="" style="left: 290px;outline: none;"><a
-                    id="data_toggle" class="account-toggle" href="javascript:;"><span
-                    class="toggle-down"></span>
-                <?js if (it!=null) { ?>
-                <?js if (it.currentWeibo==null) { ?>
-                添加授权管理微博账号
-                <?js }else { ?>
-                #{ it.currentWeibo }
-                <?js } ?>
-                <?js } ?>
-                <img src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/></a>
-
-                <div id="data_menu" class="afterlogin hide" style="left:0px">
-                    <ul class="productlist">
-                        <?js if (it!=null) { ?>
-                        <?js for (var ownedWeibo in it.ownedWeiboList) { ?>
-                        <?js if(it.ownedWeiboList[ownedWeibo]==null){continue;} ?>
-                        <li class="owned_weibo_li" weibo="#{ ownedWeibo }"><a href="javascript:;"><img
-                                src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/>#{ ownedWeibo }<img class="owned_weibo_del hide"   weibo="#{ ownedWeibo }" style="margin: 15px 0 0 0;float:right;" src="/static/images/close_small.png"></a>
-                            <!--<a class="images_close_a" href="javascript:"><img class="images_close"  style="vertical-align: top;" src="/static/images/close_middle.png"></a>-->
-                        </li>
-                        <?js } ?>
-                        <?js } ?>
-                        <li class="loginout"><a target ="_blank" href="http://login.sina.com.cn/sso/logout.php?entry=openapi&r=https%3A%2F%2Fapi.weibo.com%2Foauth2%2Fauthorize%3Fredirect_uri%3Dhttp%253A%252F%252Foffline.weibo.com%252Foauth%252Fcallback%26client_id%3D2445517113%26state%3D#{ settings.account }%26response_type%3Dcode%23">添加授权管理微博账号</a></li>
-                        <ul></ul>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="template">
-        <div class="main_login" id="main_login">
-            <div class="loginPanel innerPanel">
-                <div class="title">
-                    <h3>登录</h3>
-
-                    <p>以开发者身份登录离线发布服务</p>
-
-                    <div class="clr"></div>
-                </div>
-                <div class="login_operate" style="display:block" id="web_auth">
-                    <div class="content form">
-                        <div class="columnTip">
-                            <div id="authTip" style="display:none;" class="tip errorTip">登录失败</div>
-                        </div>
-                        <div class="column">
-                            <label>账号</label>
-                            <input class="text textMiddle inputQ" id="auth_account">
-                        </div>
-                        <div class="column">
-                            <label>密码</label>
-                            <input type="password" class="text textMiddle inputQ" id="auth_password">
-                        </div>
-                    </div>
-                    <div class="operator">
-                        <a href="javascript:;" class="login_btn_wrapper">
-                            <input id="auth_login" name="btlogin" type="submit" value="登录"
-                                   class="login_btn">
-                        </a>
-
-                        <div style="display: none;" id="switch1" class="lineright"></div>
-                        <a class="minorLink" target="_blank" href="javascript:;">意见反馈</a>
-                        <a class="minorLink">|</a>
-                        <a class="minorLink switch_login_register" target="_blank" href="javascript:;">注册新账号</a>
-                        <a class="minorLink">|</a>
-                        <a class="minorLink" target="_blank" href="javascript:;">忘记密码？</a>
-                    </div>
-                </div>
-            </div>
-            <div class="clr"></div>
-        </div>
-    </div>
-
-
-    <div class="template">
-        <div class="main_register" id="main_register">
-            <div class="loginPanel innerPanel">
-                <div class="title">
-                    <h3>注册</h3>
-
-                    <p>注册新的开发者账号</p>
-                    <div class="clr"></div>
-                </div>
-                <div class="login_operate" style="display:block" id="main_register_auth">
-                    <div class="content form">
-                        <div class="columnTip">
-                            <div id="main_register_authTip" style="display:none;" class="tip errorTip">注册失败</div>
-                        </div>
-                        <div class="column">
-                            <label>账号</label>
-                            <input class="text textMiddle inputQ" id="main_register_auth_account">
-                        </div>
-                        <div class="column">
-                            <label>密码</label>
-                            <input type="password" class="text textMiddle inputQ" id="main_register_auth_password1">
-                        </div>
-                        <div class="column">
-                            <label>重复密码</label>
-                            <input type="password" class="text textMiddle inputQ" id="main_register_auth_password2">
-                        </div>
-                        <div class="column">
-                            <label>邀请码</label>
-                            <input class="text textMiddle inputQ" id="main_register_invite_code">
-                        </div>
-                    </div>
-                    <div class="operator">
-                        <a href="javascript:;" class="login_btn_wrapper">
-                            <input id="auth_register" name="btlogin" type="submit" value="立即注册"
-                                   class="login_btn">
-                        </a>
-
-                        <div style="display: none;" id="switch3" class="lineright"></div>
-                        <a class="minorLink" target="_blank" href="mailto:wsds888@qq.com">意见反馈</a>
-                        <a class="minorLink">|</a>
-                        <a class="minorLink switch_login_register" target="_blank" href="javascript:;">直接登录</a>
-                    </div>
-                </div>
-            </div>
-            <div class="clr"></div>
-        </div>
-    </div>
-
-
-    <div class="template">
-        <div class="main_password" id="main_password">
-            <div class="loginPanel innerPanel">
-                <div class="title">
-                    <h3>修改密码</h3>
-
-                    <p>修改您的密码</p>
-                    <div class="clr"></div>
-                </div>
-                <div class="login_operate" style="display:block" id="main_password_auth">
-                    <div class="content form">
-                        <div class="columnTip">
-                            <div id="main_password_authTip" style="display:none;" class="tip errorTip">注册失败</div>
-                        </div>
-                        <div class="column">
-                            <label>账号</label>
-                            <input class="text textMiddle inputQ" id="main_password_auth_account">
-                        </div>
-                        <div class="column">
-                            <label>验证码</label>
-                            <input class="text textMiddle inputQ" id="main_password_access_code">
-                        </div>
-                        <div class="column">
-                            <label>密码</label>
-                            <input type="password" class="text textMiddle inputQ" id="main_password_auth_password1">
-                        </div>
-                        <div class="column">
-                            <label>重复密码</label>
-                            <input type="password" class="text textMiddle inputQ" id="main_password_auth_password2">
-                        </div>
-                    </div>
-                    <div class="operator">
-                        <a href="javascript:;" class="login_btn_wrapper">
-                            <input id="change_password" name="btlogin" type="submit" value="提交"
-                                   class="login_btn">
-                        </a>
-
-                        <div style="display: none;" id="switch4" class="lineright"></div>
-                        <a class="minorLink" target="_blank" href="mailto:wsds888@qq.com">意见反馈</a>
-                        <a class="minorLink">|</a>
-                        <a class="minorLink switch_login_register" target="_blank" href="javascript:;">直接登录</a>
-                    </div>
-                </div>
-            </div>
-            <div class="clr"></div>
-        </div>
-    </div>
-
-
-    <div class="template">
-        <div class="main_offline_post" id="main_offline_post">
-            <div class="loginPanel innerPanel">
-
-
-                <div class="login_operate" style="display:block" id="web_login">
-                    <div class="form_title">
-                        <a class="label_publish">发布内容</a>
-
-                        <div style="display: none;" id="switch" class="lineright"
-                             onmouseup="QMLogin.switchMode()"></div>
-                        <div style="float:right;">
-                            <a style=" float:right;margin: 0 10px 0 0;" href="javascript:" id="show_picker"
-                               class="operatorBtnGreen"> 定时发布 </a>
-                            <input style="float:right;" id="time_picker" name="i"/>
-                        </div>
-                    </div>
-                    <div class="content form">
-                        <div class="columnTip">
-                            <div id="msgContainer" style="display:none;" class="tip rrorTip"></div>
-                        </div>
-
-                        <div class="column">
-
-                            <textarea id="sendtext" name="description"
-                                      class="text textMiddle inputQ ajaxvalidator editable"
-                                      style="margin-top: 0px; margin-bottom: 0px; height: 130px;"> </textarea>
-                        </div>
-
-
-                    </div>
-                    <div class="operatorBar2">
-                        <output id="thumbs">
-                        </output>
-                    </div>
-                    <div class="operatorBar2">
-                        <a href="javascript:" class="operatorBtnGreen" id="addPicButton">
-                            添加图片 </a>
-
-                        <form hidden="true" id="form_image" node-type="form" action-type="form"
-                              id="pic_upload" name="pic_upload" target="upload_target"
-                              enctype="multipart/form-data" method="POST" action="">
-                            <input class="input_f" name="pic1" id="input_image" type="file" onchange=""
-                                   multiple="true">
-                        </form>
-                        <a href="javascript:" class="operatorBtnOrange">
-                            素材库 </a>
-
-                    </div>
-                    <div class="operator">
-                        <a href="javascript:;" class="login_btn_wrapper">
-                            <input id="btsend" name="btlogin" type="" value="发布" class="login_btn">
-                        </a>
-
-                        <div style="display: none;" id="switch2" class="lineright"
-                             onmouseup="QMLogin.switchMode()"></div>
-                        <a class="minorLink" target="_blank" href="/support/">意见反馈</a>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="template">
-        <div class="main_offline_post_list form" id="main_offline_post_list">
-            <?js for (var index in it) { ?>
-                <?js post=it[index]; ?>
-                <?js if(post==null) { ?>
-                    <?js continue; ?>
-                <?js } ?>
-            <div class="row-section">
-                <div style="position: absolute;">
-                    <a class="" href="javascript:">
-                        <?js if(post.pid=="none") { ?>
-                        <img class="images" src="/static/images/logo_tools.png">
-                        <?js }else { ?>
-                        <img class="images" src="http://images.weibo.com/#{ post.pid }.png">
-                        <?js } ?>
-                    </a>
-                </div>
-
-                <div class="row columnDisplay" style="padding-left:150px;height: 128px;">
-                    <label>发布时间</label>
-                    <label style="cursor: pointer;" class="posttime">#{ post.time }</label>
-                    <span>#{ post.text }</span>
-
-                    <div class="clr"></div>
-                    <div class="post_status_tag_holder" status="#{ post.status }" publishTime="#{ post.time }">
-
-                    </div>
-                    <a style="margin: 0 10px 0 0;" href="javascript:;" class="delAppBtn delapptype"
-                       postID="#{ post.id }">删除</a>
-                </div>
-            </div>
-            <?js } ?>
-        </div>
-    </div>
-
-    <div class="template">
-        <div class="tag post_status_tag" id="post_status_tag">
-            <?js var post=it; ?>
-            <?js if(post.status=="published") { ?>
-            <label>发送成功</label>
-            <?js }else if(post.status=="publishing") { ?>
-            <label>等待发送</label>
-            <?js }else if(post.status=="failed") { ?>
-            <label>发送失败</label>
-            <?js }else if(post.status=="timeout") { ?>
-            <label>发送失败(定时超时)</label>
-            <?js }else { ?>
-            <label>状态异常</label>
-            <?js } ?>
-            <?js if(post.remainTime 比较符号大于 -1) { ?>
-            <label>还剩：#{post.remainMinute }分钟#{ post.remainSecond }秒</label>
-            <?js } ?>
         </div>
     </div>
 </div>
 
+<div class="template">
+    <div class="login-bar" id="login-bar">
+        <div id="login1" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
+            <a id="login_toggle1" class="account-toggle" href="javascript:;">登录<span class="toggle-down"></span></a>
+
+            <div id="login_menu1" class="afterlogin hide" style="">
+                <ul class="productlist">
+                    <li class="login_bar_li" operation="register_account"><a id="register_account" data-uigroup="dialog" target="_blank"
+                                                                             href="javascript:;" >注册新账号</a></li>
+                    <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
+                                                                            href="javascript:;">忘记密码</a></li>
+                    <ul></ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="template">
+    <div class="owned_weibo" id="owned_weibo">
+        <div id="data" class="account" tabindex="-1" hidefocus="" style="left: 290px;outline: none;"><a
+                id="data_toggle" class="account-toggle" href="javascript:;"><span
+                class="toggle-down"></span>
+            <?js if (it!=null) { ?>
+            <?js if (it.currentWeibo==null) { ?>
+            添加授权管理微博账号
+            <?js }else { ?>
+            #{ it.currentWeibo }
+            <?js } ?>
+            <?js } ?>
+            <img src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/></a>
+
+            <div id="data_menu" class="afterlogin hide" style="left:0px">
+                <ul class="productlist">
+                    <?js if (it!=null) { ?>
+                    <?js for (var ownedWeibo in it.ownedWeiboList) { ?>
+                    <?js if(it.ownedWeiboList[ownedWeibo]==null){continue;} ?>
+                    <li class="owned_weibo_li" weibo="#{ ownedWeibo }"><a href="javascript:;"><img
+                            src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/>#{ ownedWeibo }<img class="owned_weibo_del hide"   weibo="#{ ownedWeibo }" style="margin: 15px 0 0 0;float:right;" src="/static/images/close_small.png"></a>
+                        <!--<a class="images_close_a" href="javascript:"><img class="images_close"  style="vertical-align: top;" src="/static/images/close_middle.png"></a>-->
+                    </li>
+                    <?js } ?>
+                    <?js } ?>
+                    <li class="loginout"><a target ="_blank" href="http://login.sina.com.cn/sso/logout.php?entry=openapi&r=https%3A%2F%2Fapi.weibo.com%2Foauth2%2Fauthorize%3Fredirect_uri%3Dhttp%253A%252F%252Foffline.weibo.com%252Foauth%252Fcallback%26client_id%3D2445517113%26state%3D#{ settings.account }%26response_type%3Dcode%23">添加授权管理微博账号</a></li>
+                    <ul></ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="template">
+    <div class="main_login" id="main_login">
+        <div class="loginPanel innerPanel">
+            <div class="title">
+                <h3>登录</h3>
+
+                <p>以开发者身份登录离线发布服务</p>
+
+                <div class="clr"></div>
+            </div>
+            <div class="login_operate" style="display:block" id="web_auth">
+                <div class="content form">
+                    <div class="columnTip">
+                        <div id="authTip" style="display:none;" class="tip errorTip">登录失败</div>
+                    </div>
+                    <div class="column">
+                        <label>账号</label>
+                        <input class="text textMiddle inputQ" id="auth_account">
+                    </div>
+                    <div class="column">
+                        <label>密码</label>
+                        <input type="password" class="text textMiddle inputQ" id="auth_password">
+                    </div>
+                </div>
+                <div class="operator">
+                    <a href="javascript:;" class="login_btn_wrapper">
+                        <input id="auth_login" name="btlogin" type="submit" value="登录"
+                               class="login_btn">
+                    </a>
+
+                    <div style="display: none;" id="switch1" class="lineright"></div>
+                    <a class="minorLink" target="_blank" href="javascript:;">意见反馈</a>
+                    <a class="minorLink">|</a>
+                    <a class="minorLink switch_login_register" target="_blank" href="javascript:;">注册新账号</a>
+                    <a class="minorLink">|</a>
+                    <a class="minorLink" target="_blank" href="javascript:;">忘记密码？</a>
+                </div>
+            </div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>
+
+
+<div class="template">
+    <div class="main_register" id="main_register">
+        <div class="loginPanel innerPanel">
+            <div class="title">
+                <h3>注册</h3>
+
+                <p>注册新的开发者账号</p>
+                <div class="clr"></div>
+            </div>
+            <div class="login_operate" style="display:block" id="main_register_auth">
+                <div class="content form">
+                    <div class="columnTip">
+                        <div id="main_register_authTip" style="display:none;" class="tip errorTip">注册失败</div>
+                    </div>
+                    <div class="column">
+                        <label>账号</label>
+                        <input class="text textMiddle inputQ" id="main_register_auth_account">
+                    </div>
+                    <div class="column">
+                        <label>密码</label>
+                        <input type="password" class="text textMiddle inputQ" id="main_register_auth_password1">
+                    </div>
+                    <div class="column">
+                        <label>重复密码</label>
+                        <input type="password" class="text textMiddle inputQ" id="main_register_auth_password2">
+                    </div>
+                    <div class="column">
+                        <label>邀请码</label>
+                        <input class="text textMiddle inputQ" id="main_register_invite_code">
+                    </div>
+                </div>
+                <div class="operator">
+                    <a href="javascript:;" class="login_btn_wrapper">
+                        <input id="auth_register" name="btlogin" type="submit" value="立即注册"
+                               class="login_btn">
+                    </a>
+
+                    <div style="display: none;" id="switch3" class="lineright"></div>
+                    <a class="minorLink" target="_blank" href="mailto:wsds888@qq.com">意见反馈</a>
+                    <a class="minorLink">|</a>
+                    <a class="minorLink switch_login_register" target="_blank" href="javascript:;">直接登录</a>
+                </div>
+            </div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>
+
+
+<div class="template">
+    <div class="main_password" id="main_password">
+        <div class="loginPanel innerPanel">
+            <div class="title">
+                <h3>修改密码</h3>
+
+                <p>修改您的密码</p>
+                <div class="clr"></div>
+            </div>
+            <div class="login_operate" style="display:block" id="main_password_auth">
+                <div class="content form">
+                    <div class="columnTip">
+                        <div id="main_password_authTip" style="display:none;" class="tip errorTip">注册失败</div>
+                    </div>
+                    <div class="column">
+                        <label>账号</label>
+                        <input class="text textMiddle inputQ" id="main_password_auth_account">
+                    </div>
+                    <div class="column">
+                        <label>验证码</label>
+                        <input class="text textMiddle inputQ" id="main_password_access_code">
+                    </div>
+                    <div class="column">
+                        <label>密码</label>
+                        <input type="password" class="text textMiddle inputQ" id="main_password_auth_password1">
+                    </div>
+                    <div class="column">
+                        <label>重复密码</label>
+                        <input type="password" class="text textMiddle inputQ" id="main_password_auth_password2">
+                    </div>
+                </div>
+                <div class="operator">
+                    <a href="javascript:;" class="login_btn_wrapper">
+                        <input id="change_password" name="btlogin" type="submit" value="提交"
+                               class="login_btn">
+                    </a>
+
+                    <div style="display: none;" id="switch4" class="lineright"></div>
+                    <a class="minorLink" target="_blank" href="mailto:wsds888@qq.com">意见反馈</a>
+                    <a class="minorLink">|</a>
+                    <a class="minorLink switch_login_register" target="_blank" href="javascript:;">直接登录</a>
+                </div>
+            </div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>
+
+
+<div class="template">
+<div class="main_offline_post" id="main_offline_post">
+<div class="loginPanel innerPanel">
+
+
+<div class="login_operate" style="display:block" id="web_login">
+<div class="form_title">
+    <a class="label_publish">定时发新布微博</a>
+
+    <div style="display: none;" id="switch" class="lineright"
+         onmouseup="QMLogin.switchMode()"></div>
+    <div style="float:right;color:#808080;">
+        还可以输入<span id="textLength">140</span>字
+    </div>
+    <!--定时发布按钮
+    <div style="float:right;">
+        <a style=" float:right;margin: 0 10px 0 0;" href="javascript:" id="show_picker"
+           class="operatorBtnGreen"> 定时发布 </a>
+        <input style="float:right;" id="time_picker" name="i"/>
+    </div>
+    -->
+</div>
+<div class="content form">
+    <div class="columnTip">
+        <div id="msgContainer" style="display:none;" class="tip errorTip"></div>
+    </div>
+
+    <div class="column">
+
+        <textarea id="sendtext" name="description" class="w_sendtextarea"  onKeyUp="textareaChange()"></textarea>
+    </div>
+
+
+</div>
+<div>
+    <div class="insert_icon">
+        <a href="javascript:" class="icon16 aa_face" title="表情"></a>
+        <a href="javascript:" class="icon16 ab_pic" title="图片"id="addPicButton"></a>
+        <form hidden="true" id="form_image" node-type="form" action-type="form"
+              id="pic_upload" name="pic_upload" target="upload_target"
+              enctype="multipart/form-data" method="POST" action="">
+            <input class="input_f" name="pic1" id="input_image" type="file" onChange=""
+                   multiple="true">
+        </form>
+        <a href="#" class="icon16 ac_resouse" title="素材" ></a>
+        <div class="sharpTop" style="display:none;"><img src="../static/images/face/shap.png"/></div>
+        <div id="facePanel" class="facePanel"  style="display:none;">
+            <div class="defaultFacePanel">
+                <a class="face_a" href="javascript:void(0);" text="[笑哈哈]" onClick="checkFace(this)" title="笑哈哈"></a>
+                <a class="face_a" href="javascript:void(0);" text="[得意地笑]" onClick="checkFace(this)" title="得意地笑"></a>
+                <a class="face_a" href="javascript:void(0);" text="[转发]" onClick="checkFace(this)" title="转发"></a>
+                <a class="face_a" href="javascript:void(0);" text="[江南style]" onClick="checkFace(this)" title="江南style"></a>
+                <a class="face_a" href="javascript:void(0);" text="[偷乐]" onClick="checkFace(this)" title="偷乐"></a>
+                <a class="face_a" href="javascript:void(0);" text="[bm可爱]" onClick="checkFace(this)" title="bm可爱"></a>
+                <a class="face_a" href="javascript:void(0);" text="[gst耐你]" onClick="checkFace(this)" title="gst耐你"></a>
+                <a class="face_a" href="javascript:void(0);" text="[lt切克闹]" onClick="checkFace(this)" title="lt切克闹"></a>
+                <a class="face_a" href="javascript:void(0);" text="[moc转]" onClick="checkFace(this)" title="moc转发"></a>
+                <a class="face_a" href="javascript:void(0);" text="[BOBO爱你]" onClick="checkFace(this)" title="BOBO爱你"></a>
+                <a class="face_a" href="javascript:void(0);" text="[ppb鼓掌]" onClick="checkFace(this)" title="ppb鼓掌"></a>
+                <a class="face_a" href="javascript:void(0);" text="[ppb愚人节]" onClick="checkFace(this)" title="ppb愚人节"></a>
+                <a class="face_a" href="javascript:void(0);" text="[草泥马]" onClick="checkFace(this)" title="草泥马"></a>
+                <a class="face_a" href="javascript:void(0);" text="[神马]" onClick="checkFace(this)" title="神马"></a>
+                <a class="face_a" href="javascript:void(0);" text="[浮云]" onClick="checkFace(this)" title="浮云"></a>
+                <a class="face_a" href="javascript:void(0);" text="[给力]" onClick="checkFace(this)" title="给力"></a>
+                <a class="face_a" href="javascript:void(0);" text="[围观]" onClick="checkFace(this)" title="围观"></a>
+                <a class="face_a" href="javascript:void(0);" text="[威武]" onClick="checkFace(this)" title="威武"></a>
+                <a class="face_a" href="javascript:void(0);" text="[熊猫]" onClick="checkFace(this)" title="熊猫"></a>
+                <a class="face_a" href="javascript:void(0);" text="[兔子]" onClick="checkFace(this)" title="兔子"></a>
+                <a class="face_a" href="javascript:void(0);" text="[奥特曼]" onClick="checkFace(this)" title="奥特曼"></a>
+                <a class="face_a" href="javascript:void(0);" text="[囧]" onClick="checkFace(this)" title="囧"></a>
+                <a class="face_a" href="javascript:void(0);" text="[互粉]" onClick="checkFace(this)" title="互粉"></a>
+                <a class="face_a" href="javascript:void(0);" text="[礼物]" onClick="checkFace(this)" title="礼物"></a>
+                <a class="face_a" href="javascript:void(0);" text="[呵呵]" onClick="checkFace(this)" title="呵呵"></a>
+                <a class="face_a" href="javascript:void(0);" text="[嘻嘻]" onClick="checkFace(this)" title="嘻嘻"></a>
+                <a class="face_a" href="javascript:void(0);" text="[哈哈]" onClick="checkFace(this)" title="哈哈"></a>
+                <a class="face_a" href="javascript:void(0);" text="[可爱]" onClick="checkFace(this)" title="可爱"></a>
+                <a class="face_a" href="javascript:void(0);" text="[可怜]" onClick="checkFace(this)" title="可怜"></a>
+                <a class="face_a" href="javascript:void(0);" text="[挖鼻屎]" onClick="checkFace(this)" title="挖鼻屎"></a>
+                <a class="face_a" href="javascript:void(0);" text="[吃惊]" onClick="checkFace(this)" title="吃惊"></a>
+                <a class="face_a" href="javascript:void(0);" text="[害羞]" onClick="checkFace(this)" title="害羞"></a>
+                <a class="face_a" href="javascript:void(0);" text="[挤眼]" onClick="checkFace(this)" title="挤眼"></a>
+                <a class="face_a" href="javascript:void(0);" text="[闭嘴]" onClick="checkFace(this)" title="闭嘴"></a>
+                <a class="face_a" href="javascript:void(0);" text="[鄙视]" onClick="checkFace(this)" title="鄙视"></a>
+                <a class="face_a" href="javascript:void(0);" text="[爱你]" onClick="checkFace(this)" title="爱你"></a>
+                <a class="face_a" href="javascript:void(0);" text="[泪]" onClick="checkFace(this)" title="泪"></a>
+                <a class="face_a" href="javascript:void(0);" text="[偷笑]" onClick="checkFace(this)" title="偷笑"></a>
+                <a class="face_a" href="javascript:void(0);" text="[亲亲]" onClick="checkFace(this)" title="亲亲"></a>
+                <a class="face_a" href="javascript:void(0);" text="[生病]" onClick="checkFace(this)" title="生病"></a>
+                <a class="face_a" href="javascript:void(0);" text="[太开心]" onClick="checkFace(this)" title="太开心"></a>
+                <a class="face_a" href="javascript:void(0);" text="[懒得理你]" onClick="checkFace(this)" title="懒得理你"></a>
+                <a class="face_a" href="javascript:void(0);" text="[右哼哼]" onClick="checkFace(this)" title="右哼哼"></a>
+                <a class="face_a" href="javascript:void(0);" text="[左哼哼]" onClick="checkFace(this)" title="左哼哼"></a>
+                <a class="face_a" href="javascript:void(0);" text="[嘘]" onClick="checkFace(this)" title="嘘"></a>
+                <a class="face_a" href="javascript:void(0);" text="[衰]" onClick="checkFace(this)" title="衰"></a>
+                <a class="face_a" href="javascript:void(0);" text="[委屈]" onClick="checkFace(this)" title="委屈"></a>
+                <a class="face_a" href="javascript:void(0);" text="[吐]" onClick="checkFace(this)" title="吐"></a>
+                <a class="face_a" href="javascript:void(0);" text="[打哈欠]" onClick="checkFace(this)" title="打哈欠"></a>
+                <a class="face_a" href="javascript:void(0);" text="[抱抱]" onClick="checkFace(this)" title="抱抱"></a>
+                <a class="face_a" href="javascript:void(0);" text="[怒]" onClick="checkFace(this)" title="怒"></a>
+                <a class="face_a" href="javascript:void(0);" text="[疑问]" onClick="checkFace(this)" title="疑问"></a>
+                <a class="face_a" href="javascript:void(0);" text="[馋嘴]" onClick="checkFace(this)" title="馋嘴"></a>
+                <a class="face_a" href="javascript:void(0);" text="[拜拜]" onClick="checkFace(this)" title="拜拜"></a>
+                <a class="face_a" href="javascript:void(0);" text="[思考]" onClick="checkFace(this)" title="思考"></a>
+                <a class="face_a" href="javascript:void(0);" text="[汗]" onClick="checkFace(this)" title="汗"></a>
+                <a class="face_a" href="javascript:void(0);" text="[困]" onClick="checkFace(this)" title="困"></a>
+                <a class="face_a" href="javascript:void(0);" text="[睡觉]" onClick="checkFace(this)" title="睡觉"></a>
+                <a class="face_a" href="javascript:void(0);" text="[钱]" onClick="checkFace(this)" title="钱"></a>
+                <a class="face_a" href="javascript:void(0);" text="[失望]" onClick="checkFace(this)" title="失望"></a>
+                <a class="face_a" href="javascript:void(0);" text="[酷]" onClick="checkFace(this)" title="酷"></a>
+                <a class="face_a" href="javascript:void(0);" text="[花心]" onClick="checkFace(this)" title="花心"></a>
+                <a class="face_a" href="javascript:void(0);" text="[哼]" onClick="checkFace(this)" title="哼"></a>
+                <a class="face_a" href="javascript:void(0);" text="[鼓掌]" onClick="checkFace(this)" title="鼓掌"></a>
+                <a class="face_a" href="javascript:void(0);" text="[晕]" onClick="checkFace(this)" title="晕"></a>
+                <a class="face_a" href="javascript:void(0);" text="[悲伤]" onClick="checkFace(this)" title="悲伤"></a>
+                <a class="face_a" href="javascript:void(0);" text="[抓狂]" onClick="checkFace(this)" title="抓狂"></a>
+                <a class="face_a" href="javascript:void(0);" text="[黑线]" onClick="checkFace(this)" title="黑线"></a>
+                <a class="face_a" href="javascript:void(0);" text="[阴险]" onClick="checkFace(this)" title="阴险"></a>
+                <a class="face_a" href="javascript:void(0);" text="[怒骂]" onClick="checkFace(this)" title="怒骂"></a>
+                <a class="face_a" href="javascript:void(0);" text="[心]" onClick="checkFace(this)" title="心"></a>
+                <a class="face_a" href="javascript:void(0);" text="[伤心]" onClick="checkFace(this)" title="伤心"></a>
+                <a class="face_a" href="javascript:void(0);" text="[猪头]" onClick="checkFace(this)" title="猪头"></a>
+                <a class="face_a" href="javascript:void(0);" text="[ok]" onClick="checkFace(this)" title="ok"></a>
+                <a class="face_a" href="javascript:void(0);" text="[耶]" onClick="checkFace(this)" title="耶"></a>
+                <a class="face_a" href="javascript:void(0);" text="[good]" onClick="checkFace(this)" title="good"></a>
+                <a class="face_a" href="javascript:void(0);" text="[不要]" onClick="checkFace(this)" title="不要"></a>
+                <a class="face_a" href="javascript:void(0);" text="[赞]" onClick="checkFace(this)" title="赞"></a>
+                <a class="face_a" href="javascript:void(0);" text="[来]" onClick="checkFace(this)" title="来"></a>
+                <a class="face_a" href="javascript:void(0);" text="[弱]" onClick="checkFace(this)" title="弱"></a>
+                <a class="face_a" href="javascript:void(0);" text="[蜡烛]" onClick="checkFace(this)" title="蜡烛"></a>
+                <a class="face_a" href="javascript:void(0);" text="[钟]" onClick="checkFace(this)" title="钟"></a>
+                <a class="face_a" href="javascript:void(0);" text="[话筒]" onClick="checkFace(this)" title="话筒"></a>
+                <a class="face_a" href="javascript:void(0);" text="[蛋糕]" onClick="checkFace(this)" title="蛋糕"></a>
+
+            </div>
+        </div>
+    </div>
+    <div style="float:right;">
+        <a href="#" class="time_send sendbutton" style="color:#fff;">定时发布</a>
+        <a href="#" class="now_send sendbutton" style="color:#fff;">立即发布</a>
+    </div>
+</div>
+<div class="clearevery"></div>
+<div class="operatorBar2">
+    <span id="pointupicon" class="uppoint" style="display:none;">▲</span>
+    <output id="thumbs">
+    </output>
+</div>
+<!-- <div class="operatorBar2">
+   <a href="javascript:" class="operatorBtnGreen" id="addPicButton">
+        添加图片 </a>
+
+    <form hidden="true" id="form_image" node-type="form" action-type="form"
+          id="pic_upload" name="pic_upload" target="upload_target"
+          enctype="multipart/form-data" method="POST" action="">
+        <input class="input_f" name="pic1" id="input_image" type="file" onChange=""
+               multiple="true">
+    </form>
+   <a href="javascript:" class="operatorBtnOrange">
+        素材库 </a>
+
+</div>-->
+<!--<div class="time_object">
+
+    <select name="year">
+        <option>2013</option>
+        <option>2014</option>
+        <option>2015</option>
+        <option>2016</option>
+    </select>年
+    <select name="moth">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+    </select>月
+    <select name="day">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+        <option>13</option>
+        <option>14</option>
+        <option>15</option>
+        <option>16</option>
+        <option>17</option>
+        <option>18</option>
+        <option>19</option>
+        <option>20</option>
+        <option>21</option>
+        <option>22</option>
+        <option>23</option>
+        <option>24</option>
+        <option>25</option>
+        <option>26</option>
+        <option>27</option>
+        <option>28</option>
+        <option>29</option>
+        <option>30</option>
+        <option>31</option>
+    </select>日
+    <select name="hour">
+        <option>00</option>
+        <option>01</option>
+        <option>02</option>
+        <option>03</option>
+        <option>04</option>
+        <option>05</option>
+        <option>06</option>
+        <option>07</option>
+        <option>08</option>
+        <option>09</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+        <option>13</option>
+        <option>14</option>
+        <option>15</option>
+        <option>16</option>
+        <option>17</option>
+        <option>18</option>
+        <option>19</option>
+        <option>20</option>
+        <option>21</option>
+        <option>22</option>
+        <option>23</option>
+    </select>时
+</div>-->
+<div class="operator">
+    <!-- <a href="javascript:;" class="login_btn_wrapper">
+        <input id="btsend" name="btlogin" type="" value="发布" class="login_btn">
+    </a>-->
+    <div class="time_object">
+        <a id="select_year" class="btn_gray btn_select btn_select_limiting" style="width:30px;">
+            <span class="btn_select_txt" timetype="year">#{settings.time.year}</span>
+            <span class="ico_select_s"></span>
+        </a>
+
+        <span>年</span>
+        <a id="select_month" class="btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;">
+            <span class="btn_select_txt" timetype="month">#{settings.time.month}</span>
+            <span class="ico_select_s"></span>
+        </a>
+        <span>月</span>
+        <a id="select_day" class="btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;">
+            <span  class="btn_select_txt" timetype="day">#{settings.time.day}</span>
+            <span class="ico_select_s"></span>
+        </a>
+        <span>日</span>
+        <a id="select_hour" class="btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;">
+            <span  class="btn_select_txt" timetype="hour">#{settings.time.hour}</span>
+            <span class="ico_select_s"></span>
+        </a>
+
+        <span>时</span>
+        <a id="select_minute" class="btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;">
+            <span class="btn_select_txt" timetype="minute">#{settings.time.minute}</span>
+            <span class="ico_select_s"></span>
+        </a>
+        <span>分</span>
+        <ul id="select_year_list" style="display:none;" >
+            <?js for (var number=0;number<3;number++) { ?>
+            <li class="timelist" number="#{number+settings.time.year}" timetype="year"><a href="javascript:;">#{number+settings.time.year}</a></li>
+            <?js }?>
+        </ul>
+        <ul id="select_month_list" style="display:none;" >
+            <?js for (var number=1;number<13;number++) { ?>
+            <li class="timelist" number="#{number}" timetype="month"><a  href="javascript:;">#{number}</a></li>
+            <?js }?>
+        </ul>
+        <ul id="select_day_list" style="display:none;" >
+            <?js for (var number=1;number<32;number++) { ?>
+            <li class="timelist" number="#{number}" timetype="day"><a  href="javascript:;">#{number}</a></li>
+            <?js }?>
+        </ul>
+        <ul id="select_hour_list" style="display:none;" >
+            <?js for (var number=0;number<24;number++) { ?>
+            <li class="timelist" number="#{number}" timetype="hour"><a  href="javascript:;">#{number}</a></li>
+            <?js }?>
+        </ul>
+        <ul id="select_minute_list" style="display:none;" >
+            <?js for (var number=1;number<61;number++) { ?>
+            <li class="timelist" number="#{number}" timetype="minute"><a  href="javascript:;">#{number}</a></li>
+            <?js }?>
+        </ul>
+    </div>
+    <div class="send_timeshow">
+        本条微博将在<b id="public_time">#{settings.time.public_time}</b>正式发布
+    </div>
+    <div style="display: none;" id="switch2" class="lineright"
+         onmouseup="QMLogin.switchMode()"></div>
+    <a class="minorLink" target="_blank" href="/support/">意见反馈</a>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div class="template">
+    <div class="main_offline_post_list form" id="main_offline_post_list">
+        <?js for (var index in it) { ?>
+        <?js post=it[index]; ?>
+        <?js if(post==null) { ?>
+        <?js continue; ?>
+        <?js } ?>
+        <div class="row-section">
+            <b class="icon16 ag_listpoint" style="width:18px;height:20px;"></b>
+            <div style="float:left;">
+                <a class="" href="javascript:">
+                    <?js if(post.pid=="none") { ?>
+                    <img class="images" src="/static/images/logo_tools.png">
+                    <?js }else { ?>
+                    <img class="images" src="http://images.weibo.com/#{ post.pid }.png">
+                    <?js } ?>
+                </a>
+            </div>
+            <div class="row columnDisplay">
+                <div class="postcontent">
+                    <span>#{ post.text }</span>
+                    <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
+                </div>
+                <div class="sendtime">
+                    <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;" class="posttime">#{ post.time }</label>
+                    <span class="post_status_tag_holder" status="#{ post.status }" publishTime="#{ post.time }"></span>
+                    <div style="float:right;margin-top:-3px;">
+                        <a style="color:#fff;" class="ok_button size46" href="#">保存</a>&nbsp;&nbsp;<a style="color:#fff;" class="cancel_button size46" href="#">取消</a>
+                        <a href="#" class="changedate">修改</a><span>|</span>
+                        <a class="deletedate" href="javascript:;"  postID="#{ post.id }">删除</a>
+                    </div>
+                </div>
+                <div class="clr"></div>
+            </div>
+        </div>
+        <?js } ?>
+
+        <div class="row columnDisplay">
+            <div class="postcontent">
+                <p>
+                    <span class="forwardWeibo">转发<em>老习</em>微博</span>
+                            <span class="forwardTime">
+                                <b class="icon16 forwardTime_an"></b><label>转发时间:</label><label class="posttime">2013/04/07 18:45:00</label>
+                            </span>
+                    <a href="#" class="conternhref" >查看原文</a>
+                </p>
+                <div class="clr"></div>
+                <p>转发夺去夺在转发夺去夺在转发夺去夺在转发夺去夺在转发夺去夺在</p>
+                <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
+            </div>
+            <div class="sendtime">
+                    	<span publishtime="2013/04/07 18:45:00" status="published" class="post_status_tag_holder">
+                            <div id="post_status_tag" class="tag post_status_tag"></div>
+                        </span>
+            </div>
+            <div class="clr"></div>
+        </div>
+        <div class="timing_forwarding">
+            <div class="weibo_face">
+                <img src="..static/images/face.jpg"/>
+            </div>
+            <div class="weiboContent">
+                <div>英式美品笑话</div>
+                <div>在美国动物收容所内，一名义工摄影师举着相机，流着泪，在替一个即将安乐死的狗狗拍照。然而镜头前的狗，不知道自己的生命即将终止，于是面对镜头仍露出了灿烂的笑容。。。</div>
+                <a href="#" class="ok_button size46" style="color:#fff;">定时转发</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="template">
+    <div class="tag post_status_tag" id="post_status_tag">
+        <?js var post=it; ?>
+        <?js if(post.status=="published") { ?>
+        <b class="icon16 sendsuccess_aj"></b><label style="color:#097c25;">发送成功</label>
+        <?js }else if(post.status=="publishing") { ?>
+        <b class="icon16 sending_am"></b><label style="color:#097c25;">等待发送</label>
+        <?js }else if(post.status=="failed") { ?>
+        <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败</label>
+        <?js }else if(post.status=="timeout") { ?>
+        <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败（定时超时）</label>
+        <?js }else { ?>
+        <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label>
+        <?js } ?>
+        <?js if(post.remainTime 比较符号大于 -1) { ?>
+        <b class="icon16 timingIcon"></b><label class="timingsend">还剩：#{post.remainMinute }分钟#{ post.remainSecond }秒</label>
+        <?js } ?>
+    </div>
+</div>
+</div>
+
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
-<script src="/static/js/mobiscroll-2.3.1.custom.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/static/js/settings.js"></script>
 <script type="text/javascript" src="/static/js/nTenjin.js"></script>
 <script type="text/javascript" src="/static/js/offline.js"></script>
 

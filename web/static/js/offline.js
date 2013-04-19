@@ -7,6 +7,7 @@ window.onbeforeunload = function () {
 function saveSettings() {
     window.localStorage.settings = JSON.stringify(settings);
 }
+;
 
 $(document).ready(function () {
         if (window.localStorage.settings != null) {
@@ -20,6 +21,7 @@ function renderAll() {
     renderOwnedWeibo();
     renderMain();
 }
+;
 
 $(document).ready(function () {
         settings.main = "main_login";
@@ -31,18 +33,31 @@ $(document).ready(function () {
         $("#slide_ctrls li a").click(function () {
                 $("#slide_ctrls li a").removeClass("current");
                 $(this).toggleClass("current");
+                var submenu = $(this).attr("submenu");
                 settings.main = $(this).attr("slide");
-                if (settings.main == "main_offline_post_list") {
+                if (settings.main == "main_offline_post_list" && submenu == "subshow") {
                     resolvePostlist();
+                    $(".subnav").show();
+                    $(this).attr("submenu", "subhidden");
+                    //$(".subnavpoint_af").show();
+                } else if (settings.main == "main_offline_post_list" && submenu == "subhidden") {
+                    $(".subnav").hide();
+                    $(this).attr("submenu", "subshow");
                 }
                 else {
                     renderMain();
+                    $(".subnav").hide();
+                    //$(".subnavpoint_af").hide();
+                    $(".btn_gray" + " [timetype='" + timetype + "']").html(content);
+                    $("#slide_ctrls li a" + "[slide='main_offline_post_list']").attr("submenu", "subshow");
                 }
             }
         );
 
         $(".normalTitle h2").click(function () {
                 $(".nav").slideToggle("fast");
+                $(".subnav").slideToggle("fast");
+                //$(".subnavpoint_af").slideToggle("fast");
             }
         );
 
@@ -54,7 +69,18 @@ $(document).ready(function () {
         resolvePostlistStatus();
     }, 1000 * 1);// check the postList every 1 second.
 });
-
+//发送微博时初始化当前时间
+$(document).ready(function () {
+    var today = new Date();
+    var month = today.getMonth() + 1;
+    settings.time = {};
+    settings.time.year = today.getFullYear();
+    settings.time.month = today.getMonth() + 1;
+    settings.time.day = today.getDate();
+    settings.time.hour = today.getHours();
+    settings.time.minute = today.getMinutes();
+    settings.time.public_time = today.getFullYear() + "年" + month + "月" + today.getDate() + "日" + today.getHours() + "时" + today.getMinutes() + "分";
+});
 function resolvePostlistStatus() {
     var now = new Date();
     $(".container .post_status_tag_holder").each(function () {
@@ -94,9 +120,8 @@ function registerMainEvent() {
 
             var account = $("#auth_account").val();
             var password = $("#auth_password").val();
-//                window.alert("hello" + account + password);
             $.ajax({
-                data:{"weibo_user":"tester"},
+                data:{"account":account, "password":password},
                 success:function (data) {
                     if (data["提示信息"] == "登录成功") {
                         settings.key = data.key;
@@ -115,10 +140,9 @@ function registerMainEvent() {
                         saveSettings();
                         renderLoginBar();
                     }
-//                        window.alert("data" + JSON.stringify(data));
                 },
                 type:'GET',
-                url:("http://www.weibo.com/api2/authaccount/a?account=" + account + "&password=" + password)
+                url:("http://" + app.serverUrl + "/api2/authaccount/a")
             });
         }
     );
@@ -149,7 +173,7 @@ function registerMainEvent() {
 
 //                window.alert("hello" + account + password);
             $.ajax({
-                data:{"weibo_user":"tester"},
+                data:{"account":account, "password":password1, "invite":invite},
                 success:function (data) {
                     if (data["提示信息"] == "账户注册成功") {
                         settings.key = data.key;
@@ -171,7 +195,7 @@ function registerMainEvent() {
 //                        window.alert("data" + JSON.stringify(data));
                 },
                 type:'GET',
-                url:("http://www.weibo.com/api2/addaccount/a?account=" + account + "&password=" + password1 + "&invite=" + invite)
+                url:("http://" + app.serverUrl + "/api2/addaccount/a")
             });
         }
     );
@@ -220,6 +244,114 @@ function registerMainEvent() {
             $("#thumbs").empty();
         }
     );
+    function addEvent(obj, eventType, func) {
+        if (obj.attachEvent) {
+            obj.attachEvent("on" + eventType, func);
+        }
+        else {
+            obj.addEventListener(eventType, func, false)
+        }
+    }
+
+    function clickOtherClose(el) {
+        thisObj = el.target ? el.target : event.srcElement;
+        do {
+            if (thisObj.id == "select_year_list" || thisObj.id == "select_month_list" || thisObj.id == "select_day_list" || thisObj.id == "select_hour_list" || thisObj.id == "select_minute_list" || thisObj.id == "facePanel") {
+                return;
+            }
+            if (thisObj.tagName == "BODY") {
+                noneAllPopmenu();
+                return;
+            }
+            ;
+            thisObj = thisObj.parentNode;
+        } while (thisObj.parentNode);
+    }
+
+    function noneAllPopmenu() {
+        $(".time_object ul", $('#main_container')).hide();
+        $("#facePanel").hide();
+        $(".sharpTop").hide();
+    }
+
+    $(".btn_gray").click(function () {
+        var id = $(this).attr("id");
+        var isshow = ($("#" + id + "_list").css("display") == "none");
+        $(".time_object ul", $('#main_container')).hide();
+        if (isshow) {
+            $("#" + id + "_list").show();
+            addEvent(document.body, "mousedown", clickOtherClose);
+        } else {
+            $("#" + id + "_list").hide();
+        }
+    });
+    $(".timelist").click(function () {
+        var content = $(this).attr("number");
+        var timetype = $(this).attr("timetype");
+        var id = $(this).parent().attr("id");
+        $(".btn_gray" + " [timetype='" + timetype + "']").html(content);
+
+
+        if ($(".btn_gray" + " [timetype='day']")) {
+            monthShow();
+        }
+        var year = $(".btn_gray" + " [timetype='year']").html();
+        var month = $(".btn_gray" + " [timetype='month']").html();
+        var day = $(".btn_gray" + " [timetype='day']").html();
+        var hour = $(".btn_gray" + " [timetype='hour']").html();
+        var minute = $(".btn_gray" + " [timetype='minute']").html();
+        settings.time.public_time = year + "年" + month + "月" + day + "日" + hour + "时" + minute + "分";
+        $("#public_time").html(settings.time.public_time);
+        $(".time_object ul", $('#main_container')).hide();
+    });
+    $(".aa_face").click(function () {
+        $(".facePanel").toggle();
+        $(".sharpTop").toggle();
+        addEvent(document.body, "mousedown", clickOtherClose);
+
+    });
+    $(".face_a").click(function () {
+        var content = $(this).attr("text");
+        var sendtext = document.getElementById("sendtext").value;
+
+        var lenght2 = getCharLength(content);
+        var lenght = getCharLength(sendtext);
+
+        if (lenght + lenght2 < 281) {
+            $('#sendtext').insertAtCaret(content);
+            document.getElementById("textLength").innerHTML = 140 - parseInt((lenght + lenght2) / 2);
+            $("#facePanel").hide();
+            $(".sharpTop").hide();
+        } else {
+            $('#sendtext').insertAtCaret('');
+        }
+    });
+    (function ($) {
+        $.fn.insertAtCaret = function (tagName) {
+            return this.each(function () {
+                if (document.selection) {
+                    //IE support
+                    this.focus();
+                    sel = document.selection.createRange();
+                    sel.text = tagName;
+                    this.focus();
+                } else if (this.selectionStart || this.selectionStart == '0') {
+                    //MOZILLA/NETSCAPE support
+                    startPos = this.selectionStart;
+                    endPos = this.selectionEnd;
+                    scrollTop = this.scrollTop;
+                    this.value = this.value.substring(0, startPos) + tagName + this.value.substring(endPos, this.value.length);
+                    this.focus();
+                    this.selectionStart = startPos + tagName.length;
+                    this.selectionEnd = startPos + tagName.length;
+                    this.scrollTop = scrollTop;
+                } else {
+                    this.value += tagName;
+                    this.focus();
+                }
+            });
+        };
+    })(jQuery);
 
     //定时发布列表
     $(".delAppBtn", $('#main_container')).click(function () {
@@ -230,6 +362,8 @@ function registerMainEvent() {
         delPost(postID);
         if (settings.main == "main_offline_post_list") {
             resolvePostlist();
+            $(".subnav").show();
+            //$(".subnavpoint_af").show();
         }
     });
 
@@ -305,50 +439,26 @@ function addPost(time, text, pic) {
             }
         },
         type:'POST',
-        url:("http://www.weibo.com/api2/post/add")
+        url:("http://" + app.serverUrl + "/api2/post/add")
     });
 }
 
 function delPost(postid) {
     $.ajax({
+        data:{"postid":postid, "weibo_user":settings.ownedWeibo.currentWeibo},
         success:function (data) {
-//            alert(JSON.stringify(data));
             if (data["提示信息"] == "成功") {
             }
             else {
             }
         },
         type:'GET',
-        url:("http://www.weibo.com/api2/post/del?postid=" + postid + "&weibo_user=" + settings.ownedWeibo.currentWeibo)
+        url:("http://" + app.serverUrl + "/api2/post/del")
     });
 }
 
 function registerTimerEvent() {
     var now = new Date();
-
-    $('#time_picker').mobiscroll().datetime({
-        minDate:new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-        theme:'default',
-        display:'modal',
-        animate:'slidehorizontal',
-        mode:'mixed'
-
-    });
-    $('#show_picker').click(function () {
-
-        var time = $('#time_picker').val();
-        if (time == "") {
-
-//            setTime = new Date();
-//            setTime.setTime( setTime.getTime()+1000*60*5);
-//            $('#time_picker').val(getShortDateTimeString(setTime));
-            $('#time_picker').mobiscroll('show');
-        }
-        else {
-            $('#time_picker').val('');
-        }
-        return false;
-    });
 
 
     $('#show_picker').mouseover(function () {
@@ -388,13 +498,18 @@ function registerUploadImageEvent() {
                     $('.images_a', $(span)).click(function () {
                         if ($(this).hasClass("drop")) {
                             $(this).removeClass("drop");
+                            //$("#pointupicon").toggleClass("uppoint");
+
+                            document.getElementById("pointupicon").className = "uppoint";
                             $(".images_close_a", $(this)).remove()
                         }
                         else {
                             $(this).addClass("drop");
+                            document.getElementById("pointupicon").className = "uppointclick";
                             $(this).append('<a class="images_close_a" href="javascript:"><img class="images_close"  style="vertical-align: top;" src="/static/images/close_small.png"></a>')
                             $('.images_close_a', $(this)).click(function () {
                                     $(span).remove();
+                                    document.getElementById("pointupicon").style.display = "none";
                                     if (settings.uploadStatus = "uploading") {
                                         settings.uploadStatus = "none";
                                     }
@@ -407,6 +522,10 @@ function registerUploadImageEvent() {
                 };
             })(f);
             imageReader.readAsDataURL(f);
+            //alert(document.getElementById("pointupicon").style.display);
+
+            document.getElementById("pointupicon").style.display = "block";
+            document.getElementById("pointupicon").className = "uppoint";
             break;
         }
     });
@@ -420,7 +539,7 @@ function resolvePostlist() {
             renderMain();
         },
         type:'GET',
-        url:("http://www.weibo.com/api2/getpostlist/a?weibo_user=" + settings.ownedWeibo.currentWeibo + "&start=0&end=-1")
+        url:("http://" + app.serverUrll + "/api2/getpostlist/a?weibo_user=" + settings.ownedWeibo.currentWeibo + "&start=0&end=-1")
     });
 }
 
@@ -443,7 +562,7 @@ function resolveOwnedWeibo() {
             renderAll();
         },
         type:'GET',
-        url:("http://www.weibo.com/api2/accountownedweibo/getall?account=" + settings.account)
+        url:("http://" + app.serverUrl + "/api2/accountownedweibo/getall?account=" + settings.account)
     });
 }
 
@@ -471,6 +590,8 @@ function renderOwnedWeibo() {
             renderOwnedWeibo();
             if (settings.main == "main_offline_post_list") {
                 resolvePostlist();
+                $(".subnav").show();
+                //$(".subnavpoint_af").show();
             }
         }
     );
@@ -483,6 +604,7 @@ function renderOwnedWeibo() {
             } else {
                 var delWeibo = $(this).attr("weibo");
                 $.ajax({
+                    data:{"account":settings.account, "ownedWeibo":delWeibo},
                     success:function (data) {
                         settings.ownedWeibo.ownedWeiboList[delWeibo] = undefined;
                         for (var ownedWeibo in settings.ownedWeibo.ownedWeiboList) {
@@ -497,7 +619,7 @@ function renderOwnedWeibo() {
                         $(".account", $('#owned_weibo_container')).trigger("click", ["management"]);
                     },
                     type:'GET',
-                    url:("http://www.weibo.com/api2/accountownedweibo/del?account=" + settings.account + "&ownedWeibo=" + delWeibo)
+                    url:("http://" + app.serverUrl + "/api2/accountownedweibo/del")
                 });
 
                 return false;
@@ -509,7 +631,7 @@ function renderOwnedWeibo() {
 
 function renderMain() {
     if (settings.key == null || settings.account == null) {
-        if (settings.main == "main_register" || settings.main == "main_password" ) {
+        if (settings.main == "main_register" || settings.main == "main_password") {
         } else {
             settings.main = "main_login";
         }
@@ -612,3 +734,39 @@ function getTemplate(id) {
 
 var postListStr = '{"0":{"time":"2013/02/02 15:00:00","status":"timeout","text":"打工的高高的","pid":"none","remainTime":-78634,"remainMinute":-1311,"remainSecond":-34},"1":{"time":"2013/02/02 15:01:00","status":"timeout","text":"封杀非常粗糙才","pid":"none","remainTime":-78574,"remainMinute":-1310,"remainSecond":-34}}';
 var postlist = JSON.parse(postListStr);
+
+//textarea字数变化显示
+function textareaChange() {
+    var content = document.getElementById("sendtext").value;
+    var contentLength = getCharLength(content);
+    var trueLength = parseInt(contentLength / 2);
+    //alert(content);
+    if (contentLength < 281) {
+        document.getElementById("textLength").innerHTML = 140 - trueLength;
+    } else {
+        document.getElementById("sendtext").value = document.getElementById("sendtext").value.substr(0, 281);
+        document.getElementById("textLength").innerHTML = 0;
+    }
+
+}
+function getCharLength(str) {
+    var charLen = 0;
+    for (var i = 0, len = str.length; i < len; i++) {
+        if (str.charCodeAt(i) > 255) {
+            charLen += 2;
+        } else {
+            charLen += 1;
+        }
+    }
+    return charLen;
+}
+function checkMaxLength(textArea, maxLength) {
+    var currentStr = "";
+    for (var i = 0, len = textArea.value.length; i < len; i++) {
+        currentStr += textArea.value.charAt(i);
+        if (getCharLength(currentStr) > maxLength) {
+            area.value = textArea.value.substr(0, i);
+            return;
+        }
+    }
+}
