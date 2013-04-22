@@ -333,6 +333,7 @@ body.home {
     padding: 20px 0 10px;
     border-bottom: 2px solid #eee;
     margin: 0 20px;
+    text-align:left;
 }
 
 .innerPanel .title h3 {
@@ -411,10 +412,40 @@ label {
     float: left;
     position: relative;
 }
-
+.pagination{
+	margin:10px;	
+}
+.pagination a{
+	padding:8px 14px;
+	font-size:14px;
+	font-family:"微软雅黑";	
+	border-radius:3px;
+	background:#d6d6d6;
+	font-weight:bold;
+	color:#b2b2b2;
+	border:1px solid #cecdcd;
+	background: -moz-linear-gradient(19% 75% 90deg, #ebebeb, #f7f7f7);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f7f7f7), to(#ebebeb));
+	cursor:pointer;
+}
+.pagination a:hover{
+	padding:8px 14px;
+	font-size:14px;
+	font-weight:bold;
+	font-family:"微软雅黑";	
+	border-radius:3px;
+	background:#d6d6d6;
+	color:#333;
+	border:1px solid #cecdcd;
+	background: -moz-linear-gradient(19% 75% 90deg, #f7f7f7, #ebebeb);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ebebeb), to(#f7f7f7));
+	cursor:pointer;
+}
+.pagination a.page_click{
+	color:#333;	
+}
 .form .row span {
     font-family: "微软雅黑";
-    font-size: 14px;
     color: #555;
 }
 
@@ -1299,25 +1330,44 @@ pre {
     margin-left: 18px;
     background: #fff;
 }
-
+.zhuanfa{
+	border:1px solid #c4d2e3;
+	border-radius:5px;
+	background:#fff;
+	box-shadow: 1px 1px 1px #D6D6D6;
+	margin-bottom:15px;	
+}
 .timing_forwarding {
-    margin: 15px 40px;
-    border-top: 1px solid #e8e8e8;
-    border-bottom: 1px solid #e8e8e8;
-    background: #fff;
-    float: left;
+	border:1px solid #C4D2E3;
+	border-radius:5px;
+	padding:16px;
+	background:#fff;
+	float:left;
+	position:relative;
+	box-shadow:1px 1px 1px #d6d6d6;
+	margin-bottom:15px;
 }
 
-.weiboContent {
-    float: left;
-    width: 650px;
+.weiboContent{
+	float:left;
+	width:730px;
+	padding-left:14px;	
 }
-
-.weibo_face {
-    float: left;
-    margin: 18px;
-    width: 50px;
-    height: 50px;
+.weibo_title{
+	height:24px;
+	font-size:15px;
+	font-weight:bold;
+	color:#33463f;
+	text-align:left;
+}
+.weibo_content{
+	padding-right:90px;	
+	text-align:left;
+}
+.weibo_face{
+	float:left;
+	width:50px;
+	height:50px;	
 }
 
 .form .row label.timingsend {
@@ -1328,16 +1378,36 @@ pre {
     min-height: 70px;
     overflow: hidden;
     margin: 8px 12px;
+	text-align:left;
 }
-
+.zhuanfaneirong{
+	overflow:hidden;	
+	margin:8px 12px;
+	text-align:left;
+}
 .sendtime {
-    height: 18px;
+    height: 36px;
     background: #fafbfb;
     border-top: 1px solid #ededed;
     border-radius: 0 0 5px 5px;
-    padding: 9px 12px;
+    padding: 0px 12px;
+	text-align:left;
 }
-
+.time_public{
+	margin-top:9px;	
+	float:left;
+}
+.time_change_op{
+	float:right;
+	margin-top:5px;	
+}
+.sendhead{
+	height:18px;
+	background:#fafbfb;
+	border-bottom:1px solid #ededed;
+	border-radius:0 0 5px 5px;
+	padding:6px 12px 8px;
+}
 .changedate {
     color: #3c669b;
 }
@@ -1356,7 +1426,7 @@ pre {
     color: #ba3d37;
 }
 
-.form .row .sendtime div span {
+.devline {
     color: #9796a6;
     padding-left: 4px;
 }
@@ -1567,7 +1637,22 @@ div.messagelist .tips {
     font-weight: normal;
     padding: 3px 8px;
 }
-
+.size86{
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;	
+	font-size: 14px;
+	font-weight:normal;
+	width:80px;
+	height:28px;	
+	text-align:center;
+	line-height:28px;
+}
+.changetime{
+	position:absolute;
+	right:16px;
+	top:16px;	
+}
 .send_timeshow {
     float: left;
     color: #8c8477;
@@ -1608,6 +1693,7 @@ div.messagelist .tips {
 
 .btn_select .ico_select_s {
     right: 4px;
+
     top: 4px;
 }
 
@@ -1663,7 +1749,7 @@ div.messagelist .tips {
 
 .time_object {
     font-size: 12px;
-    margin: 5px 0 10px;
+    margin:6px 0 10px;
 }
 
 .time_object ul {
@@ -1694,7 +1780,44 @@ div.messagelist .tips {
     color: #fff;
 }
 
-.time_object ul li {
+
+
+
+.time_object_change {
+    font-size: 12px;
+    margin:6px 0 10px;
+	float:left;
+}
+
+.time_object_change ul {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #a0a0a0;
+    border-radius: 3px;
+    width: 54px;
+    height: 200px;
+    overflow-Y: scroll;
+    padding: 4px 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    z-index: 20px;
+
+}
+
+.time_object_change ul li a {
+    display: block;
+    height: 22px;
+    line-height: 22px;
+    padding-left: 8px;
+    color: #222;
+    font-size: 12px;
+}
+
+.time_object_change ul li a:hover {
+    background: #06F;
+    color: #fff;
+}
+
+.time_object_change ul li {
     height: 22px;
     cursor: pointer;
 }
@@ -1722,6 +1845,26 @@ div.messagelist .tips {
     left: 586px;
 }
 
+
+#select_month_change {
+    left: 241px;
+}
+
+#select_day_change {
+    left: 321px;
+}
+
+#select_hour_change {
+    left: 401px;
+}
+
+#select_minute_change {
+    left: 481px;
+}
+.public_time{
+	font-weight:normal;
+	padding-left:15px;	
+}
 .facePanel {
     border-radius: 5px;
     border: 1px solid #939494;

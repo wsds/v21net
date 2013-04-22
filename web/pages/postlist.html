@@ -80,7 +80,7 @@
     <b class="icon16 subnavpoint_af" style="display:none;"></b>
 </div>
 <div class="main" id="slide_contents">
-    <div class="subnav" style="display:none;">
+    <div class="subnav" style="display:block;">
         <ul>
             <li><a href="#" class="itemclick">发送记录</a></li>
             <li><a href="#">转发记录</a></li>
@@ -108,11 +108,22 @@
                             <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
                         </div>
                         <div class="sendtime">
-                            <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;" class="posttime">2013/04/07 18:45:00</label>
-                            <span class="post_status_tag_holder" status="published" publishtime="2013/04/07 18:45:00"></span>
-                            <div style="float:right;margin-top:-3px;">
+                        	<div class="time_public">
+                                <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;" class="posttime">2013/04/07 18:45:00</label>
+                                <span class="post_status_tag_holder" status="published" publishtime="2013/04/07 18:45:00"></span>
+                               
+                               <!-- 需要时行判断每种情况对应相应的状态显示-->
+                               
+                                <!--<b class="icon16 sendsuccess_aj"></b><label style="color:#097c25;">发送成功</label>
+                                <b class="icon16 sending_am"></b><label style="color:#097c25;">等待发送</label>
+                                <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败</label>
+                                <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败（定时超时）</label>
+                                <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label>-->
+                                <b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>
+                            </div>
+                            <div class="time_change_op">
                                 <a style="color:#fff;" class="ok_button size46" href="#">保存</a>&nbsp;&nbsp;<a style="color:#fff;" class="cancel_button size46" href="#">取消</a>
-                                <a href="#" class="changedate">修改</a><span>|</span>
+                                <a href="#" class="changedate">修改</a><span class="devline">|</span>
                                 <a class="deletedate" href="javascript:;" postid="很破滴一口钟1365321734637">删除</a>
                             </div>
                         </div>
@@ -137,11 +148,13 @@
                             <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
                         </div>
                         <div class="sendtime">
-                            <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;" class="posttime">2013/04/07 17:03:00</label>
-                            <span class="post_status_tag_holder" status="published" publishtime="2013/04/07 17:03:00"></span>
-                            <div style="float:right;margin-top:-3px;">
+                            <div class="time_public">
+                                <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;" class="posttime">2013/04/07 17:03:00</label>
+                                <span class="post_status_tag_holder" status="published" publishtime="2013/04/07 17:03:00"></span>
+                            </div>
+                            <div class="time_change_op">
                                 <a style="color:#fff;" class="ok_button size46" href="#">保存</a>&nbsp;&nbsp;<a style="color:#fff;" class="cancel_button size46" href="#">取消</a>
-                                <a href="#" class="changedate">修改</a><span>|</span>
+                                <a href="#" class="changedate">修改</a><span class="devline">|</span>
                                 <a class="deletedate" href="javascript:;" postid="很破滴一口钟1365321722141">删除</a>
                             </div>
                         </div>
@@ -166,50 +179,334 @@
                             <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
                         </div>
                         <div class="sendtime">
-                            <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;" class="posttime">2013/04/07 10:49:16</label>
-                            <span class="post_status_tag_holder" status="published" publishtime="2013/04/07 10:49:16"></span>
-                            <div style="float:right;margin-top:-3px;">
+                            <div class="time_object_change">
+                                <a style="width:30px;" class="btn_gray btn_select btn_select_limiting" id="select_year">
+                                    <span timetype="year" class="btn_select_txt">2013</span>
+                                    <span class="ico_select_s"></span>
+                                </a>
+                                
+                                <span>年</span>
+                                <a style="width:23px;margin-left:4px;" class="btn_gray btn_select btn_select_limiting" id="select_month">
+                                    <span timetype="month" class="btn_select_txt">4</span>
+                                    <span class="ico_select_s"></span>
+                                </a>
+                                <span>月</span>
+                                <a style="width:23px;margin-left:4px;" class="btn_gray btn_select btn_select_limiting" id="select_day">
+                                    <span timetype="day" class="btn_select_txt">19</span>
+                                    <span class="ico_select_s"></span>
+                                </a>
+                                <span>日</span>
+                                <a style="width:23px;margin-left:4px;" class="btn_gray btn_select btn_select_limiting" id="select_hour">
+                                    <span timetype="hour" class="btn_select_txt">14</span>
+                                    <span class="ico_select_s"></span>
+                                </a>
+                                
+                                <span>时</span>
+                                <a style="width:23px;margin-left:4px;" class="btn_gray btn_select btn_select_limiting" id="select_minute">
+                                    <span timetype="minute" class="btn_select_txt">27</span>
+                                    <span class="ico_select_s"></span>
+                                </a>
+                                <span>分</span>
+                                <ul style="display: none;" id="select_year_change">
+                                
+                                    <li timetype="year" number="2013" class="timelist"><a href="javascript:;">2013</a>
+                                    </li>
+                                
+                                    <li timetype="year" number="2014" class="timelist"><a href="javascript:;">2014</a>
+                                    </li>
+                                
+                                    <li timetype="year" number="2015" class="timelist"><a href="javascript:;">2015</a>
+                                    </li>
+                                
+                                </ul>
+                                <ul style="display:none;" id="select_month_change">
+                                
+                                    <li timetype="month" number="1" class="timelist"><a href="javascript:;">1</a></li>
+                                
+                                    <li timetype="month" number="2" class="timelist"><a href="javascript:;">2</a></li>
+                                
+                                    <li timetype="month" number="3" class="timelist"><a href="javascript:;">3</a></li>
+                                
+                                    <li timetype="month" number="4" class="timelist"><a href="javascript:;">4</a></li>
+                                
+                                    <li timetype="month" number="5" class="timelist"><a href="javascript:;">5</a></li>
+                                
+                                    <li timetype="month" number="6" class="timelist"><a href="javascript:;">6</a></li>
+                                
+                                    <li timetype="month" number="7" class="timelist"><a href="javascript:;">7</a></li>
+                                
+                                    <li timetype="month" number="8" class="timelist"><a href="javascript:;">8</a></li>
+                                
+                                    <li timetype="month" number="9" class="timelist"><a href="javascript:;">9</a></li>
+                                
+                                    <li timetype="month" number="10" class="timelist"><a href="javascript:;">10</a></li>
+                                
+                                    <li timetype="month" number="11" class="timelist"><a href="javascript:;">11</a></li>
+                                
+                                    <li timetype="month" number="12" class="timelist"><a href="javascript:;">12</a></li>
+                                
+                                </ul>
+                                <ul style="display: block;" id="select_day_change">
+                                
+                                    <li timetype="day" number="1" class="timelist"><a href="javascript:;">1</a></li>
+                                
+                                    <li timetype="day" number="2" class="timelist"><a href="javascript:;">2</a></li>
+                                
+                                    <li timetype="day" number="3" class="timelist"><a href="javascript:;">3</a></li>
+                                
+                                    <li timetype="day" number="4" class="timelist"><a href="javascript:;">4</a></li>
+                                
+                                    <li timetype="day" number="5" class="timelist"><a href="javascript:;">5</a></li>
+                                
+                                    <li timetype="day" number="6" class="timelist"><a href="javascript:;">6</a></li>
+                                
+                                    <li timetype="day" number="7" class="timelist"><a href="javascript:;">7</a></li>
+                                
+                                    <li timetype="day" number="8" class="timelist"><a href="javascript:;">8</a></li>
+                                
+                                    <li timetype="day" number="9" class="timelist"><a href="javascript:;">9</a></li>
+                                
+                                    <li timetype="day" number="10" class="timelist"><a href="javascript:;">10</a></li>
+                                
+                                    <li timetype="day" number="11" class="timelist"><a href="javascript:;">11</a></li>
+                                
+                                    <li timetype="day" number="12" class="timelist"><a href="javascript:;">12</a></li>
+                                
+                                    <li timetype="day" number="13" class="timelist"><a href="javascript:;">13</a></li>
+                                
+                                    <li timetype="day" number="14" class="timelist"><a href="javascript:;">14</a></li>
+                                
+                                    <li timetype="day" number="15" class="timelist"><a href="javascript:;">15</a></li>
+                                
+                                    <li timetype="day" number="16" class="timelist"><a href="javascript:;">16</a></li>
+                                
+                                    <li timetype="day" number="17" class="timelist"><a href="javascript:;">17</a></li>
+                                
+                                    <li timetype="day" number="18" class="timelist"><a href="javascript:;">18</a></li>
+                                
+                                    <li timetype="day" number="19" class="timelist"><a href="javascript:;">19</a></li>
+                                
+                                    <li timetype="day" number="20" class="timelist"><a href="javascript:;">20</a></li>
+                                
+                                    <li timetype="day" number="21" class="timelist"><a href="javascript:;">21</a></li>
+                                
+                                    <li timetype="day" number="22" class="timelist"><a href="javascript:;">22</a></li>
+                                
+                                    <li timetype="day" number="23" class="timelist"><a href="javascript:;">23</a></li>
+                                
+                                    <li timetype="day" number="24" class="timelist"><a href="javascript:;">24</a></li>
+                                
+                                    <li timetype="day" number="25" class="timelist"><a href="javascript:;">25</a></li>
+                                
+                                    <li timetype="day" number="26" class="timelist"><a href="javascript:;">26</a></li>
+                                
+                                    <li timetype="day" number="27" class="timelist"><a href="javascript:;">27</a></li>
+                                
+                                    <li timetype="day" number="28" class="timelist"><a href="javascript:;">28</a></li>
+                                
+                                    <li timetype="day" number="29" class="timelist"><a href="javascript:;">29</a></li>
+                                
+                                    <li timetype="day" number="30" class="timelist"><a href="javascript:;">30</a></li>
+                                
+                                    <li timetype="day" number="31" class="timelist"><a href="javascript:;">31</a></li>
+                                
+                                </ul>
+                                <ul style="display: none;" id="select_hour_change">
+                                
+                                    <li timetype="hour" number="0" class="timelist"><a href="javascript:;">0</a></li>
+                                
+                                    <li timetype="hour" number="1" class="timelist"><a href="javascript:;">1</a></li>
+                                
+                                    <li timetype="hour" number="2" class="timelist"><a href="javascript:;">2</a></li>
+                                
+                                    <li timetype="hour" number="3" class="timelist"><a href="javascript:;">3</a></li>
+                                
+                                    <li timetype="hour" number="4" class="timelist"><a href="javascript:;">4</a></li>
+                                
+                                    <li timetype="hour" number="5" class="timelist"><a href="javascript:;">5</a></li>
+                                
+                                    <li timetype="hour" number="6" class="timelist"><a href="javascript:;">6</a></li>
+                                
+                                    <li timetype="hour" number="7" class="timelist"><a href="javascript:;">7</a></li>
+                                
+                                    <li timetype="hour" number="8" class="timelist"><a href="javascript:;">8</a></li>
+                                
+                                    <li timetype="hour" number="9" class="timelist"><a href="javascript:;">9</a></li>
+                                
+                                    <li timetype="hour" number="10" class="timelist"><a href="javascript:;">10</a></li>
+                                
+                                    <li timetype="hour" number="11" class="timelist"><a href="javascript:;">11</a></li>
+                                
+                                    <li timetype="hour" number="12" class="timelist"><a href="javascript:;">12</a></li>
+                                
+                                    <li timetype="hour" number="13" class="timelist"><a href="javascript:;">13</a></li>
+                                
+                                    <li timetype="hour" number="14" class="timelist"><a href="javascript:;">14</a></li>
+                                
+                                    <li timetype="hour" number="15" class="timelist"><a href="javascript:;">15</a></li>
+                                
+                                    <li timetype="hour" number="16" class="timelist"><a href="javascript:;">16</a></li>
+                                
+                                    <li timetype="hour" number="17" class="timelist"><a href="javascript:;">17</a></li>
+                                
+                                    <li timetype="hour" number="18" class="timelist"><a href="javascript:;">18</a></li>
+                                
+                                    <li timetype="hour" number="19" class="timelist"><a href="javascript:;">19</a></li>
+                                
+                                    <li timetype="hour" number="20" class="timelist"><a href="javascript:;">20</a></li>
+                                
+                                    <li timetype="hour" number="21" class="timelist"><a href="javascript:;">21</a></li>
+                                
+                                    <li timetype="hour" number="22" class="timelist"><a href="javascript:;">22</a></li>
+                                
+                                    <li timetype="hour" number="23" class="timelist"><a href="javascript:;">23</a></li>
+                                
+                                </ul>
+                                <ul style="display:none;" id="select_minute_change">
+                                
+                                    <li timetype="minute" number="1" class="timelist"><a href="javascript:;">1</a></li>
+                                
+                                    <li timetype="minute" number="2" class="timelist"><a href="javascript:;">2</a></li>
+                                
+                                    <li timetype="minute" number="3" class="timelist"><a href="javascript:;">3</a></li>
+                                
+                                    <li timetype="minute" number="4" class="timelist"><a href="javascript:;">4</a></li>
+                                
+                                    <li timetype="minute" number="5" class="timelist"><a href="javascript:;">5</a></li>
+                                
+                                    <li timetype="minute" number="6" class="timelist"><a href="javascript:;">6</a></li>
+                                
+                                    <li timetype="minute" number="7" class="timelist"><a href="javascript:;">7</a></li>
+                                
+                                    <li timetype="minute" number="8" class="timelist"><a href="javascript:;">8</a></li>
+                                
+                                    <li timetype="minute" number="9" class="timelist"><a href="javascript:;">9</a></li>
+                                
+                                    <li timetype="minute" number="10" class="timelist"><a href="javascript:;">10</a></li>
+                                
+                                    <li timetype="minute" number="11" class="timelist"><a href="javascript:;">11</a></li>
+                                
+                                    <li timetype="minute" number="12" class="timelist"><a href="javascript:;">12</a></li>
+                                
+                                    <li timetype="minute" number="13" class="timelist"><a href="javascript:;">13</a></li>
+                                
+                                    <li timetype="minute" number="14" class="timelist"><a href="javascript:;">14</a></li>
+                                
+                                    <li timetype="minute" number="15" class="timelist"><a href="javascript:;">15</a></li>
+                                
+                                    <li timetype="minute" number="16" class="timelist"><a href="javascript:;">16</a></li>
+                                
+                                    <li timetype="minute" number="17" class="timelist"><a href="javascript:;">17</a></li>
+                                
+                                    <li timetype="minute" number="18" class="timelist"><a href="javascript:;">18</a></li>
+                                
+                                    <li timetype="minute" number="19" class="timelist"><a href="javascript:;">19</a></li>
+                                
+                                    <li timetype="minute" number="20" class="timelist"><a href="javascript:;">20</a></li>
+                                
+                                    <li timetype="minute" number="21" class="timelist"><a href="javascript:;">21</a></li>
+                                
+                                    <li timetype="minute" number="22" class="timelist"><a href="javascript:;">22</a></li>
+                                
+                                    <li timetype="minute" number="23" class="timelist"><a href="javascript:;">23</a></li>
+                                
+                                    <li timetype="minute" number="24" class="timelist"><a href="javascript:;">24</a></li>
+                                
+                                    <li timetype="minute" number="25" class="timelist"><a href="javascript:;">25</a></li>
+                                
+                                    <li timetype="minute" number="26" class="timelist"><a href="javascript:;">26</a></li>
+                                
+                                    <li timetype="minute" number="27" class="timelist"><a href="javascript:;">27</a></li>
+                                
+                                    <li timetype="minute" number="28" class="timelist"><a href="javascript:;">28</a></li>
+                                
+                                    <li timetype="minute" number="29" class="timelist"><a href="javascript:;">29</a></li>
+                                
+                                    <li timetype="minute" number="30" class="timelist"><a href="javascript:;">30</a></li>
+                                
+                                    <li timetype="minute" number="31" class="timelist"><a href="javascript:;">31</a></li>
+                                
+                                    <li timetype="minute" number="32" class="timelist"><a href="javascript:;">32</a></li>
+                                
+                                    <li timetype="minute" number="33" class="timelist"><a href="javascript:;">33</a></li>
+                                
+                                    <li timetype="minute" number="34" class="timelist"><a href="javascript:;">34</a></li>
+                                
+                                    <li timetype="minute" number="35" class="timelist"><a href="javascript:;">35</a></li>
+                                
+                                    <li timetype="minute" number="36" class="timelist"><a href="javascript:;">36</a></li>
+                                
+                                    <li timetype="minute" number="37" class="timelist"><a href="javascript:;">37</a></li>
+                                
+                                    <li timetype="minute" number="38" class="timelist"><a href="javascript:;">38</a></li>
+                                
+                                    <li timetype="minute" number="39" class="timelist"><a href="javascript:;">39</a></li>
+                                
+                                    <li timetype="minute" number="40" class="timelist"><a href="javascript:;">40</a></li>
+                                
+                                    <li timetype="minute" number="41" class="timelist"><a href="javascript:;">41</a></li>
+                                
+                                    <li timetype="minute" number="42" class="timelist"><a href="javascript:;">42</a></li>
+                                
+                                    <li timetype="minute" number="43" class="timelist"><a href="javascript:;">43</a></li>
+                                
+                                    <li timetype="minute" number="44" class="timelist"><a href="javascript:;">44</a></li>
+                                
+                                    <li timetype="minute" number="45" class="timelist"><a href="javascript:;">45</a></li>
+                                
+                                    <li timetype="minute" number="46" class="timelist"><a href="javascript:;">46</a></li>
+                                
+                                    <li timetype="minute" number="47" class="timelist"><a href="javascript:;">47</a></li>
+                                
+                                    <li timetype="minute" number="48" class="timelist"><a href="javascript:;">48</a></li>
+                                
+                                    <li timetype="minute" number="49" class="timelist"><a href="javascript:;">49</a></li>
+                                
+                                    <li timetype="minute" number="50" class="timelist"><a href="javascript:;">50</a></li>
+                                
+                                    <li timetype="minute" number="51" class="timelist"><a href="javascript:;">51</a></li>
+                                
+                                    <li timetype="minute" number="52" class="timelist"><a href="javascript:;">52</a></li>
+                                
+                                    <li timetype="minute" number="53" class="timelist"><a href="javascript:;">53</a></li>
+                                
+                                    <li timetype="minute" number="54" class="timelist"><a href="javascript:;">54</a></li>
+                                
+                                    <li timetype="minute" number="55" class="timelist"><a href="javascript:;">55</a></li>
+                                
+                                    <li timetype="minute" number="56" class="timelist"><a href="javascript:;">56</a></li>
+                                
+                                    <li timetype="minute" number="57" class="timelist"><a href="javascript:;">57</a></li>
+                                
+                                    <li timetype="minute" number="58" class="timelist"><a href="javascript:;">58</a></li>
+                                
+                                    <li timetype="minute" number="59" class="timelist"><a href="javascript:;">59</a></li>
+                                
+                                    <li timetype="minute" number="60" class="timelist"><a href="javascript:;">60</a></li>
+                                
+                                </ul>
+                                </div>
+                            <div class="time_change_op">
                                 <a style="color:#fff;" class="ok_button size46" href="#">保存</a>&nbsp;&nbsp;<a style="color:#fff;" class="cancel_button size46" href="#">取消</a>
-                                <a href="#" class="changedate">修改</a><span>|</span>
+                                <a href="#" class="changedate">修改</a><span class="devline">|</span>
                                 <a class="deletedate" href="javascript:;" postid="很破滴一口钟1365302946297">删除</a>
                             </div>
                         </div>
                         <div class="clr"></div>
                     </div>
                 </div>
-
-
-                <div class="row columnDisplay">
-                    <div class="postcontent">
-                        <p>
-                            <span class="forwardWeibo">转发<em>老习</em>微博</span>
-                            <span class="forwardTime">
-                                <b class="icon16 forwardTime_an"></b><label>转发时间:</label><label class="posttime">2013/04/07 18:45:00</label>
-                            </span>
-                            <a href="#" class="conternhref">查看原文</a>
-                        </p>
-                        <div class="clr"></div>
-                        <p>转发夺去夺在转发夺去夺在转发夺去夺在转发夺去夺在转发夺去夺在</p>
-                        <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
-                    </div>
-                    <div class="sendtime">
-                    	<span publishtime="2013/04/07 18:45:00" status="published" class="post_status_tag_holder">
-                            <div id="post_status_tag" class="tag post_status_tag"></div>
-                        </span>
-                    </div>
-                    <div class="clr"></div>
+				<div class="clearevery"></div>
+                <div class="pagination">
+                	<a href="#" title="上一页"><<</a>
+                	<a href="#" class="page_click">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <span>·&nbsp;·&nbsp;·</span>
+                    <a href="#">20</a>
+                    <a href="#" title="下一页">>></a>
                 </div>
-                <div class="timing_forwarding">
-                    <div class="weibo_face">
-                        <img src="/static/images/face.jpg">
-                    </div>
-                    <div class="weiboContent">
-                        <div>英式美品笑话</div>
-                        <div>在美国动物收容所内，一名义工摄影师举着相机，流着泪，在替一个即将安乐死的狗狗拍照。然而镜头前的狗，不知道自己的生命即将终止，于是面对镜头仍露出了灿烂的笑容。。。</div>
-                        <a href="#" class="ok_button size46" style="color:#fff;">定时转发</a>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
