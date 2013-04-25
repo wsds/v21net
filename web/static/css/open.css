@@ -367,6 +367,7 @@ body.home {
     border-radius: 0 0 2px 2px;
     background: #F0F1F2;
     overflow: hidden;
+    text-align: left;
 }
 
 .innerPanel .operatorBar2 {

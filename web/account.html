@@ -1,0 +1,253 @@
+﻿<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf8">
+    <title>微博发布工具(离线多账号)</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/openContent.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/open.css">
+</head>
+<body>
+<div class="messageList"></div>
+<div class="container">
+
+    <div class="intro">
+
+        <div class="articleTitle normalTitle">
+            <h2 href="javascript:;">微博发布工具(离线多账号) </h2>
+
+            <div class="templateContainer" template="owned_weibo" status="Hide" statusSet="Hide Show">
+            </div>
+            <div class="templateContainer" template="login_bar" status="NotLoggedIn" statusSet="NotLoggedIn LoggedIn">
+            </div>
+            <div class="clr"></div>
+        </div>
+
+        <div class="nav">
+            <ul id="slide_ctrls">
+                <li><a slide="main_offline_post" class="slide-ctrl nav-item-1 current" href="javascript:;"><span
+                        class="nav-item-icon"></span><span>离线发布工具</span></a>
+                </li>
+                <li><a slide="main_offline_post_list" class="slide-ctrl nav-item-2" submenu="subshow"
+                       href="javascript:;"><span
+                        class="nav-item-icon"></span><span>定时发布列表</span></a>
+                </li>
+                <li><a slide="main_register" class="slide-ctrl nav-item-5 " href="javascript:;"><span
+                        class="nav-item-icon"></span><span>定时转发</span></a>
+                </li>
+            </ul>
+            <b class="icon16 subnavpoint_af" style="display:none;"></b>
+        </div>
+        <div class="main" id="slide_contents">
+            <div class="subnav" style="display:none;">
+                <ul>
+                    <li><a href="#" class="itemclick">发送记录</a></li>
+                    <li><a href="#">转发记录</a></li>
+                </ul>
+
+            </div>
+            <div class="appContent normalContent">
+                <div class="templateContainer" template="main_panel" status="main_login"
+                     statusSet="main_login main_register main_password">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p class="copyright textGray">&copy; 2012 - 2015 SLZD All Rights Reserved.</p>
+</div>
+
+<div class="templates">
+    <div class="template" template="login_bar" status="LoggedIn" statusSet="NotLoggedIn LoggedIn" eventPool="login_bar">
+        <div id="login" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
+            <a id="login_toggle" class="account-toggle" href="javascript:;">#{ data.account }, 已登录<span
+                    class="toggle-down"></span></a>
+
+            <div id="login_menu" class="afterlogin hide">
+                <ul class="productlist">
+                    <li class="login_bar_li" operation="weibo_management"><a data-uigroup="dialog" target="_blank"
+                                                                             href="javascript:;">账号管理</a></li>
+                    <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
+                                                                            href="javascript:;">修改密码</a></li>
+                    <li class="loginout"><a id="auth_logout" href="javascript:">退出登录</a></li>
+                    <ul></ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="template" template="login_bar" status="NotLoggedIn" statusSet="NotLoggedIn LoggedIn"
+         eventPool="login_bar">
+        <div id="login1" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
+            <a id="login_toggle1" class="account-toggle" href="javascript:;">登录<span class="toggle-down"></span></a>
+
+            <div id="login_menu1" class="afterlogin hide">
+                <ul class="productlist">
+                    <li class="login_bar_li" operation="register_account"><a id="register_account"
+                                                                             data-uigroup="dialog"
+                                                                             target="_blank"
+                                                                             href="javascript:;">注册新账号</a></li>
+                    <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
+                                                                            href="javascript:;">忘记密码</a></li>
+                    <ul></ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="template" template="main_panel" status="main_login" eventPool="main_login">
+        <div class="main_login" id="main_login">
+            <div class="loginPanel innerPanel">
+                <div class="title">
+                    <h3>登录</h3>
+
+                    <p>以开发者身份登录离线发布服务</p>
+
+                    <div class="clr"></div>
+                </div>
+                <div class="login_operate" style="display:block" id="web_auth">
+                    <div class="content form">
+                        <div class="columnTip">
+                            <div id="authTip" style="display:none;" class="tip errorTip">登录失败</div>
+                        </div>
+                        <div class="column">
+                            <label>账号</label>
+                            <input class="text textMiddle inputQ" id="auth_account">
+                        </div>
+                        <div class="column">
+                            <label>密码</label>
+                            <input type="password" class="text textMiddle inputQ" id="auth_password">
+                        </div>
+                    </div>
+                    <div class="operator">
+                        <a href="javascript:;" class="login_btn_wrapper">
+                            <input id="auth_login" name="btlogin" type="submit" value="登录"
+                                   class="login_btn">
+                        </a>
+
+                        <div style="display: none;" id="switch1" class="lineright"></div>
+                        <a class="minorLink" target="_blank" href="javascript:;">意见反馈</a>
+                        <a class="minorLink">|</a>
+                        <a class="minorLink switch_login_register" target="_blank" href="javascript:;">注册新账号</a>
+                        <a class="minorLink">|</a>
+                        <a class="minorLink switch_main_password" target="_blank" href="javascript:;">忘记密码？</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clr"></div>
+        </div>
+    </div>
+
+
+    <div class="template" template="main_panel" status="main_register" eventPool="main_register">
+        <div class="main_register" id="main_register">
+            <div class="loginPanel innerPanel">
+                <div class="title">
+                    <h3>注册</h3>
+
+                    <p>注册新的开发者账号</p>
+
+                    <div class="clr"></div>
+                </div>
+                <div class="login_operate" style="display:block" id="main_register_auth">
+                    <div class="content form">
+                        <div class="columnTip">
+                            <div id="main_register_authTip" style="display:none;" class="tip errorTip">注册失败</div>
+                        </div>
+                        <div class="column">
+                            <label>账号</label>
+                            <input class="text textMiddle inputQ" id="main_register_auth_account">
+                        </div>
+                        <div class="column">
+                            <label>密码</label>
+                            <input type="password" class="text textMiddle inputQ" id="main_register_auth_password1">
+                        </div>
+                        <div class="column">
+                            <label>重复密码</label>
+                            <input type="password" class="text textMiddle inputQ" id="main_register_auth_password2">
+                        </div>
+                        <div class="column">
+                            <label>邀请码</label>
+                            <input class="text textMiddle inputQ" id="main_register_invite_code">
+                        </div>
+                    </div>
+                    <div class="operator">
+                        <a href="javascript:;" class="login_btn_wrapper">
+                            <input id="auth_register" name="btlogin" type="submit" value="立即注册"
+                                   class="login_btn">
+                        </a>
+
+                        <div style="display: none;" id="switch3" class="lineright"></div>
+                        <a class="minorLink" target="_blank" href="mailto:wsds888@qq.com">意见反馈</a>
+                        <a class="minorLink">|</a>
+                        <a class="minorLink switch_login_register" target="_blank" href="javascript:;">直接登录</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clr"></div>
+        </div>
+    </div>
+
+
+    <div class="template" template="main_panel" status="main_password" eventPool="main_password">
+        <div class="main_login" id="main_password">
+            <div class="loginPanel innerPanel">
+                <div class="title">
+                    <h3>修改密码</h3>
+
+                    <p>修改您的密码</p>
+
+                    <div class="clr"></div>
+                </div>
+                <div class="login_operate" style="display:block" id="main_password_auth">
+                    <div class="content form">
+                        <div class="columnTip">
+                            <div id="main_password_authTip" style="display:none;" class="tip errorTip">注册失败</div>
+                        </div>
+                        <div class="column">
+                            <label>账号</label>
+                            <input class="text textMiddle inputQ" id="main_password_auth_account">
+                        </div>
+                        <div class="column">
+                            <label>验证码</label>
+                            <input class="text textMiddle inputQ" id="main_password_access_code">
+                        </div>
+                        <div class="column">
+                            <label>密码</label>
+                            <input type="password" class="text textMiddle inputQ" id="main_password_auth_password1">
+                        </div>
+                        <div class="column">
+                            <label>重复密码</label>
+                            <input type="password" class="text textMiddle inputQ" id="main_password_auth_password2">
+                        </div>
+                    </div>
+                    <div class="operator">
+                        <a href="javascript:;" class="login_btn_wrapper">
+                            <input id="change_password" name="btlogin" type="submit" value="提交"
+                                   class="login_btn">
+                        </a>
+
+                        <div style="display: none;" id="switch4" class="lineright"></div>
+                        <a class="minorLink" target="_blank" href="mailto:wsds888@qq.com">意见反馈</a>
+                        <a class="minorLink">|</a>
+                        <a class="minorLink switch_login_register" target="_blank" href="javascript:;">直接登录</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clr"></div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/nTenjin.js"></script>
+<script type="text/javascript" src="/static/js/webapp.js"></script>
+<script type="text/javascript" src="/static/js/account/account.js"></script>
+<script type="text/javascript" src="/static/js/account/eventPool.js"></script>
+
+
+</body>
+</html>
