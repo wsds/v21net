@@ -119,8 +119,8 @@ function registerMainEvent() {
             var account = $("#auth_account").val();
             var password = $("#auth_password").val();
             $.ajax({
-                data:{"account":account, "password":password},
-                success:function (data) {
+                data: {"account": account, "password": password},
+                success: function (data) {
                     if (data["提示信息"] == "登录成功") {
                         settings.key = data.key;
                         settings.authTip = data["提示信息"];
@@ -139,8 +139,8 @@ function registerMainEvent() {
                         renderLoginBar();
                     }
                 },
-                type:'GET',
-                url:("http://" + app.serverUrl + "/api2/authaccount/a")
+                type: 'GET',
+                url: ("http://" + app.serverUrl + "/api2/authaccount/a")
             });
         }
     );
@@ -170,8 +170,8 @@ function registerMainEvent() {
             }
 
             $.ajax({
-                data:{"account":account, "password":password1, "invite":invite},
-                success:function (data) {
+                data: {"account": account, "password": password1, "invite": invite},
+                success: function (data) {
                     if (data["提示信息"] == "账户注册成功") {
                         settings.key = data.key;
                         settings.authTip = data["提示信息"];
@@ -191,8 +191,8 @@ function registerMainEvent() {
                     }
 //                        window.alert("data" + JSON.stringify(data));
                 },
-                type:'GET',
-                url:("http://" + app.serverUrl + "/api2/addaccount/a")
+                type: 'GET',
+                url: ("http://" + app.serverUrl + "/api2/addaccount/a")
             });
         }
     );
@@ -404,8 +404,8 @@ function uploadPic(next) {
 //            alert("reader.onload");
             var urlData = this.result;
             $.ajax({
-                data:{filename:"1.png", image:urlData, weibo_user:settings.ownedWeibo.currentWeibo},
-                success:function (data) {
+                data: {filename: "1.png", image: urlData, weibo_user: settings.ownedWeibo.currentWeibo},
+                success: function (data) {
                     var filename = data.filename;
                     if (filename == null) {
                         alert(JSON.stringify(data));
@@ -413,8 +413,8 @@ function uploadPic(next) {
                         next(filename);
                     }
                 },
-                type:'POST',
-                url:("http://www.weibo.com/upload2/")
+                type: 'POST',
+                url: ("http://www.weibo.com/upload2/")
             });
         };
 
@@ -427,30 +427,29 @@ function uploadPic(next) {
 
 function addPost(time, text, pic) {
     $.ajax({
-        data:{"text":text, "weibo_user":settings.ownedWeibo.currentWeibo, "time":time, "pic":pic},
-        success:function (data) {
-//            alert(JSON.stringify(data));
+        data: {"text": text, "weibo_user": settings.ownedWeibo.currentWeibo, "time": time, "pic": pic},
+        type: 'POST',
+        url: ("http://" + app.serverUrl + "/api2/post/add"),
+        success: function (data) {
             if (data["提示信息"] == "成功") {
             }
             else {
             }
-        },
-        type:'POST',
-        url:("http://" + app.serverUrl + "/api2/post/add")
+        }
     });
 }
 
 function delPost(postid) {
     $.ajax({
-        data:{"postid":postid, "weibo_user":settings.ownedWeibo.currentWeibo},
-        success:function (data) {
+        data: {"postid": postid, "weibo_user": settings.ownedWeibo.currentWeibo},
+        success: function (data) {
             if (data["提示信息"] == "成功") {
             }
             else {
             }
         },
-        type:'GET',
-        url:("http://" + app.serverUrl + "/api2/post/del")
+        type: 'GET',
+        url: ("http://" + app.serverUrl + "/api2/post/del")
     });
 }
 
@@ -531,12 +530,12 @@ function registerUploadImageEvent() {
 
 function resolvePostlist() {
     $.ajax({
-        success:function (data) {
+        success: function (data) {
             postlist = data;
             renderMain();
         },
-        type:'GET',
-        url:("http://" + app.serverUrll + "/api2/getpostlist/a?weibo_user=" + settings.ownedWeibo.currentWeibo + "&start=0&end=-1")
+        type: 'GET',
+        url: ("http://" + app.serverUrll + "/api2/getpostlist/a?weibo_user=" + settings.ownedWeibo.currentWeibo + "&start=0&end=-1")
     });
 }
 
@@ -547,7 +546,7 @@ function resolveOwnedWeibo() {
         return;
     }
     $.ajax({
-        success:function (data) {
+        success: function (data) {
             settings.ownedWeibo = data;
 //            window.alert("data" + JSON.stringify(data));
 
@@ -558,8 +557,8 @@ function resolveOwnedWeibo() {
             saveSettings();
             renderAll();
         },
-        type:'GET',
-        url:("http://" + app.serverUrl + "/api2/accountownedweibo/getall?account=" + settings.account)
+        type: 'GET',
+        url: ("http://" + app.serverUrl + "/api2/accountownedweibo/getall?account=" + settings.account)
     });
 }
 
@@ -601,8 +600,8 @@ function renderOwnedWeibo() {
             } else {
                 var delWeibo = $(this).attr("weibo");
                 $.ajax({
-                    data:{"account":settings.account, "ownedWeibo":delWeibo},
-                    success:function (data) {
+                    data: {"account": settings.account, "ownedWeibo": delWeibo},
+                    success: function (data) {
                         settings.ownedWeibo.ownedWeiboList[delWeibo] = undefined;
                         for (var ownedWeibo in settings.ownedWeibo.ownedWeiboList) {
                             if (settings.ownedWeibo.ownedWeiboList[ownedWeibo] != undefined) {
@@ -615,8 +614,8 @@ function renderOwnedWeibo() {
                         renderOwnedWeibo();
                         $(".account", $('#owned_weibo_container')).trigger("click", ["management"]);
                     },
-                    type:'GET',
-                    url:("http://" + app.serverUrl + "/api2/accountownedweibo/del")
+                    type: 'GET',
+                    url: ("http://" + app.serverUrl + "/api2/accountownedweibo/del")
                 });
 
                 return false;

@@ -7,7 +7,7 @@ window.onbeforeunload = function () {
     window.localStorage.localSettings = JSON.stringify(app.localSettings);
 };
 
-function saveSettings() {
+function saveLocalSettings() {
     window.localStorage.localSettings = JSON.stringify(app.localSettings);
 }
 
@@ -22,8 +22,8 @@ $(document).ready(function () {
 $(document).ready(function () {
         app.page.linkData();
         var area = $("body");
+        app.eventPool["body"]("None", area);
         renderTemplate(area);
-        eventPool["body"]("None", area);
     }
 );
 
@@ -44,8 +44,10 @@ function renderTemplate(area) {
             if (nTemplate == null) {
                 return;
             }
-            $(templateContainer).html(nTemplate.render());
-            eventPool[nTemplate.eventPool](status, templateContainers);
+            resolveServerData(nTemplate, function(serverData){
+                $(templateContainer).html(nTemplate.render(serverData));
+                app.eventPool[nTemplate.eventPool](status, templateContainer);
+            })
         }
     );
 }
@@ -66,5 +68,16 @@ function getTemplate(template, status) {
     var nTemplate = new tenjin.Template();
     nTemplate.convert(string);
     nTemplate.eventPool = $(templateDiv).attr("eventPool");
+    nTemplate.serverData = $(templateDiv).attr("serverData");
     return nTemplate;
+}
+
+
+function resolveServerData(nTemplate, next) {
+    if (nTemplate.serverData == null) {
+        next(null);
+    }
+    else {
+        app.dataPool[nTemplate.serverData](next);
+    }
 }

@@ -1,6 +1,11 @@
-var eventPool = {};
+eventPool = {};
+app.eventPool = eventPool;
 
 eventPool.body = function (status, area) {
+    if (app.localSettings.key != null && app.localSettings.account != null) {
+        window.location.href = "/";
+    }
+
     $("#slide_ctrls li a").click(function () {
             $("#slide_ctrls li a").removeClass("current");
             $(this).toggleClass("current");
@@ -14,8 +19,7 @@ eventPool.body = function (status, area) {
     );
 
     $(".container").click(function () {
-//            alert("click");
-            droppedElements=$(".drop");
+            droppedElements = $(".drop");
             droppedElements.toggleClass("drop");
             $(".afterlogin", droppedElements).toggleClass("hide");
             $(".afterlogin", droppedElements).toggleClass("shouldHide");
@@ -45,7 +49,6 @@ eventPool.login_bar = function (status, area) {
 
         $(".login_bar_li", area).click(function () {
                 var operation = $(this).attr("operation");
-//                alert($("a",this).val());
 
                 var main_panel_container = $(".templateContainer[template='main_panel']");
                 if (operation == "change_password") {
@@ -54,10 +57,10 @@ eventPool.login_bar = function (status, area) {
                 else if (operation == "register_account") {
                     if (main_panel_container.attr("status") == "main_login") {
                         main_panel_container.attr("status", "main_register")
-                        $("a",this).html("已是会员");
+                        $("a", this).html("已是会员");
                     } else {
                         main_panel_container.attr("status", "main_login");
-                        $("a",this).html("还不是会员");
+                        $("a", this).html("还不是会员");
                     }
                 }
                 renderTemplate(main_panel_container);
@@ -69,7 +72,7 @@ eventPool.login_bar = function (status, area) {
 }
 
 eventPool.main_login = function (status, area) {
-//登录界面
+
     $("#auth_password").keyup(function () {
         if (event.keyCode == 13) {
             $("#auth_login").trigger("click");
@@ -97,21 +100,19 @@ eventPool.main_login = function (status, area) {
                 data: {"account": account, "password": password},
                 success: function (data) {
                     if (data["提示信息"] == "登录成功") {
-                        settings.key = data.key;
-                        settings.authTip = data["提示信息"];
-                        settings.account = account;
-                        saveSettings();
-                        resolveOwnedWeibo();
-                        renderLoginBar();
+                        app.localSettings.key = data.key;
+                        app.localSettings.authTip = data["提示信息"];
+                        app.localSettings.account = account;
+                        saveLocalSettings();
+                        window.location.href = "/";
                     }
                     else {
-                        settings.key = undefined;
-                        settings.account = undefined;
-                        settings.authTip = data["提示信息"];
+                        app.localSettings.key = undefined;
+                        app.localSettings.account = undefined;
+                        app.localSettings.authTip = data["提示信息"];
                         $("#authTip").show();
-                        $("#authTip").html("登录失败：" + settings.authTip);
-                        saveSettings();
-                        renderLoginBar();
+                        $("#authTip").html("登录失败：" + app.localSettings.authTip);
+
                     }
                 },
                 type: 'GET',
@@ -129,7 +130,7 @@ eventPool.main_register = function (status, area) {
         main_panel_container.attr("status", "main_login");
         renderTemplate(main_panel_container);
     });
-    //注册
+
     $("#auth_register").click(function () {
 
             var account = $("#main_register_auth_account").val();
@@ -172,7 +173,6 @@ eventPool.main_register = function (status, area) {
                         saveSettings();
                         renderLoginBar();
                     }
-//                        window.alert("data" + JSON.stringify(data));
                 },
                 type: 'GET',
                 url: ("http://" + app.serverUrl + "/api2/addaccount/a")
@@ -189,45 +189,3 @@ eventPool.main_password = function (status, area) {
     });
 };
 
-
-eventPool.main_offline_post_list = function (status, area) {
-};
-
-
-//textarea字数变化显示
-function textareaChange() {
-    var content = document.getElementById("sendtext").value;
-    var contentLength = getCharLength(content);
-    var trueLength = parseInt(contentLength / 2);
-    //alert(content);
-    if (contentLength < 281) {
-        document.getElementById("textLength").innerHTML = 140 - trueLength;
-    } else {
-        document.getElementById("sendtext").value = document.getElementById("sendtext").value.substr(0, 281);
-        document.getElementById("textLength").innerHTML = 0;
-    }
-
-}
-
-function getCharLength(str) {
-    var charLen = 0;
-    for (var i = 0, len = str.length; i < len; i++) {
-        if (str.charCodeAt(i) > 255) {
-            charLen += 2;
-        } else {
-            charLen += 1;
-        }
-    }
-    return charLen;
-}
-
-function checkMaxLength(textArea, maxLength) {
-    var currentStr = "";
-    for (var i = 0, len = textArea.value.length; i < len; i++) {
-        currentStr += textArea.value.charAt(i);
-        if (getCharLength(currentStr) > maxLength) {
-            area.value = textArea.value.substr(0, i);
-            return;
-        }
-    }
-}

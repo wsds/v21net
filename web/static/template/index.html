@@ -1,0 +1,50 @@
+﻿<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf8">
+    <title>微博发布工具(离线多账号)</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/openContent.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/open.css">
+</head>
+<body>
+
+<div class="templates">
+    <div class="template" template="login_bar" status="LoggedIn" statusSet="NotLoggedIn LoggedIn" eventPool="login_bar">
+        <div id="login" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
+            <a id="login_toggle" class="account-toggle" href="javascript:;">#{ data.account }, 已登录<span
+                    class="toggle-down"></span></a>
+
+            <div id="login_menu" class="afterlogin hide">
+                <ul class="productlist">
+                    <li class="login_bar_li" operation="weibo_management"><a data-uigroup="dialog" target="_blank"
+                                                                             href="javascript:;">账号管理</a></li>
+                    <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
+                                                                            href="javascript:;">修改密码</a></li>
+                    <li class="loginout"><a id="auth_logout" href="javascript:">退出登录</a></li>
+                    <ul></ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="template" template="login_bar" status="NotLoggedIn" statusSet="NotLoggedIn LoggedIn"
+         eventPool="login_bar">
+        <div id="login1" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
+            <a id="login_toggle1" class="account-toggle" href="javascript:;">登录<span class="toggle-down"></span></a>
+
+            <div id="login_menu1" class="afterlogin hide">
+                <ul class="productlist">
+                    <li class="login_bar_li" operation="register_account"><a id="register_account"
+                                                                             data-uigroup="dialog"
+                                                                             target="_blank"
+                                                                             href="javascript:;">注册新账号</a></li>
+                    <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
+                                                                            href="javascript:;">忘记密码</a></li>
+                    <ul></ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

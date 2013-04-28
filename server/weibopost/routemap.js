@@ -19,25 +19,26 @@
 var requestHandles = require("./requestHandles");
 
 var routemap = {
-    "get":{
-        "/api2/post/:operation":requestHandles.post,
-        "/api2/postsend/*":requestHandles.postSend,
-        "/api2/postlist/*":requestHandles.postList,
-        "/api2/gettokeninfo/*":requestHandles.getTokenInfo,
-        "/api2/addaccount/*":requestHandles.addAccount,
-        "/api2/accountownedweibo/:operation":requestHandles.accountOwnedWeibo,
-        "/api2/getpostlist/*":requestHandles.getPostlist,
-        "/api2/authaccount/*":requestHandles.authAccount
+    "get": {
+        "/api2/post/:operation": requestHandles.post,
+        "/api2/postsend/*": requestHandles.postSend,
+        "/api2/postlist/*": requestHandles.postList,
+        "/api2/gettokeninfo/*": requestHandles.getTokenInfo,
+        "/api2/addaccount/*": requestHandles.addAccount,
+        "/api2/accountownedweibo/:operation": requestHandles.accountOwnedWeibo,
+        "/api2/getpostlist/*": requestHandles.getPostlist,
+        "/api2/authaccount/*": requestHandles.authAccount,
+        "/api2/test/*": requestHandles.test
     },
-    "post":{
-        "/api2/test/*":requestHandles.test,
-        "/api2/post/:operation":requestHandles.post,
-        "/api2/weibouseradd/*":requestHandles.weiboUserAdd,
-        "/api2/accountownedweibo/:operation":requestHandles.accountOwnedWeiboPost
+    "post": {
+        "/api2/test/*": requestHandles.test,
+        "/api2/post/:operation": requestHandles.post,
+        "/api2/weibouseradd/*": requestHandles.weiboUserAdd,
+        "/api2/accountownedweibo/:operation": requestHandles.accountOwnedWeiboPost
     },
-    "put":{
+    "put": {
     },
-    "del":{
+    "del": {
     }
 };
 

@@ -9,7 +9,6 @@
 <div class="messageList"></div>
 <div class="container">
 
-
     <div class="intro">
 
         <div class="articleTitle normalTitle">
@@ -43,10 +42,9 @@
                     <li><a href="#" class="itemclick">发送记录</a></li>
                     <li><a href="#">转发记录</a></li>
                 </ul>
-
             </div>
             <div class="appContent normalContent">
-                <div class="templateContainer" template="main_panel" status="main_login"
+                <div class="templateContainer" template="main_panel" status="main_offline_post"
                      statusSet="main_login main_register">
                 </div>
             </div>
@@ -98,7 +96,8 @@
 </div>
 
 
-<div class="template" template="owned_weibo" status="Hide" statusSet="Hide Show" eventPool="login_bar">
+<div class="template" template="owned_weibo" status="Hide" statusSet="Hide Show" serverData="owned_weibo"
+     eventPool="owned_weibo">
     <div id="data" class="account" tabindex="-1" hidefocus="" style="left: 290px;outline: none;"><a
             id="data_toggle" class="account-toggle" href="javascript:;"><span
             class="toggle-down"></span>
@@ -134,234 +133,148 @@
 </div>
 
 
-<div class="template" template="main_panel" status="main_login" eventPool="main_login">
-    <div class="main_login" id="main_login">
+<div class="template" template="main_panel" status="main_offline_post" eventPool="main_offline_post">
+    <div class="main_offline_post" id="main_offline_post">
         <div class="loginPanel innerPanel">
-            <div class="title">
-                <h3>登录</h3>
 
-                <p>以开发者身份登录离线发布服务</p>
 
-                <div class="clr"></div>
-            </div>
-            <div class="login_operate" style="display:block" id="web_auth">
+            <div class="login_operate" style="display:block" id="web_login">
+                <div class="form_title">
+                    <a class="label_publish">定时发新布微博</a>
+
+                    <div style="float:right;color:#808080;">
+                        还可以输入<span id="textLength">140</span>字
+                    </div>
+                </div>
                 <div class="content form">
                     <div class="columnTip">
-                        <div id="authTip" style="display:none;" class="tip errorTip">登录失败</div>
+                        <div id="msgContainer" style="display:none;" class="tip errorTip"></div>
                     </div>
+
                     <div class="column">
-                        <label>账号</label>
-                        <input class="text textMiddle inputQ" id="auth_account">
+                        <textarea id="sendtext" name="description" class="w_sendtextarea"
+                                  onKeyUp="textareaChange()"></textarea>
                     </div>
-                    <div class="column">
-                        <label>密码</label>
-                        <input type="password" class="text textMiddle inputQ" id="auth_password">
+
+
+                </div>
+                <div>
+                    <div class="insert_icon">
+                        <a href="javascript:" class="icon16 aa_face" title="表情"></a>
+                        <a href="javascript:" class="icon16 ab_pic" title="图片" id="addPicButton"></a>
+
+                        <form hidden="true" id="form_image" node-type="form" action-type="form"
+                              id="pic_upload" name="pic_upload" target="upload_target"
+                              enctype="multipart/form-data" method="POST" action="">
+                            <input class="input_f" name="pic1" id="input_image" type="file" onChange=""
+                                   multiple="true">
+                        </form>
+                        <a href="javascript:" class="icon16 ac_resouse" title="素材"></a>
+
+                        <div class="sharpTop" style="display:none;"><img src="../static/images/face/shap.png"/></div>
+                        <div id="facePanel" class="facePanel" style="display:none;">
+                            <div class="defaultFacePanel">
+                                <?js for (var index=1;index<data.faceTitles.length;index++) { ?>
+                                <a class="face_a" href="javascript:void(0);" text="[#{data.faceTitles[index]}]"
+                                   title="#{data.faceTitles[index]}"></a>
+                                <?js }?>
+                            </div>
+                        </div>
                     </div>
+                    <div style="float:right;">
+                        <a href="javascript:" id="time_send" class="time_send sendbutton" style="color:#fff;">定时发布</a>
+                        <a href="javascript:" id="now_send" class="now_send sendbutton" style="color:#fff;">立即发布</a>
+                    </div>
+                </div>
+                <div class="clearevery"></div>
+                <div class="operatorBar2">
+                    <span id="pointupicon" class="uppoint" style="display:none;">▲</span>
+                    <output id="thumbs">
+                    </output>
                 </div>
                 <div class="operator">
-                    <a href="javascript:;" class="login_btn_wrapper">
-                        <input id="auth_login" name="btlogin" type="submit" value="登录"
-                               class="login_btn">
-                    </a>
+                    <!-- <a href="javascript:;" class="login_btn_wrapper">
+                        <input id="btsend" name="btlogin" type="" value="发布" class="login_btn">
+                    </a>-->
+                    <div class="time_object">
+                        <a id="select_year" class="btn_gray btn_select btn_select_limiting" style="width:30px;">
+                            <span class="btn_select_txt" timetype="year">#{app.time.year}</span>
+                            <span class="ico_select_s"></span>
+                        </a>
 
-                    <div style="display: none;" id="switch1" class="lineright"></div>
-                    <a class="minorLink" target="_blank" href="javascript:;">意见反馈</a>
-                    <a class="minorLink">|</a>
-                    <a class="minorLink switch_login_register" target="_blank" href="javascript:;">注册新账号</a>
-                    <a class="minorLink">|</a>
-                    <a class="minorLink" target="_blank" href="javascript:;">忘记密码？</a>
+                        <span>年</span>
+                        <a id="select_month" class="btn_gray btn_select btn_select_limiting"
+                           style="width:23px;margin-left:4px;">
+                            <span class="btn_select_txt" timetype="month">#{app.time.month}</span>
+                            <span class="ico_select_s"></span>
+                        </a>
+                        <span>月</span>
+                        <a id="select_day" class="btn_gray btn_select btn_select_limiting"
+                           style="width:23px;margin-left:4px;">
+                            <span class="btn_select_txt" timetype="day">#{app.time.day}</span>
+                            <span class="ico_select_s"></span>
+                        </a>
+                        <span>日</span>
+                        <a id="select_hour" class="btn_gray btn_select btn_select_limiting"
+                           style="width:23px;margin-left:4px;">
+                            <span class="btn_select_txt" timetype="hour">#{app.time.hour}</span>
+                            <span class="ico_select_s"></span>
+                        </a>
+
+                        <span>时</span>
+                        <a id="select_minute" class="btn_gray btn_select btn_select_limiting"
+                           style="width:23px;margin-left:4px;">
+                            <span class="btn_select_txt" timetype="minute">#{app.time.minute}</span>
+                            <span class="ico_select_s"></span>
+                        </a>
+                        <span>分</span>
+                        <ul id="select_year_list" style="display:none;">
+                            <?js for (var number=0;number<3;number++) { ?>
+                            <li class="timelist" number="#{number+app.time.year}" timetype="year"><a
+                                    href="javascript:;">#{number+app.time.year}</a>
+                            </li>
+                            <?js }?>
+                        </ul>
+                        <ul id="select_month_list" style="display:none;">
+                            <?js for (var number=1;number<13;number++) { ?>
+                            <li class="timelist" number="#{number}" timetype="month"><a
+                                    href="javascript:;">#{number}</a></li>
+                            <?js }?>
+                        </ul>
+                        <ul id="select_day_list" style="display:none;">
+                            <?js for (var number=1;number<32;number++) { ?>
+                            <li class="timelist" number="#{number}" timetype="day"><a href="javascript:;">#{number}</a>
+                            </li>
+                            <?js }?>
+                        </ul>
+                        <ul id="select_hour_list" style="display:none;">
+                            <?js for (var number=0;number<24;number++) { ?>
+                            <li class="timelist" number="#{number}" timetype="hour"><a href="javascript:;">#{number}</a>
+                            </li>
+                            <?js }?>
+                        </ul>
+                        <ul id="select_minute_list" style="display:none;">
+                            <?js for (var number=1;number<61;number++) { ?>
+                            <li class="timelist" number="#{number}" timetype="minute"><a
+                                    href="javascript:;">#{number}</a></li>
+                            <?js }?>
+                        </ul>
+                    </div>
+                    <div class="send_timeshow">
+                        本条微博将在<b id="public_time">#{app.time.public_time}</b>正式发布
+                    </div>
+                    <div style="display: none;" id="switch2" class="lineright"
+                         onmouseup="QMLogin.switchMode()"></div>
+                    <a class="minorLink" target="_blank" href="javascript:">意见反馈</a>
+
                 </div>
             </div>
         </div>
-        <div class="clr"></div>
     </div>
 </div>
 
 
-<div class="template" template="main_panel" status="main_register" eventPool="main_register">
-    <div class="main_register" id="main_register">
-        <div class="loginPanel innerPanel">
-            <div class="title">
-                <h3>注册</h3>
-
-                <p>注册新的开发者账号</p>
-
-                <div class="clr"></div>
-            </div>
-            <div class="login_operate" style="display:block" id="main_register_auth">
-                <div class="content form">
-                    <div class="columnTip">
-                        <div id="main_register_authTip" style="display:none;" class="tip errorTip">注册失败</div>
-                    </div>
-                    <div class="column">
-                        <label>账号</label>
-                        <input class="text textMiddle inputQ" id="main_register_auth_account">
-                    </div>
-                    <div class="column">
-                        <label>密码</label>
-                        <input type="password" class="text textMiddle inputQ" id="main_register_auth_password1">
-                    </div>
-                    <div class="column">
-                        <label>重复密码</label>
-                        <input type="password" class="text textMiddle inputQ" id="main_register_auth_password2">
-                    </div>
-                    <div class="column">
-                        <label>邀请码</label>
-                        <input class="text textMiddle inputQ" id="main_register_invite_code">
-                    </div>
-                </div>
-                <div class="operator">
-                    <a href="javascript:;" class="login_btn_wrapper">
-                        <input id="auth_register" name="btlogin" type="submit" value="立即注册"
-                               class="login_btn">
-                    </a>
-
-                    <div style="display: none;" id="switch3" class="lineright"></div>
-                    <a class="minorLink" target="_blank" href="mailto:wsds888@qq.com">意见反馈</a>
-                    <a class="minorLink">|</a>
-                    <a class="minorLink switch_login_register" target="_blank" href="javascript:;">直接登录</a>
-                </div>
-            </div>
-        </div>
-        <div class="clr"></div>
-    </div>
-</div>
-
-<div class="template"  template="main_panel" status="main_offline_post" eventPool="main_offline_post">
-<div class="main_offline_post" id="main_offline_post">
-<div class="loginPanel innerPanel">
-
-
-<div class="login_operate" style="display:block" id="web_login">
-<div class="form_title">
-    <a class="label_publish">定时发新布微博</a>
-
-    <div style="display: none;" id="switch" class="lineright"
-         onmouseup="QMLogin.switchMode()"></div>
-    <div style="float:right;color:#808080;">
-        还可以输入<span id="textLength">140</span>字
-    </div>
-</div>
-<div class="content form">
-    <div class="columnTip">
-        <div id="msgContainer" style="display:none;" class="tip errorTip"></div>
-    </div>
-
-    <div class="column">
-
-        <textarea id="sendtext" name="description" class="w_sendtextarea" onKeyUp="textareaChange()"></textarea>
-    </div>
-
-
-</div>
-<div>
-    <div class="insert_icon">
-        <a href="javascript:" class="icon16 aa_face" title="表情"></a>
-        <a href="javascript:" class="icon16 ab_pic" title="图片" id="addPicButton"></a>
-
-        <form hidden="true" id="form_image" node-type="form" action-type="form"
-              id="pic_upload" name="pic_upload" target="upload_target"
-              enctype="multipart/form-data" method="POST" action="">
-            <input class="input_f" name="pic1" id="input_image" type="file" onChange=""
-                   multiple="true">
-        </form>
-        <a href="#" class="icon16 ac_resouse" title="素材"></a>
-
-        <div class="sharpTop" style="display:none;"><img src="../static/images/face/shap.png"/></div>
-        <div id="facePanel" class="facePanel" style="display:none;">
-            <div class="defaultFacePanel">
-                <?js for (var index=1;index<data.faceTitles.length;index++) { ?>
-                <a class="face_a" href="javascript:void(0);" text="[#{data.faceTitles[index]}]"  title="#{data.faceTitles[index]}"></a>
-                <?js }?>
-            </div>
-        </div>
-    </div>
-    <div style="float:right;">
-        <a href="#" class="time_send sendbutton" style="color:#fff;">定时发布</a>
-        <a href="#" class="now_send sendbutton" style="color:#fff;">立即发布</a>
-    </div>
-</div>
-<div class="clearevery"></div>
-<div class="operatorBar2">
-    <span id="pointupicon" class="uppoint" style="display:none;">▲</span>
-    <output id="thumbs">
-    </output>
-</div>
-<div class="operator">
-    <!-- <a href="javascript:;" class="login_btn_wrapper">
-        <input id="btsend" name="btlogin" type="" value="发布" class="login_btn">
-    </a>-->
-    <div class="time_object">
-        <a id="select_year" class="btn_gray btn_select btn_select_limiting" style="width:30px;">
-            <span class="btn_select_txt" timetype="year">#{settings.time.year}</span>
-            <span class="ico_select_s"></span>
-        </a>
-
-        <span>年</span>
-        <a id="select_month" class="btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;">
-            <span class="btn_select_txt" timetype="month">#{settings.time.month}</span>
-            <span class="ico_select_s"></span>
-        </a>
-        <span>月</span>
-        <a id="select_day" class="btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;">
-            <span class="btn_select_txt" timetype="day">#{settings.time.day}</span>
-            <span class="ico_select_s"></span>
-        </a>
-        <span>日</span>
-        <a id="select_hour" class="btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;">
-            <span class="btn_select_txt" timetype="hour">#{settings.time.hour}</span>
-            <span class="ico_select_s"></span>
-        </a>
-
-        <span>时</span>
-        <a id="select_minute" class="btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;">
-            <span class="btn_select_txt" timetype="minute">#{settings.time.minute}</span>
-            <span class="ico_select_s"></span>
-        </a>
-        <span>分</span>
-        <ul id="select_year_list" style="display:none;">
-            <?js for (var number=0;number<3;number++) { ?>
-            <li class="timelist" number="#{number+settings.time.year}" timetype="year"><a href="javascript:;">#{number+settings.time.year}</a>
-            </li>
-            <?js }?>
-        </ul>
-        <ul id="select_month_list" style="display:none;">
-            <?js for (var number=1;number<13;number++) { ?>
-            <li class="timelist" number="#{number}" timetype="month"><a href="javascript:;">#{number}</a></li>
-            <?js }?>
-        </ul>
-        <ul id="select_day_list" style="display:none;">
-            <?js for (var number=1;number<32;number++) { ?>
-            <li class="timelist" number="#{number}" timetype="day"><a href="javascript:;">#{number}</a></li>
-            <?js }?>
-        </ul>
-        <ul id="select_hour_list" style="display:none;">
-            <?js for (var number=0;number<24;number++) { ?>
-            <li class="timelist" number="#{number}" timetype="hour"><a href="javascript:;">#{number}</a></li>
-            <?js }?>
-        </ul>
-        <ul id="select_minute_list" style="display:none;">
-            <?js for (var number=1;number<61;number++) { ?>
-            <li class="timelist" number="#{number}" timetype="minute"><a href="javascript:;">#{number}</a></li>
-            <?js }?>
-        </ul>
-    </div>
-    <div class="send_timeshow">
-        本条微博将在<b id="public_time">#{settings.time.public_time}</b>正式发布
-    </div>
-    <div style="display: none;" id="switch2" class="lineright"
-         onmouseup="QMLogin.switchMode()"></div>
-    <a class="minorLink" target="_blank" href="/support/">意见反馈</a>
-
-</div>
-</div>
-</div>
-</div>
-</div>
-
-
-
-<div class="template"  template="main_panel" status="main_offline_post_list" eventPool="main_offline_post_list">
+<div class="template" template="main_panel" status="main_offline_post_list" eventPool="main_offline_post_list">
     <div class="main_offline_post_list form" id="main_offline_post_list">
         <?js for (var index in data.postlist) { ?>
         <?js post=data.postlist[index]; ?>
@@ -370,6 +283,7 @@
         <?js } ?>
         <div class="row-section">
             <b class="icon16 ag_listpoint" style="width:18px;height:20px;"></b>
+
             <div style="float:left;">
                 <a class="" href="javascript:">
                     <?js if(post.pid=="none") { ?>
@@ -385,12 +299,15 @@
                     <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
                 </div>
                 <div class="sendtime">
-                    <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;" class="posttime">#{ post.time }</label>
+                    <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;"
+                                                                               class="posttime">#{ post.time }</label>
                     <span class="post_status_tag_holder" status="#{ post.status }" publishTime="#{ post.time }"></span>
+
                     <div style="float:right;margin-top:-3px;">
-                        <a style="color:#fff;" class="ok_button size46" href="#">保存</a>&nbsp;&nbsp;<a style="color:#fff;" class="cancel_button size46" href="#">取消</a>
+                        <a style="color:#fff;" class="ok_button size46" href="#">保存</a>&nbsp;&nbsp;<a
+                            style="color:#fff;" class="cancel_button size46" href="#">取消</a>
                         <a href="#" class="changedate">修改</a><span>|</span>
-                        <a class="deletedate" href="javascript:;"  postID="#{ post.id }">删除</a>
+                        <a class="deletedate" href="javascript:;" postID="#{ post.id }">删除</a>
                     </div>
                 </div>
                 <div class="clr"></div>
@@ -403,10 +320,12 @@
                 <p>
                     <span class="forwardWeibo">转发<em>老习</em>微博</span>
                             <span class="forwardTime">
-                                <b class="icon16 forwardTime_an"></b><label>转发时间:</label><label class="posttime">2013/04/07 18:45:00</label>
+                                <b class="icon16 forwardTime_an"></b><label>转发时间:</label><label class="posttime">2013/04/07
+                                18:45:00</label>
                             </span>
-                    <a href="#" class="conternhref" >查看原文</a>
+                    <a href="#" class="conternhref">查看原文</a>
                 </p>
+
                 <div class="clr"></div>
                 <p>转发夺去夺在转发夺去夺在转发夺去夺在转发夺去夺在转发夺去夺在</p>
                 <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
@@ -435,11 +354,13 @@
 </div>
 
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="/static/js/settings.js"></script>
 <script type="text/javascript" src="/static/js/nTenjin.js"></script>
 <script type="text/javascript" src="/static/js/webapp.js"></script>
-<script type="text/javascript" src="/static/js/eventPool.js"></script>
-
-
+<script type="text/javascript" src="/static/js/index/index.js"></script>
+<script type="text/javascript" src="/static/js/index/eventPool.js"></script>
+<script type="text/javascript" src="/static/js/index/eventPool.post.js"></script>
+<script id="dataPool" type="text/javascript" src="/static/js/index/dataPool.js"></script>
+<script id="template" type="text/html" src="/static/template/index.html"></script>
+<script type="text/javascript" src="/static/js/DynamicLoad.js"></script>
 </body>
 </html>
