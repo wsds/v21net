@@ -21,9 +21,16 @@ eventPool.main_offline_post = function (status, area) {
 
             $("#sendtext").val("");
             $("#thumbs").empty();
-            $("#post_hint").slideToggle("fast");
+            showHint();
         }
     );
+
+    function showHint(){
+        $("#post_hint").slideDown("fast");
+        setTimeout(function(){
+            $("#post_hint").slideToggle("fast");
+        },1000);
+    }
 
     $("#now_send").click(function () {
             var text = $("#sendtext").val().trim();
@@ -202,7 +209,7 @@ eventPool.main_offline_post = function (status, area) {
 
 
     $(".select_time").mousewheel(function (event, delta, deltaX, deltaY) {
-        var type = $(this).attr("type");
+        var timetype = $(this).attr("timetype");
         var max = parseInt($(this).attr("max"));
         var min = parseInt($(this).attr("min"));
         var diff = max - min;
@@ -210,21 +217,50 @@ eventPool.main_offline_post = function (status, area) {
         num = -delta + num;
         num = ((num - min) + diff) % diff + min;
         $(".btn_select_txt", this).text(num);
-        app.time[type] = num;
+        app.time[timetype] = num;
 //        console.log(type, -delta, deltaX, deltaY);
         $("#public_time").text(getShortTimeString(app.time));
         return false;
     });
 
+
+    $(".select_time").click(function () {
+        var timetype = $(this).attr("timetype");
+        var hasClassHide = false;
+        if ($("#select_" + timetype + "_list").hasClass("shouldHide")) {
+            hasClassHide = true;
+        }
+
+        shouldHideElements = $(".shouldHide");
+        shouldHideElements.toggleClass("hide");
+        shouldHideElements.toggleClass("shouldHide");
+        droppedElements = $(".drop");
+        droppedElements.toggleClass("drop");
+
+        if (!hasClassHide) {
+            $("#select_" + timetype + "_list").toggleClass("hide");
+            $("#select_" + timetype + "_list").toggleClass("shouldHide");
+        }
+        return false;
+    });
+
+    $(".timelist").click(function () {
+        var timetype = $(this).attr("timetype");
+        var num = $(this).attr("number");
+        var select_time=$("#select_"+timetype);
+        $(".btn_select_txt", select_time).text(num);
+        app.time[timetype] = num;
+        $("#public_time").text(getShortTimeString(app.time));
+    });
 };
 
 
 function getShortTimeString(date) {   //如：2011/07/29 13:30
-    var year = date.year ;
-    var month = date.month  ;
-    var day = date.day  ;
-    var hour = date.hour  ;
-    var minute = date.minute  ;
+    var year = date.year;
+    var month = date.month;
+    var day = date.day;
+    var hour = date.hour;
+    var minute = date.minute;
 
     if (month < 10) {
         month = '0' + month;
@@ -248,10 +284,10 @@ function getShortTimeString(date) {   //如：2011/07/29 13:30
 
 function getShortDateTimeString(date) {   //如：2011/07/29 13:30
     var year = date.getFullYear();
-    var month =  (date.getMonth() + 1);
-    var day =  date.getDate();
-    var hour =   date.getHours();
-    var minute =   date.getMinutes();
+    var month = (date.getMonth() + 1);
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
 //    var second = date.second || date.getSeconds();
 
     if (month < 10) {
