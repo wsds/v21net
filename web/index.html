@@ -189,45 +189,47 @@
                 <div class="operatorBar2">
                     <output id="thumbs">
                     </output>
+                    <a style="float: right; display: none;" id="post_hint">提示：发布已成功</a>
                 </div>
-                <div class="operator">
+                <div class=" operator">
                     <!-- <a href="javascript:;" class="login_btn_wrapper">
                         <input id="btsend" name="btlogin" type="" value="发布" class="login_btn">
                     </a>-->
                     <div class="time_object">
-                        <a id="select_year" class="btn_gray btn_select btn_select_limiting" style="width:30px;">
+                        <a id="select_year" class="select_time btn_gray btn_select btn_select_limiting"
+                           style="width:30px;" type="year" max="2021" min="2013">
                             <span class="btn_select_txt" timetype="year">#{app.time.year}</span>
                             <span class="ico_select_s"></span>
                         </a>
 
                         <span>年</span>
-                        <a id="select_month" class="btn_gray btn_select btn_select_limiting"
-                           style="width:23px;margin-left:4px;">
+                        <a id="select_month" class=" select_time btn_gray btn_select btn_select_limiting"
+                           style="width:23px;margin-left:4px;" type="month" min="1" max="13">
                             <span class="btn_select_txt" timetype="month">#{app.time.month}</span>
                             <span class="ico_select_s"></span>
                         </a>
                         <span>月</span>
-                        <a id="select_day" class="btn_gray btn_select btn_select_limiting"
-                           style="width:23px;margin-left:4px;">
+                        <a id="select_day" class="select_time btn_gray btn_select btn_select_limiting"
+                           style="width:23px;margin-left:4px;" type="day" min="1" max="32">
                             <span class="btn_select_txt" timetype="day">#{app.time.day}</span>
                             <span class="ico_select_s"></span>
                         </a>
                         <span>日</span>
-                        <a id="select_hour" class="btn_gray btn_select btn_select_limiting"
-                           style="width:23px;margin-left:4px;">
+                        <a id="select_hour" class="select_time btn_gray btn_select btn_select_limiting"
+                           style="width:23px;margin-left:4px;" type="hour" min="0" max="24">
                             <span class="btn_select_txt" timetype="hour">#{app.time.hour}</span>
                             <span class="ico_select_s"></span>
                         </a>
 
                         <span>时</span>
-                        <a id="select_minute" class="btn_gray btn_select btn_select_limiting"
-                           style="width:23px;margin-left:4px;">
+                        <a id="select_minute" class="select_time btn_gray btn_select btn_select_limiting"
+                           style="width:23px;margin-left:4px;" type="minute" min="0" max="60">
                             <span class="btn_select_txt" timetype="minute">#{app.time.minute}</span>
                             <span class="ico_select_s"></span>
                         </a>
                         <span>分</span>
                         <ul id="select_year_list" style="display:none;">
-                            <?js for (var number=0;number<3;number++) { ?>
+                            <?js for (var number=0;number<7;number++) { ?>
                             <li class="timelist" number="#{number+app.time.year}" timetype="year"><a
                                     href="javascript:;">#{number+app.time.year}</a>
                             </li>
@@ -352,13 +354,12 @@
 </div>
 
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="/static/js/nTenjin.js"></script>
 <script type="text/javascript" src="/static/js/webapp.js"></script>
 <script type="text/javascript" src="/static/js/index/index.js"></script>
 <script type="text/javascript" src="/static/js/index/eventPool.js"></script>
 <script type="text/javascript" src="/static/js/index/eventPool.post.js"></script>
 <script id="dataPool" type="text/javascript" src="/static/js/index/dataPool.js"></script>
-<script id="template" type="text/html" src="/static/template/index.html"></script>
-<script type="text/javascript" src="/static/js/DynamicLoad.js"></script>
 </body>
 </html>

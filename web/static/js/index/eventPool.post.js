@@ -21,6 +21,7 @@ eventPool.main_offline_post = function (status, area) {
 
             $("#sendtext").val("");
             $("#thumbs").empty();
+            $("#post_hint").slideToggle("fast");
         }
     );
 
@@ -199,28 +200,76 @@ eventPool.main_offline_post = function (status, area) {
         $("#sendtext").trigger("input");
     });
 
+
+    $(".select_time").mousewheel(function (event, delta, deltaX, deltaY) {
+        var type = $(this).attr("type");
+        var max = parseInt($(this).attr("max"));
+        var min = parseInt($(this).attr("min"));
+        var diff = max - min;
+        var num = parseInt($(".btn_select_txt", this).text());
+        num = -delta + num;
+        num = ((num - min) + diff) % diff + min;
+        $(".btn_select_txt", this).text(num);
+        app.time[type] = num;
+//        console.log(type, -delta, deltaX, deltaY);
+        $("#public_time").text(getShortTimeString(app.time));
+        return false;
+    });
+
 };
 
 
-function getShortDateTimeString(date) {   //如：2011/07/29 13:30
-    var year = date.getFullYear();
-    var month = date.getMonth();
-    var day = date.getDate();
-    month = month + 1;
-    if (month < 10) month = '0' + month;
-    if (day < 10) day = '0' + day;
-    var hour = date.getHours();
+function getShortTimeString(date) {   //如：2011/07/29 13:30
+    var year = date.year ;
+    var month = date.month  ;
+    var day = date.day  ;
+    var hour = date.hour  ;
+    var minute = date.minute  ;
+
+    if (month < 10) {
+        month = '0' + month;
+    }
+    if (day < 10) {
+        day = '0' + day;
+    }
     if (hour < 10) {
         hour = '0' + hour;
     }
-    var minute = date.getMinutes();
     if (minute < 10) {
         minute = '0' + minute;
     }
-    var second = date.getSeconds();
-    if (second < 10) {
-        second = '0' + second;
+//    if (second < 10) {
+//        second = '0' + second;
+//    }
+
+    var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute;
+    return str;
+}
+
+function getShortDateTimeString(date) {   //如：2011/07/29 13:30
+    var year = date.getFullYear();
+    var month =  (date.getMonth() + 1);
+    var day =  date.getDate();
+    var hour =   date.getHours();
+    var minute =   date.getMinutes();
+//    var second = date.second || date.getSeconds();
+
+    if (month < 10) {
+        month = '0' + month;
     }
+    if (day < 10) {
+        day = '0' + day;
+    }
+    if (hour < 10) {
+        hour = '0' + hour;
+    }
+    if (minute < 10) {
+        minute = '0' + minute;
+    }
+//    if (second < 10) {
+//        second = '0' + second;
+//    }
+
     var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute;
     return str;
 }
