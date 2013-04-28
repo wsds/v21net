@@ -152,8 +152,7 @@
                     </div>
 
                     <div class="column">
-                        <textarea id="sendtext" name="description" class="w_sendtextarea"
-                                  onKeyUp="textareaChange()"></textarea>
+                        <textarea id="sendtext" name="description" class="w_sendtextarea"></textarea>
                     </div>
 
 
@@ -171,8 +170,8 @@
                         </form>
                         <a href="javascript:" class="icon16 ac_resouse" title="素材"></a>
 
-                        <div class="sharpTop" style="display:none;"><img src="../static/images/face/shap.png"/></div>
-                        <div id="facePanel" class="facePanel" style="display:none;">
+                        <div id="sharpTop" class="sharpTop hide"><img src="../static/images/face/shap.png"/></div>
+                        <div id="facePanel" class="facePanel hide">
                             <div class="defaultFacePanel">
                                 <?js for (var index=1;index<data.faceTitles.length;index++) { ?>
                                 <a class="face_a" href="javascript:void(0);" text="[#{data.faceTitles[index]}]"
@@ -188,7 +187,6 @@
                 </div>
                 <div class="clearevery"></div>
                 <div class="operatorBar2">
-                    <span id="pointupicon" class="uppoint" style="display:none;">▲</span>
                     <output id="thumbs">
                     </output>
                 </div>

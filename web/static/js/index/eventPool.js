@@ -35,11 +35,11 @@ eventPool.body = function (status, area) {
 
 
     $(".container").click(function () {
-//            alert("click");
             droppedElements = $(".drop");
             droppedElements.toggleClass("drop");
-            $(".afterlogin", droppedElements).toggleClass("hide");
-            $(".afterlogin", droppedElements).toggleClass("shouldHide");
+            shouldHideElements = $(".shouldHide");
+            shouldHideElements.toggleClass("hide");
+            shouldHideElements.toggleClass("shouldHide");
         }
     );
 };

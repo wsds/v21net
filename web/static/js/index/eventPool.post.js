@@ -1,4 +1,3 @@
-
 eventPool.main_offline_post = function (status, area) {
 
 
@@ -105,7 +104,7 @@ eventPool.main_offline_post = function (status, area) {
                 imageReader.onload = (function (aFile) {
                     return function (e) {
                         var span = document.createElement('span');
-                        span.innerHTML = ['<a class="images_a"  href="javascript:" ><img class="images" src="', e.target.result, '" title="', aFile.name, '"/></a>'].join('');
+                        span.innerHTML = ['<span id="pointupicon" class="uppoint" style="">▲</span><a class="images_a"  href="javascript:" ><img class="images" src="', e.target.result, '" title="', aFile.name, '"/></a>'].join('');
 //                    document.getElementById('thumbs').insertBefore(span, null);
                         $("#thumbs").empty();
                         $("#thumbs").append(span);
@@ -115,18 +114,17 @@ eventPool.main_offline_post = function (status, area) {
                         $('.images_a', $(span)).click(function () {
                             if ($(this).hasClass("focus")) {
                                 $(this).removeClass("focus");
-                                //$("#pointupicon").toggleClass("uppoint");
-
-//                                document.getElementById("pointupicon").className = "uppoint";
-                                $(".images_close_a", $(this)).remove()
+                                $("#pointupicon").toggleClass("uppointclick");
+                                $(".images_close_a", $(this)).remove();
                             }
                             else {
                                 $(this).addClass("focus");
 //                                document.getElementById("pointupicon").className = "uppointclick";
+                                $("#pointupicon").toggleClass("uppointclick");
                                 $(this).append('<a class="images_close_a" href="javascript:"><img class="images_close"  style="vertical-align: top;" src="/static/images/close_small.png"></a>')
                                 $('.images_close_a', $(this)).click(function () {
                                         $(span).remove();
-                                        document.getElementById("pointupicon").style.display = "none";
+                                        $("#pointupicon").remove();
                                         if (app.uploadStatus = "uploading") {
                                             app.uploadStatus = "none";
                                         }
@@ -140,52 +138,69 @@ eventPool.main_offline_post = function (status, area) {
                 })(f);
                 imageReader.readAsDataURL(f);
                 //alert(document.getElementById("pointupicon").style.display);
+                $("#pointupicon").show();
 
-                document.getElementById("pointupicon").style.display = "block";
-                document.getElementById("pointupicon").className = "uppoint";
+//                document.getElementById("pointupicon").style.display = "block";
+//                document.getElementById("pointupicon").className = "uppoint";
                 break;
             }
         });
     }
+
+
+    $("#sendtext")[0].oninput = function () {
+        var content = $("#sendtext").val();
+        var contentLength = getCharLength(content);
+        var trueLength = parseInt(contentLength / 2);
+        //alert(content);
+        if (contentLength < 281) {
+            $("#textLength").html(140 - trueLength);
+        } else {
+            $("#sendtext").val(content.substr(0, 281));
+            $("#textLength").html(0);
+        }
+
+        function getCharLength(str) {
+            var charLen = 0;
+            for (var i = 0, len = str.length; i < len; i++) {
+                if (str.charCodeAt(i) > 255) {
+                    charLen += 2;
+                } else {
+                    charLen += 1;
+                }
+            }
+            return charLen;
+        }
+
+        function checkMaxLength(textArea, maxLength) {
+            var currentStr = "";
+            for (var i = 0, len = textArea.value.length; i < len; i++) {
+                currentStr += textArea.value.charAt(i);
+                if (getCharLength(currentStr) > maxLength) {
+                    area.value = textArea.value.substr(0, i);
+                    return;
+                }
+            }
+        }
+    }
+
+
+    $(".aa_face").click(function () {
+        $("#sharpTop").toggleClass("hide");
+        $("#sharpTop").toggleClass("shouldHide");
+        $("#facePanel").toggleClass("hide");
+        $("#facePanel").toggleClass("shouldHide");
+        return false;
+    });
+    $(".face_a").click(function () {
+        var text = $(this).attr("text");
+        var sendtext = $("#sendtext").val();
+        $("#sendtext").val(sendtext + text);
+        $("#sendtext").trigger("input");
+    });
+
 };
 
-
-
-//textarea字数变化显示
-function textareaChange() {
-    var content = document.getElementById("sendtext").value;
-    var contentLength = getCharLength(content);
-    var trueLength = parseInt(contentLength / 2);
-    //alert(content);
-    if (contentLength < 281) {
-        document.getElementById("textLength").innerHTML = 140 - trueLength;
-    } else {
-        document.getElementById("sendtext").value = document.getElementById("sendtext").value.substr(0, 281);
-        document.getElementById("textLength").innerHTML = 0;
-    }
-
-}
-function getCharLength(str) {
-    var charLen = 0;
-    for (var i = 0, len = str.length; i < len; i++) {
-        if (str.charCodeAt(i) > 255) {
-            charLen += 2;
-        } else {
-            charLen += 1;
-        }
-    }
-    return charLen;
-}
-function checkMaxLength(textArea, maxLength) {
-    var currentStr = "";
-    for (var i = 0, len = textArea.value.length; i < len; i++) {
-        currentStr += textArea.value.charAt(i);
-        if (getCharLength(currentStr) > maxLength) {
-            area.value = textArea.value.substr(0, i);
-            return;
-        }
-    }
-}
 
 function getShortDateTimeString(date) {   //如：2011/07/29 13:30
     var year = date.getFullYear();
