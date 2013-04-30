@@ -18,18 +18,32 @@ eventPool.body = function (status, area) {
     app.time.public_time = getShortDateTimeString(now);
 
     $("#slide_ctrls li a").click(function () {
+            var main_panel = $(this).attr("slide");
+
             $("#slide_ctrls li a").removeClass("current");
             $(this).toggleClass("current");
-            var main_panel = $(this).attr("slide");
+
+            $(".subnav").removeClass("current");
+            $(".subnav").hide();
+            $(".subnav[slide='" + main_panel + "']").toggleClass("current");
+            $(".subnav[slide='" + main_panel + "']").show();
+
             var main_panel_container = $(".templateContainer[template='main_panel']");
             main_panel_container.attr("status", main_panel);
             renderTemplate(main_panel_container);
         }
     );
 
+    $(".subnav li a").click(function () {
+        var main_panel = $(this).attr("slide");
+
+        $(".subnav li a[slide='" + main_panel + "']").removeClass("current");
+        $(this).toggleClass("current");
+        }
+    );
     $(".normalTitle h2").click(function () {
             $(".nav").slideToggle("fast");
-            $(".subnav").slideToggle("fast");
+            $(".subnav.current").slideToggle("fast");
         }
     );
 
