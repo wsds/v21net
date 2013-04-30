@@ -23,6 +23,7 @@ $(document).ready(function () {
         app.page.linkData();
         var area = $("body");
         app.eventPool["body"]("None", area);
+        app.dataPool["body"]("None", area);
         renderTemplate(area);
     }
 );
@@ -44,9 +45,11 @@ function renderTemplate(area) {
             if (nTemplate == null) {
                 return;
             }
-            resolveServerData(nTemplate, function(serverData){
+            resolveServerData(nTemplate, function (serverData) {
                 $(templateContainer).html(nTemplate.render(serverData));
                 app.eventPool[nTemplate.eventPool](status, templateContainer);
+                var innerTemplateContainers = $(".templateContainer", $(templateContainer));
+                renderTemplate(innerTemplateContainers);
             })
         }
     );
@@ -55,7 +58,7 @@ function renderTemplate(area) {
 
 function getTemplate(template, status) {
     var tenjin = nTenjin;
-    var templateDiv = $(".templates [template='" + template + "'][status='" + status + "']")
+    var templateDiv = $(".templates .template[template='" + template + "'][status='" + status + "']")
 
     if (templateDiv.size() != 1) {
         return null;

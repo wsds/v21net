@@ -35,9 +35,9 @@ eventPool.body = function (status, area) {
 
 
     $(".container").click(function () {
-            droppedElements = $(".drop");
+            var droppedElements = $(".drop");
             droppedElements.toggleClass("drop");
-            shouldHideElements = $(".shouldHide");
+            var shouldHideElements = $(".shouldHide");
             shouldHideElements.toggleClass("hide");
             shouldHideElements.toggleClass("shouldHide");
         }
@@ -98,6 +98,54 @@ eventPool.owned_weibo = function (status, area) {
     );
 };
 
-eventPool.main_offline_post_list = function (status, area) {
-};
+
+eventPool.time_control = function (status, area) {
+    $(".select_time", area).mousewheel(function (event, delta, deltaX, deltaY) {
+        var timetype = $(this).attr("timetype");
+        var max = parseInt($(this).attr("max"));
+        var min = parseInt($(this).attr("min"));
+        var diff = max - min;
+        var num = parseInt($(".btn_select_txt", this).text());
+        num = -delta + num;
+        num = ((num - min) + diff) % diff + min;
+        $(".btn_select_txt", this).text(num);
+        app.time[timetype] = num;
+//        console.log(type, -delta, deltaX, deltaY);
+        $("#public_time").text(getShortTimeString(app.time));
+        return false;
+    });
+
+
+    $(".select_time", area).click(function () {
+        var timetype = $(this).attr("timetype");
+        var hasClassHide = false;
+        var select_time_list = $(".select_time_list[timetype='" + timetype + "']", area)
+        if (select_time_list.hasClass("shouldHide")) {
+            hasClassHide = true;
+        }
+
+        var shouldHideElements = $(".shouldHide");
+        shouldHideElements.toggleClass("hide");
+        shouldHideElements.toggleClass("shouldHide");
+        var droppedElements = $(".drop");
+        droppedElements.toggleClass("drop");
+
+        if (!hasClassHide) {
+            select_time_list.toggleClass("hide");
+            select_time_list.toggleClass("shouldHide");
+        }
+        return false;
+    });
+
+    $(".time_list", area).click(function () {
+        var timetype = $(this).attr("timetype");
+        var num = $(this).attr("number");
+        var select_time = $(".select_time[timetype='" + timetype + "']", area);
+        $(".btn_select_txt", select_time).text(num);
+        app.time[timetype] = num;
+        $("#public_time").text(getShortTimeString(app.time));
+    });
+
+}
+
 

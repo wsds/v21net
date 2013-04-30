@@ -25,11 +25,11 @@ eventPool.main_offline_post = function (status, area) {
         }
     );
 
-    function showHint(){
+    function showHint() {
         $("#post_hint").slideDown("fast");
-        setTimeout(function(){
+        setTimeout(function () {
             $("#post_hint").slideToggle("fast");
-        },1000);
+        }, 1000);
     }
 
     $("#now_send").click(function () {
@@ -96,6 +96,7 @@ eventPool.main_offline_post = function (status, area) {
     }
 
     registerUploadImageEvent();
+    eventPool.main_offline_post.registerUploadImageEvent = registerUploadImageEvent;
 
     function registerUploadImageEvent() {
         $('#addPicButton').click(function () {
@@ -207,51 +208,54 @@ eventPool.main_offline_post = function (status, area) {
         $("#sendtext").trigger("input");
     });
 
-
-    $(".select_time").mousewheel(function (event, delta, deltaX, deltaY) {
-        var timetype = $(this).attr("timetype");
-        var max = parseInt($(this).attr("max"));
-        var min = parseInt($(this).attr("min"));
-        var diff = max - min;
-        var num = parseInt($(".btn_select_txt", this).text());
-        num = -delta + num;
-        num = ((num - min) + diff) % diff + min;
-        $(".btn_select_txt", this).text(num);
-        app.time[timetype] = num;
+    registerTimeControlEvent();
+    eventPool.main_offline_post.registerTimeControlEvent = registerTimeControlEvent;
+    function registerTimeControlEvent() {
+        $(".select_time").mousewheel(function (event, delta, deltaX, deltaY) {
+            var timetype = $(this).attr("timetype");
+            var max = parseInt($(this).attr("max"));
+            var min = parseInt($(this).attr("min"));
+            var diff = max - min;
+            var num = parseInt($(".btn_select_txt", this).text());
+            num = -delta + num;
+            num = ((num - min) + diff) % diff + min;
+            $(".btn_select_txt", this).text(num);
+            app.time[timetype] = num;
 //        console.log(type, -delta, deltaX, deltaY);
-        $("#public_time").text(getShortTimeString(app.time));
-        return false;
-    });
+            $("#public_time").text(getShortTimeString(app.time));
+            return false;
+        });
 
 
-    $(".select_time").click(function () {
-        var timetype = $(this).attr("timetype");
-        var hasClassHide = false;
-        if ($("#select_" + timetype + "_list").hasClass("shouldHide")) {
-            hasClassHide = true;
-        }
+        $(".select_time").click(function () {
+            var timetype = $(this).attr("timetype");
+            var hasClassHide = false;
+            if ($("#select_" + timetype + "_list").hasClass("shouldHide")) {
+                hasClassHide = true;
+            }
 
-        shouldHideElements = $(".shouldHide");
-        shouldHideElements.toggleClass("hide");
-        shouldHideElements.toggleClass("shouldHide");
-        droppedElements = $(".drop");
-        droppedElements.toggleClass("drop");
+            var shouldHideElements = $(".shouldHide");
+            shouldHideElements.toggleClass("hide");
+            shouldHideElements.toggleClass("shouldHide");
+            var droppedElements = $(".drop");
+            droppedElements.toggleClass("drop");
 
-        if (!hasClassHide) {
-            $("#select_" + timetype + "_list").toggleClass("hide");
-            $("#select_" + timetype + "_list").toggleClass("shouldHide");
-        }
-        return false;
-    });
+            if (!hasClassHide) {
+                $("#select_" + timetype + "_list").toggleClass("hide");
+                $("#select_" + timetype + "_list").toggleClass("shouldHide");
+            }
+            return false;
+        });
 
-    $(".timelist").click(function () {
-        var timetype = $(this).attr("timetype");
-        var num = $(this).attr("number");
-        var select_time=$("#select_"+timetype);
-        $(".btn_select_txt", select_time).text(num);
-        app.time[timetype] = num;
-        $("#public_time").text(getShortTimeString(app.time));
-    });
+        $(".timelist").click(function () {
+            var timetype = $(this).attr("timetype");
+            var num = $(this).attr("number");
+            var select_time = $("#select_" + timetype);
+            $(".btn_select_txt", select_time).text(num);
+            app.time[timetype] = num;
+            $("#public_time").text(getShortTimeString(app.time));
+        });
+    }
 };
 
 
@@ -274,9 +278,6 @@ function getShortTimeString(date) {   //如：2011/07/29 13:30
     if (minute < 10) {
         minute = '0' + minute;
     }
-//    if (second < 10) {
-//        second = '0' + second;
-//    }
 
     var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute;
     return str;
@@ -302,9 +303,6 @@ function getShortDateTimeString(date) {   //如：2011/07/29 13:30
     if (minute < 10) {
         minute = '0' + minute;
     }
-//    if (second < 10) {
-//        second = '0' + second;
-//    }
 
     var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute;
     return str;
