@@ -108,15 +108,13 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, resp
             previousID = existPostPointer.previous;
             existPostPointer.previous = post.id;
         }
-        client.hget("publishing", globaldata.nextPostID, function (err, postPointer) {
-            var nextPostPointer = postPointer;
-            var nextPostTime = nextPostPointer.publishTime;
-            if (nextPostTime > publishTime) {
-                client.set("publishing_next_post_id", post.id, redis.print);
-                globaldata.nextPostID = post.id;
-                needReload = true;
-            }
-        });
+        var nextPostPointer = globaldata.publishing[globaldata.nextPostID];
+        var nextPostTime = nextPostPointer.publishTime;
+        if (nextPostTime > publishTime) {
+            client.set("publishing_next_post_id", post.id, redis.print);
+            globaldata.nextPostID = post.id;
+            needReload = true;
+        }
     }
     var postPointer = {
         "previous": previousID,
@@ -150,14 +148,58 @@ function reloadPublishing(needReload, postID) {
     }
 }
 
-postlist.delPost = function (weibo_user_name, postid, postlist) {
-    postlist[postid] = undefined;
+postlist.delPost = function (weibo_user_name, postid, response) {
+    var needReload = false;
+
     client.hdel(["weibo_tools_postlist", postid], redis.print);
     client.lrem("postlist_" + weibo_user_name, 1, postid);
 
-    if (nextPostlist[postid] != null) {
-        this.initializePostlist();
+    var postPointer = globaldata.publishing[postid];
+    if (postPointer == null) {
+        response.write(JSON.stringify({"提示信息": "删除失败，数据不完整"}));
+        response.end();
+        return;
     }
+    if (postPointer.previous != "head") {
+        var previous = globaldata.publishing[postPointer.previous];
+        previous.next = postPointer.next;
+        client.hset(["publishing", postPointer.previous, JSON.stringify(previous)], redis.print);
+    }
+
+    if (postPointer.next != "tail") {
+        var next = globaldata.publishing[postPointer.next];
+        next.previous = postPointer.previous;
+        client.hset(["publishing", postPointer.next, JSON.stringify(next)], redis.print);
+    }
+
+    if (globaldata.nextPostID == postid) {
+        needReload = true;
+        globaldata.nextPostID = postPointer.next;
+        client.set("publishing_next_post_id", postPointer.next, redis.print);
+    }
+
+    if (globaldata.lastAddPostID == postid) {
+        if (postPointer.next != "tail") {
+            globaldata.lastAddPostID = postPointer.next;
+        } else if (postPointer.previous != "head") {
+            globaldata.lastAddPostID = postPointer.previous;
+        }
+    }
+
+    if (postPointer.previous == "head" && postPointer.next == "tail") {
+        needReload = true;
+        globaldata.nextPostID = "empty";
+        globaldata.lastAddPostID = "empty";
+        client.set("publishing_next_post_id", "empty", redis.print);
+    }
+
+    client.hdel(["publishing", postid], redis.print);
+    delete globaldata.publishing[postid];
+
+    response.write(JSON.stringify({"提示信息": "删除成功", "postID": postid}));
+    response.end();
+
+    reloadPublishing(needReload, postid);
 }
 
 
@@ -181,8 +223,12 @@ postlist.getPostlist = function (weibo_user_name, start, end, response) {
         client.lrange("postlist_" + weibo_user_name, start, end, function (err, postlistIDs) {
 
                 client.hmget("weibo_tools_postlist", postlistIDs, function (err, postlistStr) {
-                    for (postID in postlistStr) {
-                        weibo_user_postlist[postID] = JSON.parse(postlistStr[postID]);
+                    for (var index in postlistStr) {
+                        var post = JSON.parse(postlistStr[index]);
+                        if (post == null) {
+                            continue;
+                        }
+                        weibo_user_postlist[post.id] = post;
                     }
                     response.write(JSON.stringify(weibo_user_postlist));
                     response.end();

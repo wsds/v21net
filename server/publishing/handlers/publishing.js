@@ -18,7 +18,6 @@ var nextPost = {};
 
 
 publishing.initialize = function () {
-    root.globaldata.publishing = {};
     client.get("publishing_next_post_id", function (err, nextPostID) {
         if(nextPostID=="empty"){
             return;

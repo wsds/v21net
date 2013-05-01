@@ -60,9 +60,7 @@ requestHandles.post = function (request, response, pathObject, getParam) {
     } else if (operation == "del") {
         var weibo_user = getParam["weibo_user"];
         var postid = getParam["postid"];
-        var post = postlist.delPost(weibo_user, postid, globaldata.postlist);
-        responseJSON = {"提示信息": "删除成功", "post": post}
-        response.write(JSON.stringify(responseJSON));
+        var post = postlist.delPost(weibo_user, postid, response);
     }
 
 };

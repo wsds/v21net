@@ -38,7 +38,7 @@ eventPool.main_offline_post = function (status, area) {
                 window.alert("发布内容不能为空的。");
                 return;
             }
-            var public_time = new Date($('#public_time').text());
+            var public_time = new Date($('#public_time').text())
 
             uploadPic(function (pic) {
                 var post = addPost(public_time.getTime(), text, pic);
@@ -228,7 +228,6 @@ function getShortTimeString(date) {   //如：2011/07/29 13:30
 }
 
 function getShortDateTimeString(date) {   //如：2011/07/29 13:30
-    var date=new Date(date);
     var year = date.getFullYear();
     var month = (date.getMonth() + 1);
     var day = date.getDate();

@@ -38,14 +38,14 @@
         <div class="main" id="slide_contents">
             <div class="subnav" slide="main_offline_post_list">
                 <ul>
-                    <li><a href="javascript:;" class="current" slide="main_offline_post_list"  subSlide="">发送记录</a></li>
-                    <li><a href="javascript:;" slide="main_offline_post_list"  subSlide="">转发记录</a></li>
+                    <li><a href="javascript:;" class="current" slide="main_offline_post_list" subSlide="">发送记录</a></li>
+                    <li><a href="javascript:;" slide="main_offline_post_list" subSlide="">转发记录</a></li>
                 </ul>
             </div>
             <div class="subnav" slide="main_forward" style="padding-left:270px;">
                 <ul>
-                    <li><a href="javascript:;" class="current"  slide="main_forward" subSlide="">我的首页 </a></li>
-                    <li><a href="javascript:;"  slide="main_forward"  subSlide="">我关注的人</a></li>
+                    <li><a href="javascript:;" class="current" slide="main_forward" subSlide="">我的首页 </a></li>
+                    <li><a href="javascript:;" slide="main_forward" subSlide="">我关注的人</a></li>
                 </ul>
             </div>
             <div class="appContent normalContent">
@@ -296,7 +296,8 @@
 </div>
 
 
-<div class="template" template="main_panel" status="main_offline_post_list" eventPool="main_offline_post_list">
+<div class="template" template="main_panel" status="main_offline_post_list" eventPool="main_offline_post_list"
+     serverData="main_offline_post_list">
     <div class="main_offline_post_list form" id="main_offline_post_list">
         <?js for (var index in data.postlist) { ?>
         <?js post=data.postlist[index]; ?>
@@ -315,8 +316,8 @@
             </div>
             <div class="row columnDisplay">
                 <div class="postcontent">
-                    <span class="post_show">#{ post.text }</span>
-                    <textarea class="editweibo post_modify hide" name="" cols="" rows="">#{ post.text }</textarea>
+                    <span class="post_show post_text">#{ post.text }</span>
+                    <textarea class="editweibo post_modify modify_editor hide" name="" cols="" rows="">#{ post.text }</textarea>
                 </div>
                 <div class="sendtime">
                     <div class="time_object_change  post_modify hide">
@@ -326,8 +327,8 @@
 
                     <div class="time_public post_show" postID="#{ post.id }">
                         <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;"
-                                                                                   class="posttime">2013/04/07
-                        18:45:00</label>
+                                                                                   class="posttime">#{getShortDateTimeString(post.time)}
+                    </label>
                         <span class="post_status_tag_holder" status="published"
                               publishtime="2013/04/07 18:45:00"></span>
 
@@ -354,7 +355,7 @@
                             href="javascript:;" postID="#{ post.id }">取消</a>
                         <a href="javascript:;" class="changedate post_show modify_post"
                            postID="#{ post.id }">修改</a><span class="devline post_show">|</span>
-                        <a class="deletedate post_show" href="javascript:;" postID="#{ post.id }">删除</a>
+                        <a class="deletedate post_show delete_post" href="javascript:;" postID="#{ post.id }">删除</a>
                     </div>
                 </div>
                 <div class="clr"></div>
