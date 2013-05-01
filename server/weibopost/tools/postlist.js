@@ -30,6 +30,9 @@ postlist.initializePublishing = function () {
         }
         client.hgetall("publishing", function (err, postPointerStr) {
             for (var postID in postPointerStr) {
+                if (postID == "undefined") {
+                    continue;
+                }
                 var postPointer = JSON.parse(postPointerStr[postID]);
                 globaldata.publishing[postID] = postPointer;
             }
@@ -38,22 +41,14 @@ postlist.initializePublishing = function () {
     });
 };
 
-postlist.addPost = function (weibo_user_name, text, publishTimeString, pic) {
+postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, response) {
     var needReload = false;
-    var post = {};
 
     var now = new Date();
-    post.id = weibo_user_name + now.getTime();
-    post.time = publishTime.getTime();
-    post.status = "publishing";
-    post.text = text;
-    post.pid = pic;
-    post.weibo_user = weibo_user_name;
 
     var previousID = "empty";
     var nextID = "empty";
     var publishTime = 0;
-
 
     if (publishTimeString == "now") {
         publishTime = now.getTime() + 5000;
@@ -68,6 +63,13 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic) {
         return;
     }
 
+    var post = {};
+    post.id = weibo_user_name + now.getTime();
+    post.status = "publishing";
+    post.text = text;
+    post.pid = pic;
+    post.weibo_user = weibo_user_name;
+    post.time = publishTime;
 
     if (globaldata.nextPostID == "empty") {
         nextID = "tail";
@@ -106,32 +108,35 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic) {
             previousID = existPostPointer.previous;
             existPostPointer.previous = post.id;
         }
-        client.hget("publishing", nextPostIDs, function (err, postPointer) {
+        client.hget("publishing", globaldata.nextPostID, function (err, postPointer) {
             var nextPostPointer = postPointer;
             var nextPostTime = nextPostPointer.publishTime;
             if (nextPostTime > publishTime) {
                 client.set("publishing_next_post_id", post.id, redis.print);
+                globaldata.nextPostID = post.id;
                 needReload = true;
             }
         });
     }
-
-    client.hset(["publishing", existPostID, JSON.stringify(existPostPointer)], redis.print);
-    client.hset(["publishing", post.id, JSON.stringify({
+    var postPointer = {
         "previous": previousID,
         "next": nextID,
         "publishTime": post.time,
         "weibo_user": post.weibo_user,
         "text": post.text
-    })], redis.print);
+    }
+    client.hset(["publishing", existPostID, JSON.stringify(existPostPointer)], redis.print);
+    client.hset(["publishing", post.id, JSON.stringify(postPointer)], redis.print);
 
     globaldata.lastAddPostID = post.id;
+    globaldata.publishing[post.id] = postPointer;
 
     client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
     client.lpush("postlist_" + weibo_user_name, post.id);
 
-    response.write(JSON.stringify({"提示信息": "添加定时微博内容成功。"}));
+    response.write(JSON.stringify({"提示信息": "定时发布成功", "post": post}));
     response.end();
+
     reloadPublishing(needReload, post.id);
     return post;
 }

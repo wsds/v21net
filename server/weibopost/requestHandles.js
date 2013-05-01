@@ -17,7 +17,7 @@ requestHandles.feedlist = function (request, response, pathObject, queryobj) {
 var globaldata = root.globaldata;
 
 var postlist = require('./tools/postlist');
-postlist.initializePostlist();
+postlist.initializePublishing();
 
 var users = require('./tools/users');
 users.initializeUsers();
@@ -25,7 +25,7 @@ users.initializeUsers();
 var accounts = require('./tools/accounts');
 accounts.initializeAccounts();
 
-var weibo_post = require('./tools/weibo_post');
+//var weibo_post = require('./tools/weibo_post');
 
 
 requestHandles.postSend = function (request, response, pathObject, getParam) {
@@ -56,9 +56,7 @@ requestHandles.post = function (request, response, pathObject, getParam) {
         var weibo_user = getParam["weibo_user"];
         var time = getParam["time"];
         var pic = getParam["pic"];
-        var post = postlist.addPost(weibo_user, text, time, pic, globaldata.postlist);
-        responseJSON = {"提示信息": "定时发布成功", "post": post}
-        response.write(JSON.stringify(responseJSON));
+        var post = postlist.addPost(weibo_user, text, time, pic, response);
     } else if (operation == "del") {
         var weibo_user = getParam["weibo_user"];
         var postid = getParam["postid"];

@@ -38,12 +38,10 @@ eventPool.main_offline_post = function (status, area) {
                 window.alert("发布内容不能为空的。");
                 return;
             }
-            var time = $('#time_picker').val();
-
-            time = "now";
+            var public_time = new Date($('#public_time').text())
 
             uploadPic(function (pic) {
-                var post = addPost(time, text, pic);
+                var post = addPost(public_time.getTime(), text, pic);
             });
 
             $("#sendtext").val("");
