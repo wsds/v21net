@@ -25,7 +25,6 @@ http.createServer(
         response.writeHead(200, {
             "Content-Type":"application/json; charset=UTF-8"
         });
-
         queryobj = {};
         route(routemap, request.url, request, response, queryobj);
 

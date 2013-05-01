@@ -48,7 +48,7 @@ eventPool.body = function (status, area) {
     );
 
 
-    $(".container").click(function () {
+    $("body").click(function () {
             var droppedElements = $(".drop");
             droppedElements.toggleClass("drop");
             var shouldHideElements = $(".shouldHide");

@@ -32,7 +32,7 @@ var defaultSetting = {
  *
  */
 function ajax(settings) {
-    // ajax(settings)
+    // ajax.js(settings)
     if (typeof settings === "object") {
         // 处理默认值继承
         // todo ...

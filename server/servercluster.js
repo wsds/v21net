@@ -9,3 +9,6 @@ console.log("weiboauth is starting");
 
 var imageupload = require('./imageupload/index.js');//8062
 console.log("imageupload is starting");
+
+var post = require('./publishing/main.js');//8063
+console.log("publishing is starting");

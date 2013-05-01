@@ -6,7 +6,7 @@
 
 
 
-var requestHandles = {
+var requestHandles = function () {
 };
 var feedlist = ["这是第一篇文章", "这是第二篇文章", "这是第3篇文章"];
 requestHandles.feedlist = function (request, response, pathObject, queryobj) {
@@ -37,7 +37,7 @@ requestHandles.postSend = function (request, response, pathObject, getParam) {
 
     weibo_post.postText(weibo_user, text);
 
-    responseJSON = {"提示信息":"发布成功"}
+    responseJSON = {"提示信息": "发布成功"}
     response.write(JSON.stringify(responseJSON));
 //    postlist.addPost(weibo_user, text, time, globaldata.postlist);
 //    response.write(JSON.stringify(globaldata.postlist));
@@ -57,13 +57,13 @@ requestHandles.post = function (request, response, pathObject, getParam) {
         var time = getParam["time"];
         var pic = getParam["pic"];
         var post = postlist.addPost(weibo_user, text, time, pic, globaldata.postlist);
-        responseJSON = {"提示信息":"定时发布成功", "post":post}
+        responseJSON = {"提示信息": "定时发布成功", "post": post}
         response.write(JSON.stringify(responseJSON));
     } else if (operation == "del") {
         var weibo_user = getParam["weibo_user"];
         var postid = getParam["postid"];
         var post = postlist.delPost(weibo_user, postid, globaldata.postlist);
-        responseJSON = {"提示信息":"删除成功", "post":post}
+        responseJSON = {"提示信息": "删除成功", "post": post}
         response.write(JSON.stringify(responseJSON));
     }
 
@@ -78,7 +78,7 @@ requestHandles.weiboUserAdd = function (request, response, pathObject, postData)
     var weibo_user = JSON.parse(weibo_user_str);
 
     users.addUser(weibo_user, globaldata.weibo_users);
-    response.write(JSON.stringify({"提示信息":"微博账号添加成功"}));
+    response.write(JSON.stringify({"提示信息": "微博账号添加成功"}));
     response.end();
 };
 
@@ -87,11 +87,11 @@ requestHandles.addAccount = function (request, response, pathObject, getParam) {
     var accountName = getParam["account"];
     var password = getParam["password"];
     var invite = getParam["invite"];
-    if(invite=="slzd2013"){
+    if (invite == "slzd2013") {
         accounts.addAccount(accountName, password, response);
     }
-    else{
-        response.write(JSON.stringify({"提示信息":"邀请码不正确。"}));
+    else {
+        response.write(JSON.stringify({"提示信息": "邀请码不正确。"}));
         response.end();
     }
 
@@ -145,6 +145,6 @@ requestHandles.getPostlist = function (request, response, pathObject, getParam) 
 
 
 requestHandles.test = function (request, response, pathObject, getParam) {
-    response.write(JSON.stringify({"a":"666", b:"888"}));
+    response.write(JSON.stringify({"a": "1213", b: "3213123"}));
 };
 module.exports = requestHandles;

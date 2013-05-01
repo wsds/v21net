@@ -29,7 +29,7 @@ weibo_post.postText = function (weibo_user_name, text) {
         weibo.update(weibo_user, text, function (err, status) {
             console.log(err);
             console.log(status);
-//        client.hset(["weibo_tools_postlist_success", post.id, JSON.stringify(post)], redis.print);
+//        client.hset(["weibo_tools_postlist_success", publishing.id, JSON.stringify(publishing)], redis.print);
         });
     }
 }
@@ -44,7 +44,7 @@ weibo_post.post = function (post, postlist) {
                 post.status = "published";
                 client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
                 postlist.initializePostlist();
-//        client.hset(["weibo_tools_postlist_success", post.id, JSON.stringify(post)], redis.print);
+//        client.hset(["weibo_tools_postlist_success", publishing.id, JSON.stringify(publishing)], redis.print);
             });
         }
         else {
@@ -68,7 +68,7 @@ weibo_post.getTokenInfo = function (weibo_user_name, response) {
     weibo_user = globaldata.weibo_users[weibo_user_name];
     if (weibo_user != null) {
         var access_token = weibo_user.access_token;
-//        ajax.ajax( {
+//        ajax.js.ajax.js( {
 //            data: {"access_token":access_token},
 //            success: function(data){
 //                response.write(JSON.stringify(data));

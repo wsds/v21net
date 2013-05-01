@@ -1,15 +1,19 @@
-HSET "weibo_tools_acount:"
+HSET "weibo_tools_accounts:"
         acountname : {"accountID":acountID, "accountName":accountName,  "password":password, "ownedWeibo":{ownedWeibo:"true"}, "key": key}
 
-HSET "weibo_tools_acount_id:"
-        acountID : acountname
 
 HSET "weibo_users:"
-        weibo_user.uid : weibo_user
+        weibo_user.name : weibo_user
 
 
 HSET "weibo_tools_postlist:"
         post.id : post
 
-lpush "postlist_" + weibo_user_name:
+HSET "publishing:"
+        post.id : {"previous" : post.id, "next" : post.id, "publishTime": post.publishTime,"weibo_user": post.weibo_user,  "text": post.text}
+
+LPUSH  "postlist_" + weibo_user_name:
         [post.id]
+
+SET "publishing_next_post_id"
+        post.id || "empty"

@@ -128,7 +128,6 @@ eventPool.main_offline_post = function (status, area) {
                             }
                             else {
                                 $(this).addClass("focus");
-//                                document.getElementById("pointupicon").className = "uppointclick";
                                 $("#pointupicon").toggleClass("uppointclick");
                                 $(this).append('<a class="images_close_a" href="javascript:"><img class="images_close"  style="vertical-align: top;" src="/static/images/close_small.png"></a>')
                                 $('.images_close_a', $(this)).click(function () {
@@ -140,17 +139,12 @@ eventPool.main_offline_post = function (status, area) {
                                     }
                                 );
                             }
-//                        alert("images_a");
                         });
-//                    alert(span);
                     };
                 })(f);
                 imageReader.readAsDataURL(f);
-                //alert(document.getElementById("pointupicon").style.display);
                 $("#pointupicon").show();
 
-//                document.getElementById("pointupicon").style.display = "block";
-//                document.getElementById("pointupicon").className = "uppoint";
                 break;
             }
         });
@@ -208,54 +202,6 @@ eventPool.main_offline_post = function (status, area) {
         $("#sendtext").trigger("input");
     });
 
-    registerTimeControlEvent();
-    eventPool.main_offline_post.registerTimeControlEvent = registerTimeControlEvent;
-    function registerTimeControlEvent() {
-        $(".select_time").mousewheel(function (event, delta, deltaX, deltaY) {
-            var timetype = $(this).attr("timetype");
-            var max = parseInt($(this).attr("max"));
-            var min = parseInt($(this).attr("min"));
-            var diff = max - min;
-            var num = parseInt($(".btn_select_txt", this).text());
-            num = -delta + num;
-            num = ((num - min) + diff) % diff + min;
-            $(".btn_select_txt", this).text(num);
-            app.time[timetype] = num;
-//        console.log(type, -delta, deltaX, deltaY);
-            $("#public_time").text(getShortTimeString(app.time));
-            return false;
-        });
-
-
-        $(".select_time").click(function () {
-            var timetype = $(this).attr("timetype");
-            var hasClassHide = false;
-            if ($("#select_" + timetype + "_list").hasClass("shouldHide")) {
-                hasClassHide = true;
-            }
-
-            var shouldHideElements = $(".shouldHide");
-            shouldHideElements.toggleClass("hide");
-            shouldHideElements.toggleClass("shouldHide");
-            var droppedElements = $(".drop");
-            droppedElements.toggleClass("drop");
-
-            if (!hasClassHide) {
-                $("#select_" + timetype + "_list").toggleClass("hide");
-                $("#select_" + timetype + "_list").toggleClass("shouldHide");
-            }
-            return false;
-        });
-
-        $(".timelist").click(function () {
-            var timetype = $(this).attr("timetype");
-            var num = $(this).attr("number");
-            var select_time = $("#select_" + timetype);
-            $(".btn_select_txt", select_time).text(num);
-            app.time[timetype] = num;
-            $("#public_time").text(getShortTimeString(app.time));
-        });
-    }
 };
 
 

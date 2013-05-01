@@ -8,80 +8,141 @@ var postlist = {};
 var redis = require("redis");
 var client = redis.createClient();
 
-var weibo_post = require('./../tools/weibo_post');
 
 var globaldata = root.globaldata;
+root.globaldata.publishing = {};
+root.globaldata.nextPostID = "empty";
+root.globaldata.lastAddPostID = "empty";
 
-var nextPostTime = new Date("2020/01/28 18:28:18");
-var nextPostlist = {};
+postlist.initializePublishing = function () {
 
-
-postlist.initializePostlist = function () {
-    root.globaldata.postlist = {};
-    client.hgetall("weibo_tools_postlist", function (err, postlistStr) {
-        var now = new Date();
-        nextPostTime = new Date("2020/01/28 18:28:18");
-        nextPostlist = {};
-        for (postID in postlistStr) {
-            var post = JSON.parse(postlistStr[postID]);
-            globaldata.postlist[postID] = post;
-//            console.log(JSON.stringify(post));
-            if (post.status == "publishing") {
-                var publishTime = new Date(post.time);
-                post.remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000));
-                if (post.remainTime < 0) {
-                    post.status = "timeout";
-                    client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
-                    continue;
-                }
-                if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) <= 0) {
-                    if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) < 0) {
-                        nextPostlist = {};
-                    }
-                    nextPostTime = publishTime;
-                    nextPostlist[postID] = post;
-                }
-            }
+    client.get("publishing_next_post_id", function (err, nextPostID) {
+        if (nextPostID == null) {
+            client.set("publishing_next_post_id", "empty", redis.print);
+            return;
         }
-        console.log("postlist initialized.")
+        if (nextPostID == "empty") {
+            return;
+        }
+        globaldata.nextPostID = nextPostID;
+        if (globaldata.lastAddPostID == "empty") {
+            globaldata.lastAddPostID = nextPostID;
+        }
+        client.hgetall("publishing", function (err, postPointerStr) {
+            for (var postID in postPointerStr) {
+                var postPointer = JSON.parse(postPointerStr[postID]);
+                globaldata.publishing[postID] = postPointer;
+            }
+            console.log("publishing initialized.")
+        });
     });
 };
 
-postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, postlist) {
+postlist.addPost = function (weibo_user_name, text, publishTimeString, pic) {
+    var needReload = false;
     var post = {};
 
     var now = new Date();
     post.id = weibo_user_name + now.getTime();
-
-    if (publishTimeString != "") {
-        var publishTime = now;
-        if (publishTimeString == "now") {
-            publishTime.setSeconds(publishTime.getSeconds() + 10);
-        }
-        else {
-            publishTime = new Date(publishTimeString);
-        }
-        if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) <= 0) {
-            if (parseInt((publishTime.getTime() - nextPostTime.getTime()) / (1000)) < 0) {
-                nextPostlist = {};
-            }
-            nextPostTime = publishTime;
-            nextPostlist[post.id] = post;
-        }
-    }
-
-    post.time = getShortDateTimeString(publishTime);
+    post.time = publishTime.getTime();
     post.status = "publishing";
     post.text = text;
     post.pid = pic;
-    //post.remainTime = parseInt((publishTime.getTime() - now.getTime()) / (1000));
-    //post.remainMinute = Math.floor(post.remainTime / 60);
-    //post.remainSecond = post.remainTime % 60;
     post.weibo_user = weibo_user_name;
+
+    var previousID = "empty";
+    var nextID = "empty";
+    var publishTime = 0;
+
+
+    if (publishTimeString == "now") {
+        publishTime = now.getTime() + 5000;
+    }
+    else {
+        publishTime = parseInt(publishTimeString);
+    }
+
+    if (publishTime < now.getTime() + 5000) {
+        response.write(JSON.stringify({"提示信息": "定时参数不正确。"}));
+        response.end();
+        return;
+    }
+
+
+    if (globaldata.nextPostID == "empty") {
+        nextID = "tail";
+        previousID = "head";
+        globaldata.nextPostID = post.id;
+        client.set("publishing_next_post_id", globaldata.nextPostID, redis.print);
+        needReload = true;
+    }
+    else {
+        if (globaldata.lastAddPostID == "empty") {
+            globaldata.lastAddPostID = globaldata.nextPostID;
+        }
+        var existPostID = globaldata.lastAddPostID;
+        var existPostPointer = globaldata.publishing[existPostID];
+        if (existPostPointer.publishTime > publishTime) {
+            while (existPostPointer.publishTime > publishTime) {
+                existPostID = existPostPointer.previous;
+                if (existPostID == "head") {
+                    break;
+                }
+                existPostPointer = globaldata.publishing[existPostID];
+            }
+            nextID = existPostPointer.next;
+            previousID = existPostID;
+            existPostPointer.next = post.id;
+        }
+        else {
+            while (existPostPointer.publishTime <= publishTime) {
+                existPostID = existPostPointer.next;
+                if (existPostID == "tail") {
+                    break;
+                }
+                existPostPointer = globaldata.publishing[existPostID];
+            }
+            nextID = existPostID;
+            previousID = existPostPointer.previous;
+            existPostPointer.previous = post.id;
+        }
+        client.hget("publishing", nextPostIDs, function (err, postPointer) {
+            var nextPostPointer = postPointer;
+            var nextPostTime = nextPostPointer.publishTime;
+            if (nextPostTime > publishTime) {
+                client.set("publishing_next_post_id", post.id, redis.print);
+                needReload = true;
+            }
+        });
+    }
+
+    client.hset(["publishing", existPostID, JSON.stringify(existPostPointer)], redis.print);
+    client.hset(["publishing", post.id, JSON.stringify({
+        "previous": previousID,
+        "next": nextID,
+        "publishTime": post.time,
+        "weibo_user": post.weibo_user,
+        "text": post.text
+    })], redis.print);
+
+    globaldata.lastAddPostID = post.id;
+
     client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
     client.lpush("postlist_" + weibo_user_name, post.id);
-    postlist[post.id] = post;
+
+    response.write(JSON.stringify({"提示信息": "添加定时微博内容成功。"}));
+    response.end();
+    reloadPublishing(needReload, post.id);
     return post;
+}
+
+function reloadPublishing(needReload, postID) {
+    if (needReload) {
+        console.log("needReload", postID);
+    }
+    else {
+        console.log("not needReload", postID);
+    }
 }
 
 postlist.delPost = function (weibo_user_name, postid, postlist) {
@@ -125,51 +186,6 @@ postlist.getPostlist = function (weibo_user_name, start, end, response) {
         );
 
     });
-}
-
-function getShortDateTimeString(date) {   //如：2011-07-29 13:30:50
-    var year = date.getFullYear();
-    var month = date.getMonth();
-    var day = date.getDate();
-    month = month + 1;
-    if (month < 10) month = '0' + month;
-    if (day < 10) day = '0' + day;
-    var hour = date.getHours();
-    if (hour < 10) {
-        hour = '0' + hour;
-    }
-    var minute = date.getMinutes();
-    if (minute < 10) {
-        minute = '0' + minute;
-    }
-    var second = date.getSeconds();
-    if (second < 10) {
-        second = '0' + second;
-    }
-    var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
-    return str;
-}
-
-
-var timer_alert = setInterval(function () {
-    resolvePostList();
-}, 1000 * 1);// check the postList every 1 second.
-
-function resolvePostList() {
-    var now = new Date();
-    var remainTime = parseInt((nextPostTime.getTime() - now.getTime()) / (1000));
-//    console.log("还剩：" + remainTime+"     nextPostTime:"+getShortDateTimeString(nextPostTime)+"    nextPostlist:"+JSON.stringify(nextPostlist));
-    if (remainTime == 0) {
-        for (var index in nextPostlist) {
-            var post = nextPostlist[index];
-            sendPost(post);
-        }
-    }
-}
-
-function sendPost(post) {
-    weibo_post.post(post, postlist);
-//    console.log(JSON.stringify(post) + " has been posted!");
 }
 
 

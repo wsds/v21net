@@ -36,9 +36,9 @@ function ajax(settings) {
     if (typeof settings === "object") {
         // 处理默认值继承
         // todo ...
-        for(key in defaultSetting){
-            if(settings[key]==null){
-                settings[key]=defaultSetting[key];
+        for (key in defaultSetting) {
+            if (settings[key] == null) {
+                settings[key] = defaultSetting[key];
             }
         }
     }
@@ -64,6 +64,9 @@ function ajax(settings) {
         path:params.path,
         method:settings.type
     };
+    if (params.protocol == "https:") {
+        options.port = 443;
+    }
 
     var req = http.request(options,function (res) {
         var data = '';
@@ -93,7 +96,9 @@ function ajax(settings) {
 //    }
 
     if (settings.type === "POST") {
-        req.write(querystring.stringify(settings.data));
+        var dataStr = querystring.stringify(settings.data);
+        req.setHeader("Content-Length", dataStr.length);
+        req.write(dataStr);
     }
 
     req.setTimeout(settings.timeout);
