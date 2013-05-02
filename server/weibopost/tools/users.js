@@ -26,4 +26,9 @@ users.addUser = function (weibo_user, weibo_users) {
 }
 
 
+users.weiboUsers = function (response) {
+    response.write(JSON.stringify({"提示信息": "globaldata.weibo_users 数据结构", "globaldata.publishing": globaldata.weibo_users}));
+    response.end();
+};
+
 module.exports = users;

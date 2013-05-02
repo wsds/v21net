@@ -4,28 +4,29 @@
  * 作者：潘雪鹏
  */
 
-var http = require("http"),
-    Url = require("url"),
-    querystring = require('querystring');
+var https = require("https");
+var http = require("http");
+var Url = require("url");
+var querystring = require('querystring');
 
 // 默认值
 var defaultSetting = {
     // 如果返回false可以取消本次请求
-    beforeSend:function (req) {
+    beforeSend: function (req) {
     },
-    complete:function (req) {
+    complete: function (req) {
     },
-    data:'', // Object, String
-    dataType:'JSON',
-    error:function () {
+    data: '', // Object, String
+    dataType: 'JSON',
+    error: function () {
     },
-    headers:{}, // {k:v, ...}
-    statusCode:{},
-    success:function (data) {
+    headers: {}, // {k:v, ...}
+    statusCode: {},
+    success: function (data) {
     },
-    timeout:10,
-    type:'GET', // GET, POST
-    url:"www.baidu.com"
+    timeout: 10,
+    type: 'GET', // GET, POST
+    url: "www.baidu.com"
 };
 
 /**
@@ -59,16 +60,27 @@ function ajax(settings) {
     // }
 
     var options = {
-        host:params.hostname,
-        port:params.port || 80,
-        path:params.path,
-        method:settings.type
+        host: params.hostname,
+        port: params.port || 80,
+        path: params.path,
+        method: settings.type
     };
-    if (params.protocol == "https:") {
-        options.port = 443;
+
+    if (settings.data != null) {
+        options.path += "?"
+        for (var key in settings.data) {
+            options.path = options.path + "&" + key + "=" + settings.data[key];
+        }
+        console.log(options.path);
     }
 
-    var req = http.request(options,function (res) {
+    var httpUnity = http;
+    if (params.protocol == "https:") {
+        options.port = 443;
+        var httpUnity = https;
+    }
+
+    var req = httpUnity.request(options,function (res) {
         var data = '';
         res.on('data',function (chunk) {
             data += chunk;

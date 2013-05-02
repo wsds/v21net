@@ -20,7 +20,7 @@ var requestHandles = require("./requestHandles");
 var test =new require("./test");
 var test1=new test();
 
-
+var weiboInterface = require("./weiboInterface");
 var routemap = {
     "get": {
         "/api2/post/:operation": requestHandles.post,
@@ -32,13 +32,15 @@ var routemap = {
         "/api2/getpostlist/*": requestHandles.getPostlist,
         "/api2/authaccount/*": requestHandles.authAccount,
         "/api2/test/*": test1.test2,
-        "/api2/server/:operation": requestHandles.server
+        "/api2/server/:operation": requestHandles.server,
+        "/api2/weiboInterface/*":weiboInterface.interface
     },
     "post": {
         "/api2/test/*": requestHandles.test,
         "/api2/post/:operation": requestHandles.post,
         "/api2/weibouseradd/*": requestHandles.weiboUserAdd,
-        "/api2/accountownedweibo/:operation": requestHandles.accountOwnedWeiboPost
+        "/api2/accountownedweibo/:operation": requestHandles.accountOwnedWeiboPost,
+        "/api2/weiboInterface/*":weiboInterface.interface
     },
     "put": {
     },

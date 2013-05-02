@@ -44,8 +44,8 @@
             </div>
             <div class="subnav" slide="main_forward" style="padding-left:270px;">
                 <ul>
-                    <li><a href="javascript:;" class="current" slide="main_forward" subSlide="">我的首页 </a></li>
-                    <li><a href="javascript:;" slide="main_forward" subSlide="">我关注的人</a></li>
+                    <li><a href="javascript:;" class="current" slide="main_forward" subSlide="forward_mine">我的首页 </a></li>
+                    <li><a href="javascript:;" slide="main_forward" subSlide="forward_friend">我关注的人</a></li>
                 </ul>
             </div>
             <div class="appContent normalContent">
@@ -201,7 +201,8 @@
                         <input id="btsend" name="btlogin" type="" value="发布" class="login_btn">
                     </a>-->
                     <div class="time_object">
-                        <div class="templateContainer" template="time_control" status="common" statusSet="common" localDataBind="publish">
+                        <div class="templateContainer" template="time_control" status="common" statusSet="common"
+                             localDataBind="publish">
                         </div>
                     </div>
                     <div class="send_timeshow">
@@ -218,89 +219,11 @@
 </div>
 
 
-<div class="template" template="main_panel" status="main_offline_post_list1" eventPool="main_offline_post_list">
-    <div class="main_offline_post_list form" id="main_offline_post_list1">
-        <?js for (var index in data.postlist) { ?>
-        <?js post=data.postlist[index]; ?>
-        <?js if(post==null) { ?>
-        <?js continue; ?>
-        <?js } ?>
-        <div class="row-section">
-            <b class="icon16 ag_listpoint" style="width:18px;height:20px;"></b>
-
-            <div style="float:left;">
-                <a class="" href="javascript:">
-                    <?js if(post.pid=="none") { ?>
-                    <img class="images" src="/static/images/logo_tools.png">
-                    <?js }else { ?>
-                    <img class="images" src="http://images.weibo.com/#{ post.pid }.png">
-                    <?js } ?>
-                </a>
-            </div>
-            <div class="row columnDisplay">
-                <div class="postcontent">
-                    <span>#{ post.text }</span>
-                    <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
-                </div>
-                <div class="sendtime">
-                    <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;"
-                                                                               class="posttime">#{ post.time }</label>
-                    <span class="post_status_tag_holder" status="#{ post.status }" publishTime="#{ post.time }"></span>
-
-                    <div style="float:right;margin-top:-3px;">
-                        <a style="color:#fff;" class="ok_button size46" href="#">保存</a>&nbsp;&nbsp;<a
-                            style="color:#fff;" class="cancel_button size46" href="#">取消</a>
-                        <a href="#" class="changedate">修改</a><span>|</span>
-                        <a class="deletedate" href="javascript:;" postID="#{ post.id }">删除</a>
-                    </div>
-                </div>
-                <div class="clr"></div>
-            </div>
-        </div>
-        <?js } ?>
-
-        <div class="row columnDisplay">
-            <div class="postcontent">
-                <p>
-                    <span class="forwardWeibo">转发<em>老习</em>微博</span>
-                            <span class="forwardTime">
-                                <b class="icon16 forwardTime_an"></b><label>转发时间:</label><label class="posttime">2013/04/07
-                                18:45:00</label>
-                            </span>
-                    <a href="#" class="conternhref">查看原文</a>
-                </p>
-
-                <div class="clr"></div>
-                <p>转发夺去夺在转发夺去夺在转发夺去夺在转发夺去夺在转发夺去夺在</p>
-                <!--<textarea class="editweibo" name="" cols="" rows=""></textarea>-->
-            </div>
-            <div class="sendtime">
-                    	<span publishtime="2013/04/07 18:45:00" status="published" class="post_status_tag_holder">
-                            <div id="post_status_tag1" class="tag post_status_tag"></div>
-                        </span>
-            </div>
-            <div class="clr"></div>
-        </div>
-        <div class="timing_forwarding">
-            <div class="weibo_face">
-                <img src="/static/images/face.jpg"/>
-            </div>
-            <div class="weiboContent">
-                <div>英式美品笑话</div>
-                <div>在美国动物收容所内，一名义工摄影师举着相机，流着泪，在替一个即将安乐死的狗狗拍照。然而镜头前的狗，不知道自己的生命即将终止，于是面对镜头仍露出了灿烂的笑容。。。</div>
-                <a href="#" class="ok_button size46" style="color:#fff;">定时转发</a>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
 <div class="template" template="main_panel" status="main_offline_post_list" eventPool="main_offline_post_list"
      serverData="main_offline_post_list">
     <div class="main_offline_post_list form" id="main_offline_post_list">
         <?js for (var index in data.postlist) { ?>
-        <?js post=data.postlist[index]; ?>
+        <?js var post=data.postlist[index]; ?>
         <?js if(post==null) { ?>
         <?js continue; ?>
         <?js } ?>
@@ -317,11 +240,13 @@
             <div class="row columnDisplay">
                 <div class="postcontent">
                     <span class="post_show post_text">#{ post.text }</span>
-                    <textarea class="editweibo post_modify modify_editor hide" name="" cols="" rows="">#{ post.text }</textarea>
+                    <textarea class="editweibo post_modify modify_editor hide" name="" cols=""
+                              rows="">#{post.text}</textarea>
                 </div>
                 <div class="sendtime">
                     <div class="time_object_change  post_modify hide">
-                        <div class="templateContainer" template="time_control" status="common" statusSet="common" localDataBind="#{ post.id }">
+                        <div class="templateContainer" template="time_control" status="common" statusSet="common"
+                             localDataBind="#{ post.id }">
                         </div>
                     </div>
 
@@ -375,6 +300,36 @@
             <a href="#">20</a>
             <a href="#" title="下一页">>></a>
         </div>
+    </div>
+</div>
+
+
+<div class="template" template="main_panel" status="main_forward" eventPool="main_forward"
+     serverData="main_forward">
+    <?js for (var index in data.statuses) { ?>
+    <?js var status=data.statuses[index]; ?>
+    <?js var user=status.user; ?>
+    <?js if(status==null) { ?>
+    <?js continue; ?>
+    <?js } ?>
+    <div class="timing_forwarding">
+        <div class="weibo_face">
+            <img src="#{user.profile_image_url}"/>
+        </div>
+        <div class="weiboContent">
+            <div class="weibo_title">
+                <span> #{user.screen_name}</span>
+                <span class="public_time"> #{ status.created_at }</span>
+            </div>
+            <div class="weibo_content">#{ status.text }</div>
+            <a href="#" class="ok_button size86 changetime" style="color:#fff;">定时转发</a>
+        </div>
+    </div>
+    <?js } ?>
+    <div class="clearevery"></div>
+    <div class="pagination">
+        <a href="#" title="上一页"><<</a>
+        <a href="#" title="下一页">>></a>
     </div>
 </div>
 
@@ -459,6 +414,7 @@
 <script type="text/javascript" src="/static/js/index/eventPool.js"></script>
 <script type="text/javascript" src="/static/js/index/eventPool.post.js"></script>
 <script type="text/javascript" src="/static/js/index/eventPool.postlist.js"></script>
+<script type="text/javascript" src="/static/js/index/eventPool.forward.js"></script>
 <script id="dataPool" type="text/javascript" src="/static/js/index/dataPool.js"></script>
 </body>
 </html>

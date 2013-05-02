@@ -153,5 +153,8 @@ requestHandles.server = function (request, response, pathObject, getParam) {
     else if (operation == "clear") {
         postlist.clear(response);
     }
+    else if (operation == "weibo_users") {
+        users.weiboUsers(response);
+    }
 };
 module.exports = requestHandles;

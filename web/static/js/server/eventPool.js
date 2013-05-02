@@ -7,15 +7,6 @@ eventPool.body = function (status, area) {
         window.location.href = "/account.html";
     }
 
-    var now = new Date();
-    var month = now.getMonth() + 1;
-    app.time = {};
-    app.time.year = now.getFullYear();
-    app.time.month = now.getMonth() + 1;
-    app.time.day = now.getDate();
-    app.time.hour = now.getHours();
-    app.time.minute = now.getMinutes();
-    app.time.public_time = getShortDateTimeString(now);
 
     $("#slide_ctrls li a").click(function () {
             var main_panel = $(this).attr("slide");
@@ -70,6 +61,42 @@ eventPool.body = function (status, area) {
                     data: {},
                     type: 'GET',
                     url: ("http://" + app.serverUrl + "/api2/server/clear"),
+                    success: function (data) {
+                        if (data["提示信息"] == "成功") {
+                        }
+                        else {
+                        }
+                    }
+                });
+            }
+        }
+    );
+
+    $("#weibo_interface").click(function () {
+            publish();
+            function publish() {
+                $.ajax({
+                    data: {screen_name: "冯志成plus"},
+                    type: 'GET',
+                    url: ("http://" + app.serverUrl + "/api2/weiboInterface/weibo"),
+                    success: function (data) {
+                        if (data["提示信息"] == "成功") {
+                        }
+                        else {
+                        }
+                    }
+                });
+            }
+        }
+    );
+
+    $("#weibo_users").click(function () {
+            publish();
+            function publish() {
+                $.ajax({
+                    data: {screen_name: "冯志成plus"},
+                    type: 'GET',
+                    url: ("http://" + app.serverUrl + "/api2/server/weibo_users"),
                     success: function (data) {
                         if (data["提示信息"] == "成功") {
                         }

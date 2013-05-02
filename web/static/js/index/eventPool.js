@@ -33,6 +33,19 @@ eventPool.body = function (status, area) {
 
             $(".subnav li a[slide='" + main_panel + "']").removeClass("current");
             $(this).toggleClass("current");
+            var subSlide = $(this).attr("subSlide");
+            if (subSlide == "forward_mine") {
+                data.statusList = "mine";
+            }
+            else if (subSlide == "forward_friend") {
+                data.statusList = "friends";
+            }
+            else {
+                return;
+            }
+            var main_panel_container = $(".templateContainer[template='main_panel']");
+            main_panel_container.attr("status", main_panel);
+            renderTemplate(main_panel_container);
         }
     );
     $(".normalTitle h2").click(function () {
