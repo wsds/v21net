@@ -44,7 +44,8 @@
             </div>
             <div class="subnav" slide="main_forward" style="padding-left:270px;">
                 <ul>
-                    <li><a href="javascript:;" class="current" slide="main_forward" subSlide="forward_mine">我的首页 </a></li>
+                    <li><a href="javascript:;" class="current" slide="main_forward" subSlide="forward_mine">我的首页 </a>
+                    </li>
                     <li><a href="javascript:;" slide="main_forward" subSlide="forward_friend">我关注的人</a></li>
                 </ul>
             </div>
@@ -322,9 +323,33 @@
                 <span class="public_time"> #{ status.created_at }</span>
             </div>
             <div class="weibo_content">#{ status.text }</div>
-            <a href="#" class="ok_button size86 changetime" style="color:#fff;">定时转发</a>
+            <a href="javascript:;" class="ok_button size86 forward_post_show changetime" style="color:#fff;" postid="#{status.id}">定时转发</a>
+        </div>
+
+        <div class="forward_post_panel hide" postid="#{status.id}">
+            <div class="clr"></div>
+            <textarea class="edit_forward" name="" cols=""
+                      rows="">转发微博</textarea>
+
+            <div class="clr"></div>
+
+            <div class="sendtime" style="padding-top: 8px;">
+                <div class="time_object_change   ">
+                    <div class="templateContainer" template="time_control" status="common" statusSet="common"
+                         localDataBind="publish">
+                    </div>
+                </div>
+
+                <div class="time_change_forward">
+                    <a style="color:#fff;" class="forward_post ok_button size46  " href="javascript:;"
+                       postid="#{status.id}">定时发布</a>&nbsp;&nbsp;<a style="color:#fff;"
+                                                                    class="cancel_forward_post cancel_button size46  "
+                                                                    href="javascript:;" postid="#{status.id}">取消</a>
+                </div>
+            </div>
         </div>
     </div>
+
     <?js } ?>
     <div class="clearevery"></div>
     <div class="pagination">
