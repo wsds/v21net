@@ -44,6 +44,13 @@
                     <li><a href="javascript:;" slide="main_forward" subSlide="">我关注的人</a></li>
                 </ul>
             </div>
+            <div class="subnav current" slide="main_offline_post_list">
+                <ul>
+                    <li><a href="javascript:;" id="publish" class="current" slide="main_offline_post_list">publish</a>
+                    </li>
+                    <li><a href="javascript:;" id="clear" slide="main_offline_post_list" subSlide="">clear</a></li>
+                </ul>
+            </div>
             <div class="appContent normalContent">
                 <div class="templateContainer" template="main_panel" status="main_offline_post"
                      statusSet="main_login main_register">
@@ -60,158 +67,159 @@
 
 <div class="templates">
 
-<div class="template" template="main_panel" status="server_post_list" eventPool="server_post_list"
-     serverData="server_post_list">
-    <div class="main_offline_post_list form" id="main_offline_post_list">
-        <?js for (var index in data.postlist) { ?>
-        <?js post=data.postlist[index]; ?>
-        <?js if(post==null) { ?>
-        <?js continue; ?>
-        <?js } ?>
-        <div class="row-section" postID="#{ post.id }">
-            <b class="icon16 ag_listpoint" style="width:18px;height:20px;"></b>
+    <div class="template" template="main_panel" status="server_post_list" eventPool="server_post_list"
+         serverData="server_post_list">
+        <div class="main_offline_post_list form" id="main_offline_post_list">
+            <?js for (var index in data.postlist) { ?>
+            <?js post=data.postlist[index]; ?>
+            <?js if(post==null) { ?>
+            <?js continue; ?>
+            <?js } ?>
+            <div class="row-section" postID="#{ post.id }">
+                <b class="icon16 ag_listpoint" style="width:18px;height:20px;"></b>
 
-            <div style="float:left;">
-                <a class="" href="javascript:">
+                <div style="float:left;">
+                    <a class="" href="javascript:">
 
-                    <img class="images" src="/static/images/logo_tools.png">
+                        <img class="images" src="/static/images/logo_tools.png">
 
-                </a>
-            </div>
-            <div class="row columnDisplay">
-                <div class="postcontent">
-                    <span class="post_show">#{ post.text }</span>
-                    <textarea class="editweibo post_modify hide" name="" cols="" rows="">#{ post.text }</textarea>
+                    </a>
                 </div>
-                <div class="sendtime">
-                    <div class="time_object_change  post_modify hide">
-                        <div class="templateContainer" template="time_control" status="common" statusSet="common">
-                        </div>
+                <div class="row columnDisplay">
+                    <div class="postcontent">
+                        <span class="post_show">#{ post.text }</span>
+                        <textarea class="editweibo post_modify hide" name="" cols="" rows="">#{ post.text }</textarea>
                     </div>
+                    <div class="sendtime">
+                        <div class="time_object_change  post_modify hide">
+                            <div class="templateContainer" template="time_control" status="common" statusSet="common">
+                            </div>
+                        </div>
 
-                    <div class="time_public post_show" postID="#{ post.id }">
-                        <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;"
-                                                                                   class="posttime">2013/04/07
-                        18:45:00</label>
+                        <div class="time_public post_show" postID="#{ post.id }">
+                            <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;"
+                                                                                       class="posttime">2013/04/07
+                            18:45:00</label>
                         <span class="post_status_tag_holder" status="published"
                               publishtime="2013/04/07 18:45:00"></span>
 
-                        <!-- 需要时行判断每种情况对应相应的状态显示-->
-                        <?js if (data.postlist[index].status=="published") { ?>
-                        <b class="icon16 sendsuccess_aj"></b><label style="color:#097c25;">发送成功</label>
-                        <?js }else if(data.postlist[index].status=="publishing"){?>
-                        <b class="icon16 sending_am"></b><label style="color:#097c25;">等待发送</label>
-                        <?js }else if(data.postlist[index].status=="failed"){?>
-                        <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败</label>
-                        <?js }else if(data.postlist[index].status=="timeout"){?>
-                        <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败（定时超时）</label>
-                        <?js }else {?>
-                        <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label>
-                        <?js }?>
-                        <b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>
-                        <!--$(".post_show").toggleClass("hide")-->
-                        <!--$(".post_modify").toggleClass("hide")-->
+                            <!-- 需要时行判断每种情况对应相应的状态显示-->
+                            <?js if (data.postlist[index].status=="published") { ?>
+                            <b class="icon16 sendsuccess_aj"></b><label style="color:#097c25;">发送成功</label>
+                            <?js }else if(data.postlist[index].status=="publishing"){?>
+                            <b class="icon16 sending_am"></b><label style="color:#097c25;">等待发送</label>
+                            <?js }else if(data.postlist[index].status=="failed"){?>
+                            <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败</label>
+                            <?js }else if(data.postlist[index].status=="timeout"){?>
+                            <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败（定时超时）</label>
+                            <?js }else {?>
+                            <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label>
+                            <?js }?>
+                            <b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>
+                            <!--$(".post_show").toggleClass("hide")-->
+                            <!--$(".post_modify").toggleClass("hide")-->
+                        </div>
+                        <div class="time_change_op">
+                            <a style="color:#fff;" class="save_post_modify ok_button size46  post_modify hide"
+                               href="javascript:;" postID="#{ post.id }">保存</a>&nbsp;&nbsp;<a
+                                style="color:#fff;" class="cancel_post_modify cancel_button size46  post_modify hide"
+                                href="javascript:;" postID="#{ post.id }">取消</a>
+                            <a href="javascript:;" class="changedate post_show modify_post"
+                               postID="#{ post.id }">修改</a><span class="devline post_show">|</span>
+                            <a class="deletedate post_show" href="javascript:;" postID="#{ post.id }">删除</a>
+                        </div>
                     </div>
-                    <div class="time_change_op">
-                        <a style="color:#fff;" class="save_post_modify ok_button size46  post_modify hide"
-                           href="javascript:;" postID="#{ post.id }">保存</a>&nbsp;&nbsp;<a
-                            style="color:#fff;" class="cancel_post_modify cancel_button size46  post_modify hide"
-                            href="javascript:;" postID="#{ post.id }">取消</a>
-                        <a href="javascript:;" class="changedate post_show modify_post"
-                           postID="#{ post.id }">修改</a><span class="devline post_show">|</span>
-                        <a class="deletedate post_show" href="javascript:;" postID="#{ post.id }">删除</a>
-                    </div>
+                    <div class="clr"></div>
                 </div>
-                <div class="clr"></div>
+            </div>
+            <?js } ?>
+
+            <div class="clearevery"></div>
+            <div class="pagination">
+                <a href="#" title="上一页"><<</a>
+                <a href="#" class="page_click">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <span>·&nbsp;·&nbsp;·</span>
+                <a href="#">20</a>
+                <a href="#" title="下一页">>></a>
             </div>
         </div>
-        <?js } ?>
+    </div>
 
-        <div class="clearevery"></div>
-        <div class="pagination">
-            <a href="#" title="上一页"><<</a>
-            <a href="#" class="page_click">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <span>·&nbsp;·&nbsp;·</span>
-            <a href="#">20</a>
-            <a href="#" title="下一页">>></a>
+
+    <div class="template" template="time_control" status="common" eventPool="time_control">
+        <div class="time_object_change">
+            <a timetype="year" class="select_time btn_gray btn_select btn_select_limiting"
+               style="width:30px;" timetype="year" max="2021" min="2013">
+                <span class="btn_select_txt" timetype="year">#{app.time.year}</span>
+                <span class="ico_select_s"></span>
+            </a>
+
+            <span>年</span>
+            <a timetype="month" class=" select_time btn_gray btn_select btn_select_limiting"
+               style="width:23px;margin-left:4px;" timetype="month" min="1" max="13">
+                <span class="btn_select_txt" timetype="month">#{app.time.month}</span>
+                <span class="ico_select_s"></span>
+            </a>
+            <span>月</span>
+            <a timetype="day" class="select_time btn_gray btn_select btn_select_limiting"
+               style="width:23px;margin-left:4px;" timetype="day" min="1" max="32">
+                <span class="btn_select_txt" timetype="day">#{app.time.day}</span>
+                <span class="ico_select_s"></span>
+            </a>
+            <span>日</span>
+            <a timetype="hour" class="select_time btn_gray btn_select btn_select_limiting"
+               style="width:23px;margin-left:4px;" timetype="hour" min="0" max="24">
+                <span class="btn_select_txt" timetype="hour">#{app.time.hour}</span>
+                <span class="ico_select_s"></span>
+            </a>
+
+            <span>时</span>
+            <a timetype="minute" class="select_time btn_gray btn_select btn_select_limiting"
+               style="width:23px;margin-left:4px;" timetype="minute" min="0" max="60">
+                <span class="btn_select_txt" timetype="minute">#{app.time.minute}</span>
+                <span class="ico_select_s"></span>
+            </a>
+            <span>分</span>
+
+
+            <ul timetype="year" class="select_time_list hide"
+                style="left: 0px;width: 58px;height: 155px;overflow: hidden;">
+                <?js for (var number=0;number<7;number++) { ?>
+                <li class="time_list" number="#{number+app.time.year}" timetype="year"><a
+                        href="javascript:;">#{number+app.time.year}</a>
+                </li>
+                <?js }?>
+            </ul>
+            <ul timetype="month" class="select_time_list hide" style="left: 86px;">
+                <?js for (var number=1;number<13;number++) { ?>
+                <li class="time_list" number="#{number}" timetype="month"><a
+                        href="javascript:;">#{number}</a></li>
+                <?js }?>
+            </ul>
+            <ul timetype="day" class="select_time_list hide" style="left: 166px;">
+                <?js for (var number=1;number<32;number++) { ?>
+                <li class="time_list" number="#{number}" timetype="day"><a href="javascript:;">#{number}</a>
+                </li>
+                <?js }?>
+            </ul>
+            <ul timetype="hour" class="select_time_list hide" style="left: 246px;">
+                <?js for (var number=0;number<24;number++) { ?>
+                <li class="time_list" number="#{number}" timetype="hour"><a href="javascript:;">#{number}</a>
+                </li>
+                <?js }?>
+            </ul>
+            <ul timetype="minute" class="select_time_list hide" style="left: 326px;">
+                <?js for (var number=0;number<60;number++) { ?>
+                <li class="time_list" number="#{number}" timetype="minute"><a
+                        href="javascript:;">#{number}</a></li>
+                <?js }?>
+            </ul>
         </div>
     </div>
-</div>
-
-
-<div class="template" template="time_control" status="common" eventPool="time_control">
-    <div class="time_object_change">
-        <a timetype="year" class="select_time btn_gray btn_select btn_select_limiting"
-           style="width:30px;" timetype="year" max="2021" min="2013">
-            <span class="btn_select_txt" timetype="year">#{app.time.year}</span>
-            <span class="ico_select_s"></span>
-        </a>
-
-        <span>年</span>
-        <a timetype="month" class=" select_time btn_gray btn_select btn_select_limiting"
-           style="width:23px;margin-left:4px;" timetype="month" min="1" max="13">
-            <span class="btn_select_txt" timetype="month">#{app.time.month}</span>
-            <span class="ico_select_s"></span>
-        </a>
-        <span>月</span>
-        <a timetype="day" class="select_time btn_gray btn_select btn_select_limiting"
-           style="width:23px;margin-left:4px;" timetype="day" min="1" max="32">
-            <span class="btn_select_txt" timetype="day">#{app.time.day}</span>
-            <span class="ico_select_s"></span>
-        </a>
-        <span>日</span>
-        <a timetype="hour" class="select_time btn_gray btn_select btn_select_limiting"
-           style="width:23px;margin-left:4px;" timetype="hour" min="0" max="24">
-            <span class="btn_select_txt" timetype="hour">#{app.time.hour}</span>
-            <span class="ico_select_s"></span>
-        </a>
-
-        <span>时</span>
-        <a timetype="minute" class="select_time btn_gray btn_select btn_select_limiting"
-           style="width:23px;margin-left:4px;" timetype="minute" min="0" max="60">
-            <span class="btn_select_txt" timetype="minute">#{app.time.minute}</span>
-            <span class="ico_select_s"></span>
-        </a>
-        <span>分</span>
-
-
-        <ul timetype="year" class="select_time_list hide" style="left: 0px;width: 58px;height: 155px;overflow: hidden;">
-            <?js for (var number=0;number<7;number++) { ?>
-            <li class="time_list" number="#{number+app.time.year}" timetype="year"><a
-                    href="javascript:;">#{number+app.time.year}</a>
-            </li>
-            <?js }?>
-        </ul>
-        <ul timetype="month" class="select_time_list hide" style="left: 86px;">
-            <?js for (var number=1;number<13;number++) { ?>
-            <li class="time_list" number="#{number}" timetype="month"><a
-                    href="javascript:;">#{number}</a></li>
-            <?js }?>
-        </ul>
-        <ul timetype="day" class="select_time_list hide" style="left: 166px;">
-            <?js for (var number=1;number<32;number++) { ?>
-            <li class="time_list" number="#{number}" timetype="day"><a href="javascript:;">#{number}</a>
-            </li>
-            <?js }?>
-        </ul>
-        <ul timetype="hour" class="select_time_list hide" style="left: 246px;">
-            <?js for (var number=0;number<24;number++) { ?>
-            <li class="time_list" number="#{number}" timetype="hour"><a href="javascript:;">#{number}</a>
-            </li>
-            <?js }?>
-        </ul>
-        <ul timetype="minute" class="select_time_list hide" style="left: 326px;">
-            <?js for (var number=0;number<60;number++) { ?>
-            <li class="time_list" number="#{number}" timetype="minute"><a
-                    href="javascript:;">#{number}</a></li>
-            <?js }?>
-        </ul>
-    </div>
-</div>
 
 </div>
 

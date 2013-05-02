@@ -143,4 +143,15 @@ requestHandles.getPostlist = function (request, response, pathObject, getParam) 
 requestHandles.test = function (request, response, pathObject, getParam) {
     response.write(JSON.stringify({"a": "1213", b: "3213123"}));
 };
+
+
+requestHandles.server = function (request, response, pathObject, getParam) {
+    var operation = pathObject["operation"];
+    if (operation == "publishing") {
+        postlist.publishing(response);
+    }
+    else if (operation == "clear") {
+        postlist.clear(response);
+    }
+};
 module.exports = requestHandles;

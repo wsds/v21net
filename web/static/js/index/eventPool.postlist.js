@@ -15,17 +15,19 @@ eventPool.main_offline_post_list = function (status, area) {
     });
 
 
-    function delPost(postID) {
+    function delPost(postID, modify) {
         $.ajax({
             data: {"postid": postID, "weibo_user": app.localSettings.ownedWeibo.currentWeibo},
             type: 'GET',
             url: ("http://" + app.serverUrl + "/api2/post/del"),
             success: function (data) {
-                var row_section = $(".row-section[postID='" + postID + "']");
-                row_section.remove();
-                if (data["提示信息"] == "成功") {
+
+                if (data["提示信息"] == "删除成功" && modify == null) {
+                    var row_section = $(".row-section[postID='" + postID + "']");
+                    row_section.remove();
                 }
-                else {
+                else if (data["提示信息"] != "删除成功") {
+                    alert(JSON.stringify(data));
                 }
             }
         });
@@ -60,6 +62,8 @@ eventPool.main_offline_post_list = function (status, area) {
         var public_time = new Date(public_time_str);
         post.time = public_time.getTime();
         post.text = $(".modify_editor", row_section).val();
+        delPost(postID, 1);
+        addPost(post.time, post.text, post.pic);
         $(".post_text", row_section).html(post.text);
         $(".posttime", row_section).html(public_time_str);
 

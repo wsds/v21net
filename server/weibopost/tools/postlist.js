@@ -10,9 +10,9 @@ var client = redis.createClient();
 
 
 var globaldata = root.globaldata;
-root.globaldata.publishing = {};
-root.globaldata.nextPostID = "empty";
-root.globaldata.lastAddPostID = "empty";
+globaldata.publishing = {};
+globaldata.nextPostID = "empty";
+globaldata.lastAddPostID = "empty";
 
 postlist.initializePublishing = function () {
 
@@ -85,28 +85,30 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, resp
         var existPostID = globaldata.lastAddPostID;
         var existPostPointer = globaldata.publishing[existPostID];
         if (existPostPointer.publishTime > publishTime) {
+            console.log("publishTime时间更早!");
             while (existPostPointer.publishTime > publishTime) {
+                if (existPostPointer.previous == "head") {
+                    break;
+                }
                 existPostID = existPostPointer.previous;
-                if (existPostID == "head") {
-                    break;
-                }
-                existPostPointer = globaldata.publishing[existPostID];
-            }
-            nextID = existPostPointer.next;
-            previousID = existPostID;
-            existPostPointer.next = post.id;
-        }
-        else {
-            while (existPostPointer.publishTime <= publishTime) {
-                existPostID = existPostPointer.next;
-                if (existPostID == "tail") {
-                    break;
-                }
                 existPostPointer = globaldata.publishing[existPostID];
             }
             nextID = existPostID;
             previousID = existPostPointer.previous;
             existPostPointer.previous = post.id;
+        }
+        else {
+            console.log("publishTime时间更晚!");
+            while (existPostPointer.publishTime <= publishTime) {
+                if (existPostPointer.next == "tail") {
+                    break;
+                }
+                existPostID = existPostPointer.next;
+                existPostPointer = globaldata.publishing[existPostID];
+            }
+            nextID = existPostPointer.next;
+            previousID = existPostID;
+            existPostPointer.next = post.id;
         }
         var nextPostPointer = globaldata.publishing[globaldata.nextPostID];
         var nextPostTime = nextPostPointer.publishTime;
@@ -156,18 +158,28 @@ postlist.delPost = function (weibo_user_name, postid, response) {
 
     var postPointer = globaldata.publishing[postid];
     if (postPointer == null) {
-        response.write(JSON.stringify({"提示信息": "删除失败，数据不完整"}));
+        response.write(JSON.stringify({"提示信息": "删除失败，postPointer 数据不完整"}));
         response.end();
         return;
     }
     if (postPointer.previous != "head") {
         var previous = globaldata.publishing[postPointer.previous];
+        if (previous == null) {
+            response.write(JSON.stringify({"提示信息": "删除失败，previous 数据不完整", "postPointer": postPointer}));
+            response.end();
+            return;
+        }
         previous.next = postPointer.next;
         client.hset(["publishing", postPointer.previous, JSON.stringify(previous)], redis.print);
     }
 
     if (postPointer.next != "tail") {
         var next = globaldata.publishing[postPointer.next];
+        if (next == null) {
+            response.write(JSON.stringify({"提示信息": "删除失败，next 数据不完整", "postPointer": postPointer}));
+            response.end();
+            return;
+        }
         next.previous = postPointer.previous;
         client.hset(["publishing", postPointer.next, JSON.stringify(next)], redis.print);
     }
@@ -237,6 +249,33 @@ postlist.getPostlist = function (weibo_user_name, start, end, response) {
         );
 
     });
+}
+
+
+postlist.publishing = function (response) {
+    response.write(JSON.stringify({"提示信息": "globaldata.publishing 数据结构", "globaldata.publishing": globaldata.publishing}));
+    response.end();
+};
+
+postlist.clear = function (response, weibo_user_name) {
+//    var length =client.lpop("postlist_" + weibo_user_name, function (err, postID) {
+//    client.lpop("postlist_" + weibo_user_name, function (err, postID) {
+//
+//    });
+
+    client.hkeys("publishing", function (err, postIDs) {
+        for (var index in postIDs) {
+            var postID = postIDs[index];
+            client.hdel("publishing", postID, redis.print);
+            console.log(postID + " has deleted.")
+        }
+    });
+
+    globaldata.publishing = {};
+    globaldata.nextPostID = "empty";
+    globaldata.lastAddPostID = "empty";
+    response.write(JSON.stringify({"提示信息": "postlist数据结构已清除", "globaldata.publishing": globaldata.publishing}));
+    response.end();
 }
 
 

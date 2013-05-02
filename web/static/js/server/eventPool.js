@@ -35,10 +35,9 @@ eventPool.body = function (status, area) {
     );
 
     $(".subnav li a").click(function () {
-        var main_panel = $(this).attr("slide");
-
-        $(".subnav li a[slide='" + main_panel + "']").removeClass("current");
-        $(this).toggleClass("current");
+            var main_panel = $(this).attr("slide");
+            $(".subnav li a[slide='" + main_panel + "']").removeClass("current");
+            $(this).toggleClass("current");
         }
     );
     $(".normalTitle h2").click(function () {
@@ -46,7 +45,41 @@ eventPool.body = function (status, area) {
             $(".subnav.current").slideToggle("fast");
         }
     );
+    $("#publish").click(function () {
+            publish();
+            function publish() {
+                $.ajax({
+                    data: {},
+                    type: 'GET',
+                    url: ("http://" + app.serverUrl + "/api2/server/publishing"),
+                    success: function (data) {
+                        if (data["提示信息"] == "成功") {
+                        }
+                        else {
+                        }
+                    }
+                });
+            }
+        }
+    );
 
+    $("#clear").click(function () {
+            publish();
+            function publish() {
+                $.ajax({
+                    data: {},
+                    type: 'GET',
+                    url: ("http://" + app.serverUrl + "/api2/server/clear"),
+                    success: function (data) {
+                        if (data["提示信息"] == "成功") {
+                        }
+                        else {
+                        }
+                    }
+                });
+            }
+        }
+    );
 
     $("body").click(function () {
             var droppedElements = $(".drop");
