@@ -201,7 +201,7 @@
                         <input id="btsend" name="btlogin" type="" value="发布" class="login_btn">
                     </a>-->
                     <div class="time_object">
-                        <div class="templateContainer" template="time_control" status="common" statusSet="common">
+                        <div class="templateContainer" template="time_control" status="common" statusSet="common" localDataBind="publish">
                         </div>
                     </div>
                     <div class="send_timeshow">
@@ -321,7 +321,7 @@
                 </div>
                 <div class="sendtime">
                     <div class="time_object_change  post_modify hide">
-                        <div class="templateContainer" template="time_control" status="common" statusSet="common">
+                        <div class="templateContainer" template="time_control" status="common" statusSet="common" localDataBind="#{ post.id }">
                         </div>
                     </div>
 
@@ -379,37 +379,37 @@
 </div>
 
 
-<div class="template" template="time_control" status="common" eventPool="time_control">
+<div class="template" template="time_control" status="common" eventPool="time_control" localData="time">
     <div class="time_object_change">
         <a timetype="year" class="select_time btn_gray btn_select btn_select_limiting"
            style="width:30px;" timetype="year" max="2021" min="2013">
-            <span class="btn_select_txt" timetype="year">#{app.time.year}</span>
+            <span class="btn_select_txt" timetype="year">#{it.year}</span>
             <span class="ico_select_s"></span>
         </a>
 
         <span>年</span>
         <a timetype="month" class=" select_time btn_gray btn_select btn_select_limiting"
            style="width:23px;margin-left:4px;" timetype="month" min="1" max="13">
-            <span class="btn_select_txt" timetype="month">#{app.time.month}</span>
+            <span class="btn_select_txt" timetype="month">#{it.month}</span>
             <span class="ico_select_s"></span>
         </a>
         <span>月</span>
         <a timetype="day" class="select_time btn_gray btn_select btn_select_limiting"
            style="width:23px;margin-left:4px;" timetype="day" min="1" max="32">
-            <span class="btn_select_txt" timetype="day">#{app.time.day}</span>
+            <span class="btn_select_txt" timetype="day">#{it.day}</span>
             <span class="ico_select_s"></span>
         </a>
         <span>日</span>
         <a timetype="hour" class="select_time btn_gray btn_select btn_select_limiting"
            style="width:23px;margin-left:4px;" timetype="hour" min="0" max="24">
-            <span class="btn_select_txt" timetype="hour">#{app.time.hour}</span>
+            <span class="btn_select_txt" timetype="hour">#{it.hour}</span>
             <span class="ico_select_s"></span>
         </a>
 
         <span>时</span>
         <a timetype="minute" class="select_time btn_gray btn_select btn_select_limiting"
            style="width:23px;margin-left:4px;" timetype="minute" min="0" max="60">
-            <span class="btn_select_txt" timetype="minute">#{app.time.minute}</span>
+            <span class="btn_select_txt" timetype="minute">#{it.minute}</span>
             <span class="ico_select_s"></span>
         </a>
         <span>分</span>
@@ -418,7 +418,7 @@
         <ul timetype="year" class="select_time_list hide" style="left: 0px;width: 58px;height: 155px;overflow: hidden;">
             <?js for (var number=0;number<7;number++) { ?>
             <li class="time_list" number="#{number+app.time.year}" timetype="year"><a
-                    href="javascript:;">#{number+app.time.year}</a>
+                    href="javascript:;">#{number+it.year}</a>
             </li>
             <?js }?>
         </ul>

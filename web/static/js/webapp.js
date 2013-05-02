@@ -29,11 +29,8 @@ $(document).ready(function () {
 );
 
 
-var data = {};
-
-
 function renderTemplate(area) {
-    var templateContainers = $(".templateContainer", $(area));
+    var templateContainers = $(".templateContainer:not(.templateContainer .templateContainer):visible", $(area)); //选择器过于牛逼了。
     if ($(area).hasClass("templateContainer")) {
         templateContainers = templateContainers.add(area);
     }
@@ -41,16 +38,19 @@ function renderTemplate(area) {
             var templateContainer = this;
             var template = $(templateContainer).attr("template");
             var status = $(templateContainer).attr("status");
+            var localDataBind = $(templateContainer).attr("localDataBind");
             var nTemplate = getTemplate(template, status);
             if (nTemplate == null) {
                 return;
             }
-            resolveServerData(nTemplate, function (serverData) {
-                $(templateContainer).html(nTemplate.render(serverData));
-                app.eventPool[nTemplate.eventPool](status, templateContainer);
-                var innerTemplateContainers = $(".templateContainer", $(templateContainer));
-                renderTemplate(innerTemplateContainers);
-            })
+            resolveServerData(nTemplate, function () {
+                resolveLocalData(nTemplate, localDataBind, function (localData) {
+                    $(templateContainer).html(nTemplate.render(localData));
+                    app.eventPool[nTemplate.eventPool](status, templateContainer);
+                    var innerTemplateContainers = $(".templateContainer", $(templateContainer));
+                    renderTemplate(innerTemplateContainers);
+                });
+            });
         }
     );
 }
@@ -72,15 +72,25 @@ function getTemplate(template, status) {
     nTemplate.convert(string);
     nTemplate.eventPool = $(templateDiv).attr("eventPool");
     nTemplate.serverData = $(templateDiv).attr("serverData");
+    nTemplate.localData = $(templateDiv).attr("localData");
     return nTemplate;
 }
 
 
 function resolveServerData(nTemplate, next) {
     if (nTemplate.serverData == null) {
-        next(null);
+        next();
     }
     else {
         app.dataPool[nTemplate.serverData](next);
+    }
+}
+
+function resolveLocalData(nTemplate, localDataBind, next) {
+    if (nTemplate.localData == null) {
+        next(null);
+    }
+    else {
+        app.dataPool[nTemplate.localData](localDataBind, next);
     }
 }

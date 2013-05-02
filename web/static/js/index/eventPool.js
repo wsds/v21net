@@ -8,14 +8,8 @@ eventPool.body = function (status, area) {
     }
 
     var now = new Date();
-    var month = now.getMonth() + 1;
-    app.time = {};
-    app.time.year = now.getFullYear();
-    app.time.month = now.getMonth() + 1;
-    app.time.day = now.getDate();
-    app.time.hour = now.getHours();
-    app.time.minute = now.getMinutes();
-    app.time.public_time = getShortDateTimeString(now);
+    app.time = new Time(now);
+
 
     $("#slide_ctrls li a").click(function () {
             var main_panel = $(this).attr("slide");
@@ -35,10 +29,10 @@ eventPool.body = function (status, area) {
     );
 
     $(".subnav li a").click(function () {
-        var main_panel = $(this).attr("slide");
+            var main_panel = $(this).attr("slide");
 
-        $(".subnav li a[slide='" + main_panel + "']").removeClass("current");
-        $(this).toggleClass("current");
+            $(".subnav li a[slide='" + main_panel + "']").removeClass("current");
+            $(this).toggleClass("current");
         }
     );
     $(".normalTitle h2").click(function () {
@@ -125,6 +119,15 @@ eventPool.owned_weibo = function (status, area) {
 
 
 eventPool.time_control = function (status, area) {
+    var localDataBind = $(area).attr("localDataBind");
+    var time;
+    if (localDataBind == "publish") {
+        var time = app.time;
+    }
+    else {
+        var time = data.time[localDataBind];
+    }
+
     $(".select_time", area).mousewheel(function (event, delta, deltaX, deltaY) {
         var timetype = $(this).attr("timetype");
         var max = parseInt($(this).attr("max"));
@@ -134,9 +137,12 @@ eventPool.time_control = function (status, area) {
         num = -delta + num;
         num = ((num - min) + diff) % diff + min;
         $(".btn_select_txt", this).text(num);
-        app.time[timetype] = num;
+        time[timetype] = num;
 //        console.log(type, -delta, deltaX, deltaY);
-        $("#public_time").text(getShortTimeString(app.time));
+        time.public_time = getShortTimeString(time);
+        if (localDataBind == "publish") {
+            $("#public_time").text(time.public_time);
+        }
         return false;
     });
 
@@ -167,8 +173,11 @@ eventPool.time_control = function (status, area) {
         var num = $(this).attr("number");
         var select_time = $(".select_time[timetype='" + timetype + "']", area);
         $(".btn_select_txt", select_time).text(num);
-        app.time[timetype] = num;
-        $("#public_time").text(getShortTimeString(app.time));
+        time[timetype] = num;
+        time.public_time = getShortTimeString(time);
+        if (localDataBind == "publish") {
+            $("#public_time").text(time.public_time);
+        }
     });
 
 }

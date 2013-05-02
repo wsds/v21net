@@ -56,10 +56,12 @@ eventPool.main_offline_post_list = function (status, area) {
         var public_time = new Date($('#public_time').text());
 
         var post = data.postlist[postID];
+        var public_time_str = data.time[postID].public_time;
+        var public_time = new Date(public_time_str);
         post.time = public_time.getTime();
-        post.text=$(".modify_editor",row_section).val();
-        $(".post_text",row_section).html(post.text);
-        $(".posttime",row_section).html(getShortDateTimeString(post.time));
+        post.text = $(".modify_editor", row_section).val();
+        $(".post_text", row_section).html(post.text);
+        $(".posttime", row_section).html(public_time_str);
 
     });
 

@@ -227,6 +227,16 @@ function getShortTimeString(date) {   //如：2011/07/29 13:30
     return str;
 }
 
+function Time(date) {
+    var date =new Date(date);
+    this.year = date.getFullYear();
+    this.month = date.getMonth() + 1;
+    this.day = date.getDate();
+    this.hour = date.getHours();
+    this.minute = date.getMinutes();
+    this.public_time = getShortDateTimeString(date);
+}
+
 function getShortDateTimeString(date) {   //如：2011/07/29 13:30
     var date=new Date(date);
     var year = date.getFullYear();
