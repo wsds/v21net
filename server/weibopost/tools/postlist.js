@@ -93,8 +93,13 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, resp
                 if (existPostPointer.previous == "head") {
                     break;
                 }
+                var previousPostPointer = globaldata.publishing[existPostPointer.previous];
+                if (nextPostPointer == null) {
+                    existPostPointer.previous = "head";
+                    break;
+                }
                 existPostID = existPostPointer.previous;
-                existPostPointer = globaldata.publishing[existPostID];
+                existPostPointer = previousPostPointer;
             }
             nextID = existPostID;
             previousID = existPostPointer.previous;
@@ -106,8 +111,13 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, resp
                 if (existPostPointer.next == "tail") {
                     break;
                 }
+                var nextPostPointer = globaldata.publishing[existPostPointer.next];
+                if (nextPostPointer == null) {
+                    existPostPointer.next = "tail";
+                    break;
+                }
                 existPostID = existPostPointer.next;
-                existPostPointer = globaldata.publishing[existPostID];
+                existPostPointer = nextPostPointer;
             }
             nextID = existPostPointer.next;
             previousID = existPostID;

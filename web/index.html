@@ -221,9 +221,11 @@
 
                 <div style="float:left;">
                     <a class="" href="javascript:">
-
+                        <?js if(post.pid=="none") { ?>
                         <img class="images" src="/static/images/logo_tools.png">
-
+                        <?js }else { ?>
+                        <img class="images" src="http://images.weibo.com/#{ post.pid }.png">
+                        <?js } ?>
                     </a>
                 </div>
                 <div class="row columnDisplay">
@@ -246,7 +248,7 @@
                             <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败</label><?js }else if(data.postlist[index].status=="timeout"){?>
                             <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败（定时超时）</label><?js }else {?>
                             <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label><?js }?>
-                            <b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>
+                            <!--<b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>-->
                             <!--$(".post_show").toggleClass("hide")--><!--$(".post_modify").toggleClass("hide")-->
                         </div>
                         <div class="time_change_op">

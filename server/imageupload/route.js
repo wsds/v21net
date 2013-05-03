@@ -1,5 +1,9 @@
+var requestHandler=require("./requestHandler");
+
+// /var serverSetting = root.globaldata.serverSetting;
+//console.log("route: " + JSON.stringify(serverSetting));
+
 function route(pathname,response,postData){
-    var requestHandler=require("./requestHandler");
     if (typeof requestHandler.handle[pathname] === 'function') {
 
         requestHandler.handle[pathname](response,postData);

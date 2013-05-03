@@ -1,3 +1,5 @@
+var data = {};
+
 dataPool = {};
 app.dataPool = dataPool;
 
