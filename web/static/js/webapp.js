@@ -1,5 +1,5 @@
 var app = {};
-app.serverUrl = "www.weibo.com";
+app.serverUrl = "www.wlm1001.com";
 
 app.localSettings = {};
 
