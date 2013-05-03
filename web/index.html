@@ -113,15 +113,21 @@
     <div class="template" template="owned_weibo" status="Hide" statusSet="Hide Show" serverData="owned_weibo" eventPool="owned_weibo">
         <div id="data" class="account" tabindex="-1" hidefocus="" style="left: 290px;outline: none;">
             <a id="data_toggle" class="account-toggle" href="javascript:;">
-                <span class="toggle-down"></span><?js if (data.ownedWeibo!=null) { ?><?js if (data.ownedWeibo.currentWeibo==null) { ?>添加授权管理微博账号<?js }else { ?>#{ data.ownedWeibo.currentWeibo }<?js } ?><?js } ?>
-                <img src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/></a>
+                <span class="toggle-down"></span>
+
+                <div class="current_weibo" style="display: inline-block"><?js if (data.ownedWeibo!=null) { ?><?js if (data.ownedWeibo.currentWeibo==null) { ?>添加授权管理微博账号<?js }else { ?>#{ data.ownedWeibo.currentWeibo }<?js } ?><?js } ?>
+                </div>
+                <img weibo_user_id="#{ data.ownedWeibo.ownedWeiboList[data.ownedWeibo.currentWeibo].id}" class="current_weibo_image" src="#{ data.ownedWeibo.ownedWeiboList[data.ownedWeibo.currentWeibo].profile_image_url}"/>
+            </a>
 
             <div id="data_menu" class="afterlogin hide" style="left:0px">
                 <ul class="productlist">
                     <?js if (data.ownedWeibo!=null) { ?><?js for (var ownedWeibo in data.ownedWeibo.ownedWeiboList) { ?><?js if( data.ownedWeibo.ownedWeiboList[ownedWeibo]==null){continue;} ?>
                     <li class="owned_weibo_li" weibo="#{ ownedWeibo }">
                         <a href="javascript:;">
-                            <img src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/>#{ ownedWeibo }<img class="owned_weibo_del hide" weibo="#{ ownedWeibo }" style="margin: 15px 0 0 0;float:right;" src="/static/images/close_small.png">
+                            <img weibo_user_id="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].id}" class="weibo_image" src="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].profile_image_url}"/>
+                            #{ ownedWeibo }
+                            <img class="owned_weibo_del hide" weibo="#{ ownedWeibo }" style="margin: 15px 0 0 0;float:right;" src="/static/images/close_small.png">
                         </a>
                     </li>
                     <?js } ?><?js } ?>
@@ -280,7 +286,7 @@
         <div class="main_offline_post_list form">
             <?js for (var index in data.postlist) { ?><?js var post=data.postlist[index]; ?><?js if(post==null) { ?><?js continue; ?><?js } ?>
 
-            <div class="row zhuanfa forward_list_row"  postID="#{ post.id }">
+            <div class="row zhuanfa forward_list_row" postID="#{ post.id }">
                 <div class="sendhead">
                     <p>
                         <span class="forwardWeibo">转发微博</span>
@@ -302,7 +308,8 @@
                         </div>
                         <div class="weiboContent" style="padding-left: 66px;width: 100%;">
                             <div class="weibo_title">
-                                <span>#{post.forward.forwardUser}</span> <span class="public_time">#{post.forward.forwardTime}</span>
+                                <span>#{post.forward.forwardUser}</span>
+                                <span class="public_time">#{post.forward.forwardTime}</span>
                             </div>
                             <div class="weibo_content" style="padding-right: 60px;">#{post.forward.forwordText}
                             </div>

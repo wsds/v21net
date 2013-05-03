@@ -33,8 +33,9 @@ eventPool.main_forward = function (status, area) {
         var status;
         for (var index in  data.statuses) {
             status = data.statuses[index];
-            status.id == postID;
-            break
+            if (status.id == postID) {
+                break;
+            }
         }
         return status;
     };
@@ -48,6 +49,7 @@ eventPool.main_forward = function (status, area) {
                 "forwarduser": status.user.screen_name,
                 "forwardtime": status.created_at,
                 "profile_image": status.user.profile_image_url,
+                "forward_user_id":status.user.id,
                 "forwordtext": status.text
             },
             type: 'POST',

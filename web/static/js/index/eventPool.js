@@ -12,89 +12,89 @@ eventPool.body = function (status, area) {
     app.forwardTime = new Time(now);
 
     $("#slide_ctrls li a").click(function () {
-            var main_panel = $(this).attr("slide");
+        var main_panel = $(this).attr("slide");
 
-            $("#slide_ctrls li a").removeClass("current");
-            $(this).toggleClass("current");
+        $("#slide_ctrls li a").removeClass("current");
+        $(this).toggleClass("current");
 
-            $(".subnav").removeClass("current");
-            $(".subnav").hide();
-            $(".subnav[slide='" + main_panel + "']").toggleClass("current");
-            $(".subnav[slide='" + main_panel + "']").show();
+        $(".subnav").removeClass("current");
+        $(".subnav").hide();
+        $(".subnav[slide='" + main_panel + "']").toggleClass("current");
+        $(".subnav[slide='" + main_panel + "']").show();
 
-            var main_panel_container = $(".templateContainer[template='main_panel']");
-            main_panel_container.attr("status", main_panel);
-            renderTemplate(main_panel_container);
-        });
+        var main_panel_container = $(".templateContainer[template='main_panel']");
+        main_panel_container.attr("status", main_panel);
+        renderTemplate(main_panel_container);
+    });
 
     $(".subnav li a").click(function () {
-            var main_panel = $(this).attr("slide");
+        var main_panel = $(this).attr("slide");
 
-            $(".subnav li a[slide='" + main_panel + "']").removeClass("current");
-            $(this).toggleClass("current");
+        $(".subnav li a[slide='" + main_panel + "']").removeClass("current");
+        $(this).toggleClass("current");
 
-            var subSlide = $(this).attr("subSlide");
-            if (subSlide == "forward_mine") {
-                data.statusList = "mine";
-            }
-            else if (subSlide == "forward_friend") {
-                data.statusList = "friends";
-            }
-            else if (subSlide == "main_offline_post_list") {
-                data.list = "post";
-                main_panel = $(this).attr("subSlide");
-            }
-            else if (subSlide == "main_offline_forward_list") {
-                data.list = "forward";
-                main_panel = $(this).attr("subSlide");
-            }
-            else {
-                return;
-            }
+        var subSlide = $(this).attr("subSlide");
+        if (subSlide == "forward_mine") {
+            data.statusList = "mine";
+        }
+        else if (subSlide == "forward_friend") {
+            data.statusList = "friends";
+        }
+        else if (subSlide == "main_offline_post_list") {
+            data.list = "post";
+            main_panel = $(this).attr("subSlide");
+        }
+        else if (subSlide == "main_offline_forward_list") {
+            data.list = "forward";
+            main_panel = $(this).attr("subSlide");
+        }
+        else {
+            return;
+        }
 
-            var main_panel_container = $(".templateContainer[template='main_panel']");
-            main_panel_container.attr("status", main_panel);
-            renderTemplate(main_panel_container);
-        });
+        var main_panel_container = $(".templateContainer[template='main_panel']");
+        main_panel_container.attr("status", main_panel);
+        renderTemplate(main_panel_container);
+    });
     $(".normalTitle h2").click(function () {
-            $(".nav").slideToggle("fast");
-            $(".subnav.current").slideToggle("fast");
-        });
+        $(".nav").slideToggle("fast");
+        $(".subnav.current").slideToggle("fast");
+    });
 
 
     $("body").click(function () {
-            var droppedElements = $(".drop");
-            droppedElements.toggleClass("drop");
-            var shouldHideElements = $(".shouldHide");
-            shouldHideElements.toggleClass("hide");
-            shouldHideElements.toggleClass("shouldHide");
-        });
+        var droppedElements = $(".drop");
+        droppedElements.toggleClass("drop");
+        var shouldHideElements = $(".shouldHide");
+        shouldHideElements.toggleClass("hide");
+        shouldHideElements.toggleClass("shouldHide");
+    });
 };
 
 eventPool.login_bar = function (status, area) {
 
     $(".account", area).click(function () {
-            $(this).toggleClass("drop");
-            $(".afterlogin", $(this)).toggleClass("hide");
-            $(".afterlogin", $(this)).toggleClass("shouldHide");
-            return false;//block event message loop pop this message to its father element.
-        });
+        $(this).toggleClass("drop");
+        $(".afterlogin", $(this)).toggleClass("hide");
+        $(".afterlogin", $(this)).toggleClass("shouldHide");
+        return false;//block event message loop pop this message to its father element.
+    });
 
 
     $(".login_bar_li", area).click(function () {
-            var operation = $(this).attr("operation");
+        var operation = $(this).attr("operation");
 
-            var main_panel_container = $(".templateContainer[template='main_panel']");
-            if (operation == "change_password") {
-                main_panel_container.attr("status", "main_password");
-            }
-            else if (operation == "weibo_management") {
-                $(".account", $('#owned_weibo_container')).trigger("click", ["management"]);
-            }
-            renderTemplate(main_panel_container);
-            return false;
+        var main_panel_container = $(".templateContainer[template='main_panel']");
+        if (operation == "change_password") {
+            main_panel_container.attr("status", "main_password");
+        }
+        else if (operation == "weibo_management") {
+            $(".account", $('#owned_weibo_container')).trigger("click", ["management"]);
+        }
+        renderTemplate(main_panel_container);
+        return false;
 
-        });
+    });
 
     $("#auth_logout", area).click(function () {
         app.localSettings.key = undefined;
@@ -110,26 +110,44 @@ eventPool.login_bar = function (status, area) {
 eventPool.owned_weibo = function (status, area) {
 
     $(".account", area).click(function (event, management) {
-            if (management == null) {
-                $(".owned_weibo_del", $('#owned_weibo_container')).addClass("hide");
-            }
-            else {
-                $(".owned_weibo_del", $('#owned_weibo_container')).removeClass("hide");
-            }
-            $(this).toggleClass("drop");
-            $(".afterlogin", $(this)).toggleClass("hide");
-            $(".afterlogin", $(this)).toggleClass("shouldHide");
-            return false;//block event message loop pop this message to its father element.
-        });
+        if (management == null) {
+            $(".owned_weibo_del", $('#owned_weibo_container')).addClass("hide");
+        }
+        else {
+            $(".owned_weibo_del", $('#owned_weibo_container')).removeClass("hide");
+        }
+        $(this).toggleClass("drop");
+        $(".afterlogin", $(this)).toggleClass("hide");
+        $(".afterlogin", $(this)).toggleClass("shouldHide");
+        return false;//block event message loop pop this message to its father element.
+    });
+
 
     $(".owned_weibo_li", area).click(function () {
-            settings.ownedWeibo.currentWeibo = $(this).attr("weibo");
-            if (settings.main == "main_offline_post_list") {
-                resolvePostlist();
-                $(".subnav").show();
-                //$(".subnavpoint_af").show();
-            }
-        });
+        app.localSettings.ownedWeibo.currentWeibo = $(this).attr("weibo");
+        $(".current_weibo", area).html(app.localSettings.ownedWeibo.currentWeibo);
+        $(".current_weibo_image", area).attr("src", app.localSettings.ownedWeibo.ownedWeiboList[app.localSettings.ownedWeibo.currentWeibo].profile_image_url);
+        $(".current_weibo_image", area).attr("weibo_user_id", app.localSettings.ownedWeibo.ownedWeiboList[app.localSettings.ownedWeibo.currentWeibo].id);
+
+        var main_panel_container = $(".templateContainer[template='main_panel']");
+        var main_panel = main_panel_container.attr("status");
+        if (main_panel == "main_offline_post_list" || main_panel == "main_offline_forward_list") {
+            renderTemplate(main_panel_container);
+        }
+    });
+
+    $(".current_weibo_image", area).click(function () {
+        var weibo_user_id = $(this).attr("weibo_user_id");
+        window.open("http://weibo.com/u/" + weibo_user_id);
+        return false;
+    });
+
+    $(".weibo_image", area).click(function () {
+        var weibo_user_id = $(this).attr("weibo_user_id");
+        window.open("http://weibo.com/u/" + weibo_user_id);
+        return false;
+    });
+
 
 };
 
