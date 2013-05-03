@@ -1,5 +1,5 @@
 
-
+var serverSetting = require('./settings')
 
 var weibopost = require('./weibopost/weibopost.js');//8061
 console.log("weibopost is starting");

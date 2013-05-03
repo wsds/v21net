@@ -9,7 +9,7 @@
  * 请求2：http://127.0.0.1:8061/api/template
  * 响应2：{"模板名":{"string":"模板内容"},"模板夹名":{"模板名":{"string":"模板内容"},"模板名":{"string":"模板内容"}}}
  */
-root.globaldata={};
+
 
 var http = require("http");
 var route = require("./lib/route");

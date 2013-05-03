@@ -3,6 +3,7 @@ app.eventPool = eventPool;
 
 
 eventPool.body = function (status, area) {
+
     if (app.localSettings.key == null || app.localSettings.account == null) {
         window.location.href = "/account.html";
     }
@@ -89,7 +90,8 @@ eventPool.login_bar = function (status, area) {
             main_panel_container.attr("status", "main_password");
         }
         else if (operation == "weibo_management") {
-            $(".account", $('#owned_weibo_container')).trigger("click", ["management"]);
+            $(".account", $(".templateContainer[template='owned_weibo']")).trigger("click", ["management"]);
+            return true;
         }
         renderTemplate(main_panel_container);
         return false;
@@ -111,10 +113,10 @@ eventPool.owned_weibo = function (status, area) {
 
     $(".account", area).click(function (event, management) {
         if (management == null) {
-            $(".owned_weibo_del", $('#owned_weibo_container')).addClass("hide");
+            $(".owned_weibo_del", area).addClass("hide");
         }
         else {
-            $(".owned_weibo_del", $('#owned_weibo_container')).removeClass("hide");
+            $(".owned_weibo_del", area).removeClass("hide");
         }
         $(this).toggleClass("drop");
         $(".afterlogin", $(this)).toggleClass("hide");
@@ -148,7 +150,40 @@ eventPool.owned_weibo = function (status, area) {
         return false;
     });
 
+    $(".add_weibo_user", area).click(function () {
+        var url = "http://login.sina.com.cn/sso/logout.php?entry=openapi&r=https://api.weibo.com/oauth2/authorize?redirect_uri=";
+        url += data.callbackUrl//授权回调页：
+        url += "%26client_id=";
+        url += data.appkey;
+        url += "%26state=";
+        url += data.account;
+        url += "%26response_type=code%23";
+        window.open(url);
+        return false;
+    });
 
+
+    $(".owned_weibo_del", area).click(function () {
+
+            var willDel = confirm("删除授权管理微博账号，确定？");
+            if (willDel == false) {
+                return false;
+            }
+            else {
+                var delWeibo = $(this).attr("weibo");
+                $.ajax({
+                    data: {"account": app.localSettings.account, "ownedWeibo": delWeibo},
+                    success: function (data) {
+                        delete app.localSettings.ownedWeibo.ownedWeiboList[delWeibo];
+                        renderTemplate(area);
+                    },
+                    type: 'GET',
+                    url: ("http://" + app.serverUrl + "/api2/accountownedweibo/del")
+                });
+
+                return false;
+            }
+        });
 };
 
 
