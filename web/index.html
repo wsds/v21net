@@ -125,8 +125,7 @@
                     <?js if (data.ownedWeibo!=null) { ?><?js for (var ownedWeibo in data.ownedWeibo.ownedWeiboList) { ?><?js if( data.ownedWeibo.ownedWeiboList[ownedWeibo]==null){continue;} ?>
                     <li class="owned_weibo_li" weibo="#{ ownedWeibo }">
                         <a href="javascript:;">
-                            <img weibo_user_id="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].id}" class="weibo_image" src="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].profile_image_url}"/>
-                            #{ ownedWeibo }
+                            <img weibo_user_id="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].id}" class="weibo_image" src="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].profile_image_url}"/> #{ ownedWeibo }
                             <img class="owned_weibo_del hide" weibo="#{ ownedWeibo }" style="margin: 15px 0 0 0;float:right;" src="/static/images/close_small.png">
                         </a>
                     </li>
@@ -309,7 +308,7 @@
                         <div class="weiboContent" style="padding-left: 66px;width: 100%;">
                             <div class="weibo_title">
                                 <span>#{post.forward.forwardUser}</span>
-                                <span class="public_time">#{post.forward.forwardTime}</span>
+                                <span class="public_time">#{getShortDateTimeString( post.forward.forwardTime)}</span>
                             </div>
                             <div class="weibo_content" style="padding-right: 60px;">#{post.forward.forwordText}
                             </div>
@@ -345,7 +344,8 @@
             </div>
             <div class="weiboContent">
                 <div class="weibo_title">
-                    <span> #{user.screen_name}</span> <span class="public_time"> #{ status.created_at }</span>
+                    <span> #{user.screen_name}</span>
+                    <span class="public_time"> #{getShortDateTimeString( status.created_at) }</span>
                 </div>
                 <div class="weibo_content">#{ status.text }</div>
                 <a href="javascript:;" class="ok_button size86 forward_post_show changetime" style="color:#fff;" postid="#{status.id}">定时转发</a>
@@ -444,6 +444,54 @@
         </div>
     </div>
 
+    <div class="template" template="main_panel" status="main_password" eventPool="main_password">
+        <div class="main_login" id="main_password">
+            <div class="loginPanel innerPanel">
+                <div class="title">
+                    <h3>修改密码</h3>
+
+                    <p>修改您的密码</p>
+
+                    <div class="clr"></div>
+                </div>
+                <div class="login_operate" style="display:block" id="main_password_auth">
+                    <div class="content form">
+                        <div class="columnTip">
+                            <div id="main_password_authTip" style="display:none;" class="tip errorTip">修改成功</div>
+                        </div>
+                        <div class="column">
+                            <label>账号</label>
+                            <input class="text textMiddle inputQ" id="main_password_modify_account" value="#{data.account}">
+                        </div>
+                        <div class="column">
+                            <label>验证码</label>
+                            <input class="text textMiddle inputQ" id="main_verification_code">
+                        </div>
+                        <div class="column">
+                            <label>密码</label>
+                            <input type="password" class="text textMiddle inputQ" id="main_password_modify_password1">
+                        </div>
+                        <div class="column">
+                            <label>重复密码</label>
+                            <input type="password" class="text textMiddle inputQ" id="main_password_modify_password2">
+                        </div>
+                    </div>
+                    <div class="operator">
+                        <a href="javascript:;" class="login_btn_wrapper">
+                            <input id="change_password" name="btlogin" type="submit" value="提交"
+                                   class="login_btn">
+                        </a>
+
+                        <div style="display: none;" id="switch4" class="lineright"></div>
+                        <a class="minorLink" target="_blank" href="mailto:wsds888@qq.com">意见反馈</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clr"></div>
+        </div>
+    </div>
+
+
 </div>
 
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
@@ -455,6 +503,7 @@
 <script type="text/javascript" src="/static/js/index/eventPool.post.js"></script>
 <script type="text/javascript" src="/static/js/index/eventPool.postlist.js"></script>
 <script type="text/javascript" src="/static/js/index/eventPool.forward.js"></script>
+<script type="text/javascript" src="/static/js/account/eventPool.password.js"></script>
 <script id="dataPool" type="text/javascript" src="/static/js/index/dataPool.js"></script>
 </body>
 </html>

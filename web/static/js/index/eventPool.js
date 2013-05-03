@@ -88,14 +88,13 @@ eventPool.login_bar = function (status, area) {
         var main_panel_container = $(".templateContainer[template='main_panel']");
         if (operation == "change_password") {
             main_panel_container.attr("status", "main_password");
+            renderTemplate(main_panel_container);
+            return true;
         }
         else if (operation == "weibo_management") {
             $(".account", $(".templateContainer[template='owned_weibo']")).trigger("click", ["management"]);
             return true;
         }
-        renderTemplate(main_panel_container);
-        return false;
-
     });
 
     $("#auth_logout", area).click(function () {

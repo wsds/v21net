@@ -181,11 +181,4 @@ eventPool.main_register = function (status, area) {
     );
 };
 
-eventPool.main_password = function (status, area) {
-    $(".switch_login_register").click(function () {
-        var main_panel_container = $(".templateContainer[template='main_panel']");
-        main_panel_container.attr("status", "main_login");
-        renderTemplate(main_panel_container);
-    });
-};
 

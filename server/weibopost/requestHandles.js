@@ -107,8 +107,22 @@ requestHandles.addAccount = function (request, response, pathObject, getParam) {
         response.write(JSON.stringify({"提示信息": "邀请码不正确。"}));
         response.end();
     }
-
 };
+
+
+requestHandles.modifyAccount = function (request, response, pathObject, getParam) {
+    var accountName = getParam["account"];
+    var password = getParam["password"];
+    var verification = getParam["verification"];
+    if (verification == "山鲁佐德") {
+        accounts.modifyAccount(accountName, password, response);
+    }
+    else {
+        response.write(JSON.stringify({"提示信息": "验证码不正确。"}));
+        response.end();
+    }
+};
+
 
 requestHandles.authAccount = function (request, response, pathObject, getParam) {
     var accountName = getParam["account"];

@@ -32,6 +32,7 @@ var routemap = {
         "/api2/getforwardlist/*": requestHandles.getForwardlist,
         "/api2/getpostlist/*": requestHandles.getPostlist,
         "/api2/authaccount/*": requestHandles.authAccount,
+        "/api2/modifyaccount/*": requestHandles.modifyAccount,
         "/api2/test/*": test1.test2,
         "/api2/server/:operation": requestHandles.server,
         "/api2/weiboInterface/*":weiboInterface.interface

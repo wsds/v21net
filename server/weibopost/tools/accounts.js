@@ -21,7 +21,7 @@ accounts.initializeAccounts = function () {
 };
 
 accounts.addAccount = function (accountName, password, response) {
-    if (globaldata.accounts[accountName] == null) {
+    if (globaldata.accounts[accountName] == null) {//to do load data from redis
         var account = {
             "accountName": accountName,
             "password": password,
@@ -38,6 +38,24 @@ accounts.addAccount = function (accountName, password, response) {
     }
     else {
         response.write(JSON.stringify({"提示信息": "账户名已被占用"}));
+    }
+}
+
+accounts.modifyAccount = function (accountName, password, response) {
+    var account =globaldata.accounts[accountName]
+    if (account != null) {
+        account.password=password;
+        var now = new Date();
+        account.key = "key:" + now.getTime();
+        client.hset(["weibo_tools_accounts", account.accountName, JSON.stringify(account)], redis.print);
+        globaldata.accounts[accountName] = account;
+        response.write(JSON.stringify({
+            "提示信息": "账户修改成功",
+            "key": account.key
+        }));
+    }
+    else {
+        response.write(JSON.stringify({"提示信息": "账户名不存在"}));
     }
 }
 
