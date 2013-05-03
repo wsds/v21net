@@ -8,6 +8,7 @@ dataPool.body = function (status, area) {
     data.ownedWeibo = app.localSettings.ownedWeibo;
     data.time = {};
     data.serverUrl = app.serverUrl;
+    data.imageServerUrl = "http://images.weibo.com/";
     data.appkey="2445517113";
     data.callbackUrl="http://www.weibo.com/oauth/callback";//http://offline.wlm1001.com/oauth/callback
 
