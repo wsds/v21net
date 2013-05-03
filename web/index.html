@@ -14,45 +14,50 @@
         <div class="articleTitle normalTitle">
             <h2 href="javascript:;">微博发布工具(离线多账号) </h2>
 
-            <div class="templateContainer" template="owned_weibo" status="Hide" statusSet="Hide Show">
-            </div>
-            <div class="templateContainer" template="login_bar" status="LoggedIn" statusSet="NotLoggedIn LoggedIn">
-            </div>
+            <div class="templateContainer" template="owned_weibo" status="Hide" statusSet="Hide Show"></div>
+            <div class="templateContainer" template="login_bar" status="LoggedIn" statusSet="NotLoggedIn LoggedIn"></div>
             <div class="clr"></div>
         </div>
 
         <div class="nav">
             <ul id="slide_ctrls">
-                <li><a slide="main_offline_post" class="slide-ctrl nav-item-1 current" href="javascript:;"><span
-                        class="nav-item-icon"></span><span>离线发布工具</span></a>
+                <li>
+                    <a slide="main_offline_post" class="slide-ctrl nav-item-1 current" href="javascript:;">
+                        <span class="nav-item-icon"></span><span>离线发布工具</span></a>
                 </li>
-                <li><a slide="main_offline_post_list" class="slide-ctrl nav-item-2" submenu="subshow"
-                       href="javascript:;"><span
-                        class="nav-item-icon"></span><span>定时发布列表</span></a>
+                <li>
+                    <a slide="main_offline_post_list" class="slide-ctrl nav-item-2" submenu="subshow" href="javascript:;">
+                        <span class="nav-item-icon"></span><span>定时发布列表</span></a>
                 </li>
-                <li><a slide="main_forward" class="slide-ctrl nav-item-5 " href="javascript:;"><span
-                        class="nav-item-icon"></span><span>定时转发</span></a>
+                <li>
+                    <a slide="main_forward" class="slide-ctrl nav-item-5 " href="javascript:;">
+                        <span class="nav-item-icon"></span><span>定时转发</span></a>
                 </li>
             </ul>
         </div>
         <div class="main" id="slide_contents">
             <div class="subnav" slide="main_offline_post_list">
                 <ul>
-                    <li><a href="javascript:;" class="current" slide="main_offline_post_list" subSlide="">发送记录</a></li>
-                    <li><a href="javascript:;" slide="main_offline_post_list" subSlide="">转发记录</a></li>
+                    <li>
+                        <a href="javascript:;" class="current" slide="main_offline_post_list" subSlide="main_offline_post_list">发送记录</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" slide="main_offline_post_list" subSlide="main_offline_forward_list">转发记录</a>
+                    </li>
                 </ul>
             </div>
             <div class="subnav" slide="main_forward" style="padding-left:270px;">
                 <ul>
-                    <li><a href="javascript:;" class="current" slide="main_forward" subSlide="forward_mine">我的首页 </a>
+                    <li>
+                        <a href="javascript:;" class="current" slide="main_forward" subSlide="forward_mine">我的首页</a>
                     </li>
-                    <li><a href="javascript:;" slide="main_forward" subSlide="forward_friend">我关注的人</a></li>
+                    <li>
+                        <a href="javascript:;" slide="main_forward" subSlide="forward_friend">我关注的人</a>
+                    </li>
                 </ul>
             </div>
             <div class="appContent normalContent">
-                <div class="templateContainer" template="main_panel" status="main_offline_post"
-                     statusSet="main_login main_register">
-                </div>
+                <div class="templateContainer" template="main_panel" status="main_offline_post" statusSet="main_login main_register"></div>
             </div>
         </div>
     </div>
@@ -64,370 +69,373 @@
 </div>
 
 <div class="templates">
-<div class="template" template="login_bar" status="LoggedIn" statusSet="NotLoggedIn LoggedIn" eventPool="login_bar">
-    <div id="login" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
-        <a id="login_toggle" class="account-toggle" href="javascript:;">#{ data.account }, 已登录<span
-                class="toggle-down"></span></a>
+    <div class="template" template="login_bar" status="LoggedIn" statusSet="NotLoggedIn LoggedIn" eventPool="login_bar">
+        <div id="login" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
+            <a id="login_toggle" class="account-toggle" href="javascript:;">#{ data.account }, 已登录<span class="toggle-down"></span>
+            </a>
 
-        <div id="login_menu" class="afterlogin hide">
-            <ul class="productlist">
-                <li class="login_bar_li" operation="weibo_management"><a data-uigroup="dialog" target="_blank"
-                                                                         href="javascript:;">账号管理</a></li>
-                <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
-                                                                        href="javascript:;">修改密码</a></li>
-                <li class="loginout"><a id="auth_logout" href="javascript:">退出登录</a></li>
-                <ul></ul>
-            </ul>
+            <div id="login_menu" class="afterlogin hide">
+                <ul class="productlist">
+                    <li class="login_bar_li" operation="weibo_management">
+                        <a data-uigroup="dialog" target="_blank" href="javascript:;">账号管理</a>
+                    </li>
+                    <li class="login_bar_li" operation="change_password">
+                        <a data-uigroup="dialog" target="_blank" href="javascript:;">修改密码</a>
+                    </li>
+                    <li class="loginout">
+                        <a id="auth_logout" href="javascript:">退出登录</a>
+                    </li>
+                    <ul></ul>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="template" template="login_bar" status="NotLoggedIn" statusSet="NotLoggedIn LoggedIn"
-     eventPool="login_bar">
-    <div id="login1" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
-        <a id="login_toggle1" class="account-toggle" href="javascript:;">登录<span class="toggle-down"></span></a>
+    <div class="template" template="login_bar" status="NotLoggedIn" statusSet="NotLoggedIn LoggedIn" eventPool="login_bar">
+        <div id="login1" class="account" tabindex="-1" hidefocus="" style="right: 10px;outline: none;">
+            <a id="login_toggle1" class="account-toggle" href="javascript:;">登录<span class="toggle-down"></span></a>
 
-        <div id="login_menu1" class="afterlogin hide">
-            <ul class="productlist">
-                <li class="login_bar_li" operation="register_account"><a id="register_account"
-                                                                         data-uigroup="dialog"
-                                                                         target="_blank"
-                                                                         href="javascript:;">注册新账号</a></li>
-                <li class="login_bar_li" operation="change_password"><a data-uigroup="dialog" target="_blank"
-                                                                        href="javascript:;">忘记密码</a></li>
-                <ul></ul>
-            </ul>
+            <div id="login_menu1" class="afterlogin hide">
+                <ul class="productlist">
+                    <li class="login_bar_li" operation="register_account">
+                        <a id="register_account" data-uigroup="dialog" target="_blank" href="javascript:;">注册新账号</a>
+                    </li>
+                    <li class="login_bar_li" operation="change_password">
+                        <a data-uigroup="dialog" target="_blank" href="javascript:;">忘记密码</a>
+                    </li>
+                    <ul></ul>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 
 
-<div class="template" template="owned_weibo" status="Hide" statusSet="Hide Show" serverData="owned_weibo"
-     eventPool="owned_weibo">
-    <div id="data" class="account" tabindex="-1" hidefocus="" style="left: 290px;outline: none;"><a
-            id="data_toggle" class="account-toggle" href="javascript:;"><span
-            class="toggle-down"></span>
-        <?js if (data.ownedWeibo!=null) { ?>
-        <?js if (data.ownedWeibo.currentWeibo==null) { ?>
-        添加授权管理微博账号
-        <?js }else { ?>
-        #{ data.ownedWeibo.currentWeibo }
-        <?js } ?>
-        <?js } ?>
-        <img src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/></a>
+    <div class="template" template="owned_weibo" status="Hide" statusSet="Hide Show" serverData="owned_weibo" eventPool="owned_weibo">
+        <div id="data" class="account" tabindex="-1" hidefocus="" style="left: 290px;outline: none;">
+            <a id="data_toggle" class="account-toggle" href="javascript:;">
+                <span class="toggle-down"></span><?js if (data.ownedWeibo!=null) { ?><?js if (data.ownedWeibo.currentWeibo==null) { ?>添加授权管理微博账号<?js }else { ?>#{ data.ownedWeibo.currentWeibo }<?js } ?><?js } ?>
+                <img src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/></a>
 
-        <div id="data_menu" class="afterlogin hide" style="left:0px">
-            <ul class="productlist">
-                <?js if (data.ownedWeibo!=null) { ?>
-                <?js for (var ownedWeibo in data.ownedWeibo.ownedWeiboList) { ?>
-                <?js if( data.ownedWeibo.ownedWeiboList[ownedWeibo]==null){continue;} ?>
-                <li class="owned_weibo_li" weibo="#{ ownedWeibo }"><a href="javascript:;"><img
-                        src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/>#{ ownedWeibo }<img
-                        class="owned_weibo_del hide" weibo="#{ ownedWeibo }"
-                        style="margin: 15px 0 0 0;float:right;"
-                        src="/static/images/close_small.png"></a>
-                </li>
-                <?js } ?>
-                <?js } ?>
-                <li class="loginout"><a target="_blank"
-                                        href="http://login.sina.com.cn/sso/logout.php?entry=openapi&r=https%3A%2F%2Fapi.weibo.com%2Foauth2%2Fauthorize%3Fredirect_uri%3Dhttp%253A%252F%252F#{ data.serverUrl }%252Foauth%252Fcallback%26client_id%3D2445517113%26state%3D#{ data.account }%26response_type%3Dcode%23">添加授权管理微博账号</a>
-                </li>
-                <ul></ul>
-            </ul>
+            <div id="data_menu" class="afterlogin hide" style="left:0px">
+                <ul class="productlist">
+                    <?js if (data.ownedWeibo!=null) { ?><?js for (var ownedWeibo in data.ownedWeibo.ownedWeiboList) { ?><?js if( data.ownedWeibo.ownedWeiboList[ownedWeibo]==null){continue;} ?>
+                    <li class="owned_weibo_li" weibo="#{ ownedWeibo }">
+                        <a href="javascript:;">
+                            <img src="http://tp2.sinaimg.cn/2775127033/50/5652687485/0"/>#{ ownedWeibo }<img class="owned_weibo_del hide" weibo="#{ ownedWeibo }" style="margin: 15px 0 0 0;float:right;" src="/static/images/close_small.png">
+                        </a>
+                    </li>
+                    <?js } ?><?js } ?>
+                    <li class="loginout">
+                        <a target="_blank" href="http://login.sina.com.cn/sso/logout.php?entry=openapi&r=https%3A%2F%2Fapi.weibo.com%2Foauth2%2Fauthorize%3Fredirect_uri%3Dhttp%253A%252F%252F#{ data.serverUrl }%252Foauth%252Fcallback%26client_id%3D2445517113%26state%3D#{ data.account }%26response_type%3Dcode%23">添加授权管理微博账号</a>
+                    </li>
+                    <ul></ul>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 
 
-<div class="template" template="main_panel" status="main_offline_post" eventPool="main_offline_post">
-    <div class="main_offline_post" id="main_offline_post">
-        <div class="loginPanel innerPanel">
+    <div class="template" template="main_panel" status="main_offline_post" eventPool="main_offline_post">
+        <div class="main_offline_post" id="main_offline_post">
+            <div class="loginPanel innerPanel">
 
 
-            <div class="login_operate" style="display:block" id="web_login">
-                <div class="form_title">
-                    <a class="label_publish">定时发新布微博</a>
+                <div class="login_operate" style="display:block" id="web_login">
+                    <div class="form_title">
+                        <a class="label_publish">定时发新布微博</a>
 
-                    <div style="float:right;color:#808080;">
-                        还可以输入<span id="textLength">140</span>字
+                        <div style="float:right;color:#808080;">
+                            还可以输入<span id="textLength">140</span>字
+                        </div>
+                    </div>
+                    <div class="content form">
+                        <div class="columnTip">
+                            <div id="msgContainer" style="display:none;" class="tip errorTip"></div>
+                        </div>
+
+                        <div class="column">
+                            <textarea id="sendtext" name="description" class="w_sendtextarea"></textarea>
+                        </div>
+
+
+                    </div>
+                    <div>
+                        <div class="insert_icon">
+                            <a href="javascript:" class="icon16 aa_face" title="表情"></a>
+                            <a href="javascript:" class="icon16 ab_pic" title="图片" id="addPicButton"></a>
+
+                            <form hidden="true" id="form_image" node-type="form" action-type="form" id="pic_upload" name="pic_upload" target="upload_target" enctype="multipart/form-data" method="POST" action="">
+                                <input class="input_f" name="pic1" id="input_image" type="file" onChange="" multiple="true">
+                            </form>
+                            <a href="javascript:" class="icon16 ac_resouse" title="素材"></a>
+
+                            <div id="sharpTop" class="sharpTop hide"><img src="../static/images/face/shap.png"/></div>
+                            <div id="facePanel" class="facePanel hide">
+                                <div class="defaultFacePanel">
+                                    <?js for (var index=1;index<data.faceTitles.length;index++) { ?>
+                                    <a class="face_a" href="javascript:void(0);" text="[#{data.faceTitles[index]}]" title="#{data.faceTitles[index]}"></a>
+                                    <?js }?>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="float:right;">
+                            <a href="javascript:" id="time_send" class="time_send sendbutton" style="color:#fff;">定时发布</a>
+                            <a href="javascript:" id="now_send" class="now_send sendbutton" style="color:#fff;">立即发布</a>
+                        </div>
+                    </div>
+                    <div class="clearevery"></div>
+                    <div class="operatorBar2">
+                        <output id="thumbs"></output>
+                        <a style="float: right; display: none;" id="post_hint">提示：发布已成功!</a>
+                    </div>
+                    <div class=" operator">
+                        <!-- <a href="javascript:;" class="login_btn_wrapper">
+                            <input id="btsend" name="btlogin" type="" value="发布" class="login_btn">
+                        </a>-->
+                        <div class="time_object">
+                            <div class="templateContainer" template="time_control" status="common" statusSet="common" localDataBind="publish"></div>
+                        </div>
+                        <div class="send_timeshow">
+                            本条微博将在<b id="public_time">#{app.time.public_time}</b>正式发布
+                        </div>
+                        <div style="display: none;" id="switch2" class="lineright" onmouseup="QMLogin.switchMode()"></div>
+                        <a class="minorLink" target="_blank" href="javascript:">意见反馈</a>
+
                     </div>
                 </div>
-                <div class="content form">
-                    <div class="columnTip">
-                        <div id="msgContainer" style="display:none;" class="tip errorTip"></div>
-                    </div>
-
-                    <div class="column">
-                        <textarea id="sendtext" name="description" class="w_sendtextarea"></textarea>
-                    </div>
+            </div>
+        </div>
+    </div>
 
 
+    <div class="template" template="main_panel" status="main_offline_post_list" eventPool="main_offline_post_list" serverData="main_offline_post_list">
+        <div class="main_offline_post_list form" id="main_offline_post_list">
+            <?js for (var index in data.postlist) { ?><?js var post=data.postlist[index]; ?><?js if(post==null) { ?><?js continue; ?><?js } ?>
+            <div class="row-section" postID="#{ post.id }">
+                <b class="icon16 ag_listpoint" style="width:18px;height:20px;"></b>
+
+                <div style="float:left;">
+                    <a class="" href="javascript:">
+
+                        <img class="images" src="/static/images/logo_tools.png">
+
+                    </a>
                 </div>
-                <div>
-                    <div class="insert_icon">
-                        <a href="javascript:" class="icon16 aa_face" title="表情"></a>
-                        <a href="javascript:" class="icon16 ab_pic" title="图片" id="addPicButton"></a>
+                <div class="row columnDisplay">
+                    <div class="postcontent">
+                        <span class="post_show post_text">#{ post.text }</span>
+                        <textarea class="editweibo post_modify modify_editor hide" name="" cols="" rows="">#{post.text}</textarea>
+                    </div>
+                    <div class="sendtime">
+                        <div class="time_object_change  post_modify hide">
+                            <div class="templateContainer" template="time_control" status="common" statusSet="common" localDataBind="#{ post.id }"></div>
+                        </div>
 
-                        <form hidden="true" id="form_image" node-type="form" action-type="form"
-                              id="pic_upload" name="pic_upload" target="upload_target"
-                              enctype="multipart/form-data" method="POST" action="">
-                            <input class="input_f" name="pic1" id="input_image" type="file" onChange=""
-                                   multiple="true">
-                        </form>
-                        <a href="javascript:" class="icon16 ac_resouse" title="素材"></a>
+                        <div class="time_public post_show" postID="#{ post.id }">
+                            <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;" class="posttime">#{getShortDateTimeString(post.time)} </label>
+                            <span class="post_status_tag_holder" status="published" publishtime="2013/04/07 18:45:00"></span>
 
-                        <div id="sharpTop" class="sharpTop hide"><img src="../static/images/face/shap.png"/></div>
-                        <div id="facePanel" class="facePanel hide">
-                            <div class="defaultFacePanel">
-                                <?js for (var index=1;index<data.faceTitles.length;index++) { ?>
-                                <a class="face_a" href="javascript:void(0);" text="[#{data.faceTitles[index]}]"
-                                   title="#{data.faceTitles[index]}"></a>
-                                <?js }?>
+                            <!-- 需要时行判断每种情况对应相应的状态显示--><?js if (data.postlist[index].status=="published") { ?>
+                            <b class="icon16 sendsuccess_aj"></b><label style="color:#097c25;">发送成功</label><?js }else if(data.postlist[index].status=="publishing"){?>
+                            <b class="icon16 sending_am"></b><label style="color:#097c25;">等待发送</label><?js }else if(data.postlist[index].status=="failed"){?>
+                            <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败</label><?js }else if(data.postlist[index].status=="timeout"){?>
+                            <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败（定时超时）</label><?js }else {?>
+                            <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label><?js }?>
+                            <b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>
+                            <!--$(".post_show").toggleClass("hide")--><!--$(".post_modify").toggleClass("hide")-->
+                        </div>
+                        <div class="time_change_op">
+                            <a style="color:#fff;" class="save_post_modify ok_button size46  post_modify hide" href="javascript:;" postID="#{ post.id }">保存</a>
+                            &nbsp;&nbsp;
+                            <a style="color:#fff;" class="cancel_post_modify cancel_button size46  post_modify hide" href="javascript:;" postID="#{ post.id }">取消</a>
+                            <a href="javascript:;" class="changedate post_show modify_post" postID="#{ post.id }">修改</a>
+                            <span class="devline post_show">|</span>
+
+                            <a class="deletedate post_show delete_post" href="javascript:;" postID="#{ post.id }">删除</a>
+                        </div>
+                    </div>
+                    <div class="clr"></div>
+                </div>
+            </div>
+            <?js } ?>
+
+            <div class="clearevery"></div>
+            <div class="pagination">
+                <a href="#" title="上一页"><<</a>
+                <a href="#" class="page_click">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <span>·&nbsp;·&nbsp;·</span>
+
+                <a href="#">20</a>
+                <a href="#" title="下一页">>></a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="template" template="main_panel" status="main_offline_forward_list" eventPool="main_offline_forward_list" serverData="main_offline_forward_list">
+        <div class="main_offline_post_list form">
+            <?js for (var index in data.postlist) { ?><?js var post=data.postlist[index]; ?><?js if(post==null) { ?><?js continue; ?><?js } ?>
+
+            <div class="row zhuanfa forward_list_row"  postID="#{ post.id }">
+                <div class="sendhead">
+                    <p>
+                        <span class="forwardWeibo">转发微博</span>
+
+                        <a class="deletedate post_show delete_post" href="javascript:;" postID="#{ post.id }" style="float: right;margin-left: 20px">删除</a>
+                                    <span class="forwardTime">
+                                        <b class="icon16 forwardTime_an"></b><label>转发时间:</label><label class="posttime">#{getShortDateTimeString(post.time)}</label>
+                                    </span>
+
+                    </p>
+                </div>
+                <div class="zhuanfaneirong">
+                    <div class="clr"></div>
+                    <p>#{post.text}</p>
+
+                    <div class="timing_forwarding" style="width: 95%;">
+                        <div class="weibo_face" style="position: absolute;">
+                            <img src="#{post.forward.forward_profile_image}"/>
+                        </div>
+                        <div class="weiboContent" style="padding-left: 66px;width: 100%;">
+                            <div class="weibo_title">
+                                <span>#{post.forward.forwardUser}</span> <span class="public_time">#{post.forward.forwardTime}</span>
+                            </div>
+                            <div class="weibo_content" style="padding-right: 60px;">#{post.forward.forwordText}
                             </div>
                         </div>
                     </div>
-                    <div style="float:right;">
-                        <a href="javascript:" id="time_send" class="time_send sendbutton" style="color:#fff;">定时发布</a>
-                        <a href="javascript:" id="now_send" class="now_send sendbutton" style="color:#fff;">立即发布</a>
-                    </div>
                 </div>
-                <div class="clearevery"></div>
-                <div class="operatorBar2">
-                    <output id="thumbs">
-                    </output>
-                    <a style="float: right; display: none;" id="post_hint">提示：发布已成功!</a>
-                </div>
-                <div class=" operator">
-                    <!-- <a href="javascript:;" class="login_btn_wrapper">
-                        <input id="btsend" name="btlogin" type="" value="发布" class="login_btn">
-                    </a>-->
-                    <div class="time_object">
-                        <div class="templateContainer" template="time_control" status="common" statusSet="common"
-                             localDataBind="publish">
-                        </div>
-                    </div>
-                    <div class="send_timeshow">
-                        本条微博将在<b id="public_time">#{app.time.public_time}</b>正式发布
-                    </div>
-                    <div style="display: none;" id="switch2" class="lineright"
-                         onmouseup="QMLogin.switchMode()"></div>
-                    <a class="minorLink" target="_blank" href="javascript:">意见反馈</a>
+            </div>
 
-                </div>
+            <?js } ?>
+
+            <div class="clearevery"></div>
+            <div class="pagination">
+                <a href="#" title="上一页"><<</a>
+                <a href="#" class="page_click">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <span>·&nbsp;·&nbsp;·</span>
+
+                <a href="#">20</a>
+                <a href="#" title="下一页">>></a>
             </div>
         </div>
     </div>
-</div>
 
 
-<div class="template" template="main_panel" status="main_offline_post_list" eventPool="main_offline_post_list"
-     serverData="main_offline_post_list">
-    <div class="main_offline_post_list form" id="main_offline_post_list">
-        <?js for (var index in data.postlist) { ?>
-        <?js var post=data.postlist[index]; ?>
-        <?js if(post==null) { ?>
-        <?js continue; ?>
-        <?js } ?>
-        <div class="row-section" postID="#{ post.id }">
-            <b class="icon16 ag_listpoint" style="width:18px;height:20px;"></b>
-
-            <div style="float:left;">
-                <a class="" href="javascript:">
-
-                    <img class="images" src="/static/images/logo_tools.png">
-
-                </a>
+    <div class="template" template="main_panel" status="main_forward" eventPool="main_forward" serverData="main_forward">
+        <?js for (var index in data.statuses) { ?><?js var status=data.statuses[index]; ?><?js var user=status.user; ?><?js if(status==null) { ?><?js continue; ?><?js } ?>
+        <div class="timing_forwarding">
+            <div class="weibo_face">
+                <img src="#{user.profile_image_url}"/>
             </div>
-            <div class="row columnDisplay">
-                <div class="postcontent">
-                    <span class="post_show post_text">#{ post.text }</span>
-                    <textarea class="editweibo post_modify modify_editor hide" name="" cols=""
-                              rows="">#{post.text}</textarea>
+            <div class="weiboContent">
+                <div class="weibo_title">
+                    <span> #{user.screen_name}</span> <span class="public_time"> #{ status.created_at }</span>
                 </div>
-                <div class="sendtime">
-                    <div class="time_object_change  post_modify hide">
-                        <div class="templateContainer" template="time_control" status="common" statusSet="common"
-                             localDataBind="#{ post.id }">
-                        </div>
-                    </div>
+                <div class="weibo_content">#{ status.text }</div>
+                <a href="javascript:;" class="ok_button size86 forward_post_show changetime" style="color:#fff;" postid="#{status.id}">定时转发</a>
+            </div>
 
-                    <div class="time_public post_show" postID="#{ post.id }">
-                        <b class="icon16 starttime"></b><label>发布时间:</label><label style="cursor: pointer;"
-                                                                                   class="posttime">#{getShortDateTimeString(post.time)}
-                    </label>
-                        <span class="post_status_tag_holder" status="published"
-                              publishtime="2013/04/07 18:45:00"></span>
-
-                        <!-- 需要时行判断每种情况对应相应的状态显示-->
-                        <?js if (data.postlist[index].status=="published") { ?>
-                        <b class="icon16 sendsuccess_aj"></b><label style="color:#097c25;">发送成功</label>
-                        <?js }else if(data.postlist[index].status=="publishing"){?>
-                        <b class="icon16 sending_am"></b><label style="color:#097c25;">等待发送</label>
-                        <?js }else if(data.postlist[index].status=="failed"){?>
-                        <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败</label>
-                        <?js }else if(data.postlist[index].status=="timeout"){?>
-                        <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败（定时超时）</label>
-                        <?js }else {?>
-                        <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label>
-                        <?js }?>
-                        <b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>
-                        <!--$(".post_show").toggleClass("hide")-->
-                        <!--$(".post_modify").toggleClass("hide")-->
-                    </div>
-                    <div class="time_change_op">
-                        <a style="color:#fff;" class="save_post_modify ok_button size46  post_modify hide"
-                           href="javascript:;" postID="#{ post.id }">保存</a>&nbsp;&nbsp;<a
-                            style="color:#fff;" class="cancel_post_modify cancel_button size46  post_modify hide"
-                            href="javascript:;" postID="#{ post.id }">取消</a>
-                        <a href="javascript:;" class="changedate post_show modify_post"
-                           postID="#{ post.id }">修改</a><span class="devline post_show">|</span>
-                        <a class="deletedate post_show delete_post" href="javascript:;" postID="#{ post.id }">删除</a>
-                    </div>
-                </div>
+            <div class="forward_post_panel hide" postid="#{status.id}">
                 <div class="clr"></div>
+                <textarea class="edit_forward" name="" cols="" rows="" postid="#{status.id}">转发微博</textarea>
+
+                <div class="clr"></div>
+
+                <div class="sendtime" style="padding-top: 8px;">
+                    <div class="time_object_change   ">
+                        <div class="templateContainer" template="time_control" status="common" statusSet="common" localDataBind="forward"></div>
+                    </div>
+
+                    <div class="time_change_forward">
+                        <a style="color:#fff;" class="forward_post ok_button size46  " href="javascript:;" postid="#{status.id}">定时发布</a>
+                        &nbsp;&nbsp;
+                        <a style="color:#fff;" class="cancel_forward_post cancel_button size46  " href="javascript:;" postid="#{status.id}">取消</a>
+                    </div>
+                </div>
             </div>
         </div>
-        <?js } ?>
 
+        <?js } ?>
         <div class="clearevery"></div>
         <div class="pagination">
             <a href="#" title="上一页"><<</a>
-            <a href="#" class="page_click">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <span>·&nbsp;·&nbsp;·</span>
-            <a href="#">20</a>
             <a href="#" title="下一页">>></a>
         </div>
     </div>
-</div>
 
 
-<div class="template" template="main_panel" status="main_forward" eventPool="main_forward"
-     serverData="main_forward">
-    <?js for (var index in data.statuses) { ?>
-    <?js var status=data.statuses[index]; ?>
-    <?js var user=status.user; ?>
-    <?js if(status==null) { ?>
-    <?js continue; ?>
-    <?js } ?>
-    <div class="timing_forwarding">
-        <div class="weibo_face">
-            <img src="#{user.profile_image_url}"/>
-        </div>
-        <div class="weiboContent">
-            <div class="weibo_title">
-                <span> #{user.screen_name}</span>
-                <span class="public_time"> #{ status.created_at }</span>
-            </div>
-            <div class="weibo_content">#{ status.text }</div>
-            <a href="javascript:;" class="ok_button size86 forward_post_show changetime" style="color:#fff;" postid="#{status.id}">定时转发</a>
-        </div>
+    <div class="template" template="time_control" status="common" eventPool="time_control" localData="time">
+        <div class="time_object_change">
+            <a timetype="year" class="select_time btn_gray btn_select btn_select_limiting" style="width:30px;" timetype="year" max="2021" min="2013">
+                <span class="btn_select_txt" timetype="year">#{it.year}</span> <span class="ico_select_s"></span></a>
 
-        <div class="forward_post_panel hide" postid="#{status.id}">
-            <div class="clr"></div>
-            <textarea class="edit_forward" name="" cols=""
-                      rows="">转发微博</textarea>
+            <span>年</span>
 
-            <div class="clr"></div>
+            <a timetype="month" class=" select_time btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;" timetype="month" min="1" max="13">
+                <span class="btn_select_txt" timetype="month">#{it.month}</span> <span class="ico_select_s"></span></a>
+            <span>月</span>
 
-            <div class="sendtime" style="padding-top: 8px;">
-                <div class="time_object_change   ">
-                    <div class="templateContainer" template="time_control" status="common" statusSet="common"
-                         localDataBind="publish">
-                    </div>
-                </div>
+            <a timetype="day" class="select_time btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;" timetype="day" min="1" max="32">
+                <span class="btn_select_txt" timetype="day">#{it.day}</span> <span class="ico_select_s"></span></a>
+            <span>日</span>
 
-                <div class="time_change_forward">
-                    <a style="color:#fff;" class="forward_post ok_button size46  " href="javascript:;"
-                       postid="#{status.id}">定时发布</a>&nbsp;&nbsp;<a style="color:#fff;"
-                                                                    class="cancel_forward_post cancel_button size46  "
-                                                                    href="javascript:;" postid="#{status.id}">取消</a>
-                </div>
-            </div>
+            <a timetype="hour" class="select_time btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;" timetype="hour" min="0" max="24">
+                <span class="btn_select_txt" timetype="hour">#{it.hour}</span> <span class="ico_select_s"></span></a>
+
+            <span>时</span>
+
+            <a timetype="minute" class="select_time btn_gray btn_select btn_select_limiting" style="width:23px;margin-left:4px;" timetype="minute" min="0" max="60">
+                <span class="btn_select_txt" timetype="minute">#{it.minute}</span> <span class="ico_select_s"></span>
+            </a>
+            <span>分</span>
+
+
+            <ul timetype="year" class="select_time_list hide" style="left: 0px;width: 58px;height: 155px;overflow: hidden;">
+                <?js for (var number=0;number<7;number++) { ?>
+                <li class="time_list" number="#{number+app.time.year}" timetype="year">
+                    <a href="javascript:;">#{number+it.year}</a>
+                </li>
+                <?js }?>
+            </ul>
+            <ul timetype="month" class="select_time_list hide" style="left: 86px;">
+                <?js for (var number=1;number<13;number++) { ?>
+                <li class="time_list" number="#{number}" timetype="month">
+                    <a href="javascript:;">#{number}</a>
+                </li>
+                <?js }?>
+            </ul>
+            <ul timetype="day" class="select_time_list hide" style="left: 166px;">
+                <?js for (var number=1;number<32;number++) { ?>
+                <li class="time_list" number="#{number}" timetype="day">
+                    <a href="javascript:;">#{number}</a>
+                </li>
+                <?js }?>
+            </ul>
+            <ul timetype="hour" class="select_time_list hide" style="left: 246px;">
+                <?js for (var number=0;number<24;number++) { ?>
+                <li class="time_list" number="#{number}" timetype="hour">
+                    <a href="javascript:;">#{number}</a>
+                </li>
+                <?js }?>
+            </ul>
+            <ul timetype="minute" class="select_time_list hide" style="left: 326px;">
+                <?js for (var number=0;number<60;number++) { ?>
+                <li class="time_list" number="#{number}" timetype="minute">
+                    <a href="javascript:;">#{number}</a>
+                </li>
+                <?js }?>
+            </ul>
         </div>
     </div>
-
-    <?js } ?>
-    <div class="clearevery"></div>
-    <div class="pagination">
-        <a href="#" title="上一页"><<</a>
-        <a href="#" title="下一页">>></a>
-    </div>
-</div>
-
-
-<div class="template" template="time_control" status="common" eventPool="time_control" localData="time">
-    <div class="time_object_change">
-        <a timetype="year" class="select_time btn_gray btn_select btn_select_limiting"
-           style="width:30px;" timetype="year" max="2021" min="2013">
-            <span class="btn_select_txt" timetype="year">#{it.year}</span>
-            <span class="ico_select_s"></span>
-        </a>
-
-        <span>年</span>
-        <a timetype="month" class=" select_time btn_gray btn_select btn_select_limiting"
-           style="width:23px;margin-left:4px;" timetype="month" min="1" max="13">
-            <span class="btn_select_txt" timetype="month">#{it.month}</span>
-            <span class="ico_select_s"></span>
-        </a>
-        <span>月</span>
-        <a timetype="day" class="select_time btn_gray btn_select btn_select_limiting"
-           style="width:23px;margin-left:4px;" timetype="day" min="1" max="32">
-            <span class="btn_select_txt" timetype="day">#{it.day}</span>
-            <span class="ico_select_s"></span>
-        </a>
-        <span>日</span>
-        <a timetype="hour" class="select_time btn_gray btn_select btn_select_limiting"
-           style="width:23px;margin-left:4px;" timetype="hour" min="0" max="24">
-            <span class="btn_select_txt" timetype="hour">#{it.hour}</span>
-            <span class="ico_select_s"></span>
-        </a>
-
-        <span>时</span>
-        <a timetype="minute" class="select_time btn_gray btn_select btn_select_limiting"
-           style="width:23px;margin-left:4px;" timetype="minute" min="0" max="60">
-            <span class="btn_select_txt" timetype="minute">#{it.minute}</span>
-            <span class="ico_select_s"></span>
-        </a>
-        <span>分</span>
-
-
-        <ul timetype="year" class="select_time_list hide" style="left: 0px;width: 58px;height: 155px;overflow: hidden;">
-            <?js for (var number=0;number<7;number++) { ?>
-            <li class="time_list" number="#{number+app.time.year}" timetype="year"><a
-                    href="javascript:;">#{number+it.year}</a>
-            </li>
-            <?js }?>
-        </ul>
-        <ul timetype="month" class="select_time_list hide" style="left: 86px;">
-            <?js for (var number=1;number<13;number++) { ?>
-            <li class="time_list" number="#{number}" timetype="month"><a
-                    href="javascript:;">#{number}</a></li>
-            <?js }?>
-        </ul>
-        <ul timetype="day" class="select_time_list hide" style="left: 166px;">
-            <?js for (var number=1;number<32;number++) { ?>
-            <li class="time_list" number="#{number}" timetype="day"><a href="javascript:;">#{number}</a>
-            </li>
-            <?js }?>
-        </ul>
-        <ul timetype="hour" class="select_time_list hide" style="left: 246px;">
-            <?js for (var number=0;number<24;number++) { ?>
-            <li class="time_list" number="#{number}" timetype="hour"><a href="javascript:;">#{number}</a>
-            </li>
-            <?js }?>
-        </ul>
-        <ul timetype="minute" class="select_time_list hide" style="left: 326px;">
-            <?js for (var number=0;number<60;number++) { ?>
-            <li class="time_list" number="#{number}" timetype="minute"><a
-                    href="javascript:;">#{number}</a></li>
-            <?js }?>
-        </ul>
-    </div>
-</div>
 
 </div>
 

@@ -29,6 +29,7 @@ var routemap = {
         "/api2/gettokeninfo/*": requestHandles.getTokenInfo,
         "/api2/addaccount/*": requestHandles.addAccount,
         "/api2/accountownedweibo/:operation": requestHandles.accountOwnedWeibo,
+        "/api2/getforwardlist/*": requestHandles.getForwardlist,
         "/api2/getpostlist/*": requestHandles.getPostlist,
         "/api2/authaccount/*": requestHandles.authAccount,
         "/api2/test/*": test1.test2,

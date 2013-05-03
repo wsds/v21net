@@ -9,7 +9,7 @@ eventPool.body = function (status, area) {
 
     var now = new Date();
     app.time = new Time(now);
-
+    app.forwardTime = new Time(now);
 
     $("#slide_ctrls li a").click(function () {
             var main_panel = $(this).attr("slide");
@@ -25,14 +25,14 @@ eventPool.body = function (status, area) {
             var main_panel_container = $(".templateContainer[template='main_panel']");
             main_panel_container.attr("status", main_panel);
             renderTemplate(main_panel_container);
-        }
-    );
+        });
 
     $(".subnav li a").click(function () {
             var main_panel = $(this).attr("slide");
 
             $(".subnav li a[slide='" + main_panel + "']").removeClass("current");
             $(this).toggleClass("current");
+
             var subSlide = $(this).attr("subSlide");
             if (subSlide == "forward_mine") {
                 data.statusList = "mine";
@@ -40,19 +40,26 @@ eventPool.body = function (status, area) {
             else if (subSlide == "forward_friend") {
                 data.statusList = "friends";
             }
+            else if (subSlide == "main_offline_post_list") {
+                data.list = "post";
+                main_panel = $(this).attr("subSlide");
+            }
+            else if (subSlide == "main_offline_forward_list") {
+                data.list = "forward";
+                main_panel = $(this).attr("subSlide");
+            }
             else {
                 return;
             }
+
             var main_panel_container = $(".templateContainer[template='main_panel']");
             main_panel_container.attr("status", main_panel);
             renderTemplate(main_panel_container);
-        }
-    );
+        });
     $(".normalTitle h2").click(function () {
             $(".nav").slideToggle("fast");
             $(".subnav.current").slideToggle("fast");
-        }
-    );
+        });
 
 
     $("body").click(function () {
@@ -61,8 +68,7 @@ eventPool.body = function (status, area) {
             var shouldHideElements = $(".shouldHide");
             shouldHideElements.toggleClass("hide");
             shouldHideElements.toggleClass("shouldHide");
-        }
-    );
+        });
 };
 
 eventPool.login_bar = function (status, area) {
@@ -72,8 +78,7 @@ eventPool.login_bar = function (status, area) {
             $(".afterlogin", $(this)).toggleClass("hide");
             $(".afterlogin", $(this)).toggleClass("shouldHide");
             return false;//block event message loop pop this message to its father element.
-        }
-    );
+        });
 
 
     $(".login_bar_li", area).click(function () {
@@ -89,8 +94,7 @@ eventPool.login_bar = function (status, area) {
             renderTemplate(main_panel_container);
             return false;
 
-        }
-    );
+        });
 
     $("#auth_logout", area).click(function () {
         app.localSettings.key = undefined;
@@ -108,15 +112,15 @@ eventPool.owned_weibo = function (status, area) {
     $(".account", area).click(function (event, management) {
             if (management == null) {
                 $(".owned_weibo_del", $('#owned_weibo_container')).addClass("hide");
-            } else {
+            }
+            else {
                 $(".owned_weibo_del", $('#owned_weibo_container')).removeClass("hide");
             }
             $(this).toggleClass("drop");
             $(".afterlogin", $(this)).toggleClass("hide");
             $(".afterlogin", $(this)).toggleClass("shouldHide");
             return false;//block event message loop pop this message to its father element.
-        }
-    );
+        });
 
     $(".owned_weibo_li", area).click(function () {
             settings.ownedWeibo.currentWeibo = $(this).attr("weibo");
@@ -125,8 +129,7 @@ eventPool.owned_weibo = function (status, area) {
                 $(".subnav").show();
                 //$(".subnavpoint_af").show();
             }
-        }
-    );
+        });
 
 };
 
@@ -136,6 +139,9 @@ eventPool.time_control = function (status, area) {
     var time;
     if (localDataBind == "publish") {
         var time = app.time;
+    }
+    else if (localDataBind == "forward") {
+        var time = app.forwardTime;
     }
     else {
         var time = data.time[localDataBind];
@@ -151,7 +157,7 @@ eventPool.time_control = function (status, area) {
         num = ((num - min) + diff) % diff + min;
         $(".btn_select_txt", this).text(num);
         time[timetype] = num;
-//        console.log(type, -delta, deltaX, deltaY);
+        //        console.log(type, -delta, deltaX, deltaY);
         time.public_time = getShortTimeString(time);
         if (localDataBind == "publish") {
             $("#public_time").text(time.public_time);

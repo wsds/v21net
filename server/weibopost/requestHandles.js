@@ -29,7 +29,7 @@ accounts.initializeAccounts();
 
 
 requestHandles.postSend = function (request, response, pathObject, getParam) {
-//    response.write('you have login!sendpost');
+    //    response.write('you have login!sendpost');
     var text = getParam["text"];
     var weibo_user = getParam["weibo_user"];
     var time = getParam["time"];
@@ -39,13 +39,13 @@ requestHandles.postSend = function (request, response, pathObject, getParam) {
 
     responseJSON = {"提示信息": "发布成功"}
     response.write(JSON.stringify(responseJSON));
-//    postlist.addPost(weibo_user, text, time, globaldata.postlist);
-//    response.write(JSON.stringify(globaldata.postlist));
-//    var senduser = weibo_users[weibo_user];
-//    weibo.update(senduser, text, function (err, status) {
-//        console.log(err);
-//        console.log(status);
-//    });
+    //    postlist.addPost(weibo_user, text, time, globaldata.postlist);
+    //    response.write(JSON.stringify(globaldata.postlist));
+    //    var senduser = weibo_users[weibo_user];
+    //    weibo.update(senduser, text, function (err, status) {
+    //        console.log(err);
+    //        console.log(status);
+    //    });
 };
 
 
@@ -57,10 +57,27 @@ requestHandles.post = function (request, response, pathObject, getParam) {
         var time = getParam["time"];
         var pic = getParam["pic"];
         var post = postlist.addPost(weibo_user, text, time, pic, response);
-    } else if (operation == "del") {
+    }
+    else if (operation == "del") {
         var weibo_user = getParam["weibo_user"];
         var postid = getParam["postid"];
         var post = postlist.delPost(weibo_user, postid, response);
+    }
+    else if (operation == "addforward") {
+        var text = getParam["text"];
+        var weibo_user = getParam["weibo_user"];
+        var time = getParam["time"];
+        var forwardID = getParam["forwardid"];
+        if (forwardID != null) {
+            var forward = {
+                forwardID: getParam["forwardid"],
+                forwardUser: getParam["forwarduser"],
+                forwardTime: getParam["forwardtime"],
+                forward_profile_image: getParam["profile_image"],
+                forwordText: getParam["forwordtext"]
+            }
+        }
+        var post = postlist.addPost(weibo_user, text, time, pic, response, forwardID, forward);
     }
 
 };
@@ -105,10 +122,12 @@ requestHandles.accountOwnedWeibo = function (request, response, pathObject, getP
         var accountName = getParam["account"];
         var ownedWeibo = getParam["ownedWeibo"];
         accounts.addAccountOwnedWeibo(accountName, ownedWeibo, response);
-    } else if (operation == "getall") {
+    }
+    else if (operation == "getall") {
         var accountName = getParam["account"];
         accounts.getallAccountOwnedWeibo(accountName, response);
-    } else if (operation == "del") {
+    }
+    else if (operation == "del") {
         var accountName = getParam["account"];
         var ownedWeibo = getParam["ownedWeibo"];
         accounts.delAccountOwnedWeibo(accountName, ownedWeibo, response);
@@ -137,6 +156,13 @@ requestHandles.getPostlist = function (request, response, pathObject, getParam) 
     var start = getParam["start"];
     var end = getParam["end"];
     postlist.getPostlist(weibo_user, start, end, response);
+};
+
+requestHandles.getForwardlist = function (request, response, pathObject, getParam) {
+    var weibo_user = getParam["weibo_user"];
+    var start = getParam["start"];
+    var end = getParam["end"];
+    postlist.getForwardlist(weibo_user, start, end, response);
 };
 
 

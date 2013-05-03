@@ -41,7 +41,7 @@ postlist.initializePublishing = function () {
     });
 };
 
-postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, response) {
+postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, response, forwardID, forward) {
     var needReload = false;
 
     var now = new Date();
@@ -70,6 +70,9 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, resp
     post.pid = pic;
     post.weibo_user = weibo_user_name;
     post.time = publishTime;
+    post.forwardID = forwardID;
+    post.forward = forward;
+
 
     if (globaldata.nextPostID == "empty") {
         nextID = "tail";
@@ -132,7 +135,13 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, resp
     globaldata.publishing[post.id] = postPointer;
 
     client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
-    client.lpush("postlist_" + weibo_user_name, post.id);
+    if (post.forwardID == null) {
+        client.lpush("postlist_" + weibo_user_name, post.id);
+    }
+    else {
+        client.lpush("forwardlist_" + weibo_user_name, post.id);
+    }
+
 
     response.write(JSON.stringify({"提示信息": "定时发布成功", "post": post}));
     response.end();
@@ -155,6 +164,7 @@ postlist.delPost = function (weibo_user_name, postid, response) {
 
     client.hdel(["weibo_tools_postlist", postid], redis.print);
     client.lrem("postlist_" + weibo_user_name, 1, postid);
+    client.lrem("forwardlist_" + weibo_user_name, 1, postid);
 
     var postPointer = globaldata.publishing[postid];
     if (postPointer == null) {
@@ -193,7 +203,8 @@ postlist.delPost = function (weibo_user_name, postid, response) {
     if (globaldata.lastAddPostID == postid) {
         if (postPointer.next != "tail") {
             globaldata.lastAddPostID = postPointer.next;
-        } else if (postPointer.previous != "head") {
+        }
+        else if (postPointer.previous != "head") {
             globaldata.lastAddPostID = postPointer.previous;
         }
     }
@@ -228,28 +239,32 @@ function getAllPostlist(weibo_user_name, start, end, next) {
     }
 }
 
-postlist.getPostlist = function (weibo_user_name, start, end, response) {
+postlist.getForwardlist = function (weibo_user_name, start, end, response) {
+    postlist.getPostlist(weibo_user_name, start, end, response, "forwardlist_");
+};
+
+postlist.getPostlist = function (weibo_user_name, start, end, response, list) {
+    var list = list || "postlist_";
     var weibo_user_postlist = {};
     response.asynchronous = 1;
     getAllPostlist(weibo_user_name, start, end, function (start, end) {
-        client.lrange("postlist_" + weibo_user_name, start, end, function (err, postlistIDs) {
+        client.lrange(list + weibo_user_name, start, end, function (err, postlistIDs) {
 
-                client.hmget("weibo_tools_postlist", postlistIDs, function (err, postlistStr) {
-                    for (var index in postlistStr) {
-                        var post = JSON.parse(postlistStr[index]);
-                        if (post == null) {
-                            continue;
-                        }
-                        weibo_user_postlist[post.id] = post;
+            client.hmget("weibo_tools_postlist", postlistIDs, function (err, postlistStr) {
+                for (var index in postlistStr) {
+                    var post = JSON.parse(postlistStr[index]);
+                    if (post == null) {
+                        continue;
                     }
-                    response.write(JSON.stringify(weibo_user_postlist));
-                    response.end();
-                });
-            }
-        );
+                    weibo_user_postlist[post.id] = post;
+                }
+                response.write(JSON.stringify(weibo_user_postlist));
+                response.end();
+            });
+        });
 
     });
-}
+};
 
 
 postlist.publishing = function (response) {
@@ -258,10 +273,10 @@ postlist.publishing = function (response) {
 };
 
 postlist.clear = function (response, weibo_user_name) {
-//    var length =client.lpop("postlist_" + weibo_user_name, function (err, postID) {
-//    client.lpop("postlist_" + weibo_user_name, function (err, postID) {
-//
-//    });
+    //    var length =client.lpop("postlist_" + weibo_user_name, function (err, postID) {
+    //    client.lpop("postlist_" + weibo_user_name, function (err, postID) {
+    //
+    //    });
 
     client.hkeys("publishing", function (err, postIDs) {
         for (var index in postIDs) {

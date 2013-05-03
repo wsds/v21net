@@ -15,5 +15,8 @@ HSET "publishing:"
 LPUSH  "postlist_" + weibo_user_name:
         [post.id]
 
+LPUSH  "forwardlist_" + weibo_user_name:
+        [post.id]
+
 SET "publishing_next_post_id"
         post.id || "empty"
