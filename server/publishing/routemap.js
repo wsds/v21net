@@ -16,7 +16,7 @@ var requestHandlers = require("./requestHandlers");
 var routemap = {
     "get": {
         "/api2/publishing/:operation": requestHandlers.publishing,
-        "/api2/status/:operation": requestHandlers.status
+        "/api2/publishing/status/:operation": requestHandlers.status
     },
     "post": {
     },

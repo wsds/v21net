@@ -8,12 +8,16 @@ var requestHandlers = {};
 var globaldata = root.globaldata;
 
 var publishing = require('./handlers/publishing');
+
 requestHandlers.publishing = function (request, response, pathObject, getParam) {
     var operation = pathObject["operation"];
     if (operation == "start") {
         publishing.start(response);
     } else if (operation == "reload") {
         publishing.reload(response);
+    }
+    else if (operation == "check") {
+        publishing.check(response);
     }
 };
 

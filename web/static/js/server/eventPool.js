@@ -142,6 +142,49 @@ eventPool.body = function (status, area) {
         }
     });
 
+    $("#start_publishing").click(function () {
+            $.ajax({
+                data: {},
+                type: 'GET',
+                url: ("http://" + app.serverUrl + "/api2/publishing/start"),
+                success: function (data) {
+                    if (data["提示信息"] == "成功") {
+                    }
+                    else {
+                    }
+                }
+            });
+    });
+
+    $("#check_publishing").click(function () {
+        $.ajax({
+            data: {},
+            type: 'GET',
+            url: ("http://" + app.serverUrl + "/api2/publishing/check"),
+            success: function (data) {
+                if (data["提示信息"] == "成功") {
+                }
+                else {
+                }
+            }
+        });
+    });
+
+
+    $("#check_status").click(function () {
+        $.ajax({
+            data: {},
+            type: 'GET',
+            url: ("http://" + app.serverUrl + "/api2/publishing/status/aa"),
+            success: function (data) {
+                if (data["提示信息"] == "成功") {
+                }
+                else {
+                }
+            }
+        });
+    });
+
     $("#weibo_interface").click(function () {
         publish();
         function publish() {
