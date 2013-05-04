@@ -21,6 +21,9 @@ dataPool.body = function (status, area) {
 };
 
 dataPool.owned_weibo = function (next) {
+    if (app.localSettings.key == null || app.localSettings.account == null) {
+        return;
+    }
     $.ajax({
         data: {"account": app.localSettings.account},
         type: 'GET',
@@ -40,6 +43,9 @@ dataPool.owned_weibo = function (next) {
 
 
 dataPool.main_offline_post_list = function (next) {
+    if (app.localSettings.ownedWeibo.currentWeibo == null) {
+        return;
+    }
     $.ajax({
         data: {
             "weibo_user": app.localSettings.ownedWeibo.currentWeibo,
@@ -56,6 +62,9 @@ dataPool.main_offline_post_list = function (next) {
 };
 
 dataPool.main_offline_forward_list = function (next) {
+    if (app.localSettings.ownedWeibo.currentWeibo == null) {
+        return;
+    }
     $.ajax({
         data: {
             "weibo_user": app.localSettings.ownedWeibo.currentWeibo,
@@ -88,6 +97,9 @@ dataPool.time = function (localDataBind, next) {
 };
 
 dataPool.main_forward = function (next) {
+    if (app.localSettings.ownedWeibo.currentWeibo == null) {
+        return;
+    }
     var url;
     if (data.statusList == "mine") {
         url = "2/statuses/user_timeline.json";
