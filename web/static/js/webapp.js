@@ -1,5 +1,19 @@
 var app = {};
-app.serverUrl = "www.wlm1001.com";
+
+app.environment = "local";//local or server
+
+if (app.environment == "local") {
+    app.serverUrl = "www.weibo.com";
+    app.appkey = "2445517113";//魔方石的诱惑
+    app.callbackUrl = "http://www.weibo.com/oauth/callback";
+    app.imageServerUrl = "http://images.weibo.com/";
+}
+else if (app.environment == "server") {
+    app.serverUrl = "www.wlm1001.com";
+    app.appkey = "3322737363";
+    app.callbackUrl = "http://offline.wlm1001.com/oauth/callback";
+    app.imageServerUrl = "http://tools.wlm1001.com/";
+}
 
 app.localSettings = {};
 
@@ -12,21 +26,19 @@ function saveLocalSettings() {
 }
 
 $(document).ready(function () {
-        if (window.localStorage.localSettings != null) {
-            app.localSettings = JSON.parse(window.localStorage.localSettings);
-        }
+    if (window.localStorage.localSettings != null) {
+        app.localSettings = JSON.parse(window.localStorage.localSettings);
     }
-);
+});
 
 
 $(document).ready(function () {
-        app.page.linkData();
-        var area = $("body");
-        app.eventPool["body"]("None", area);
-        app.dataPool["body"]("None", area);
-        renderTemplate(area);
-    }
-);
+    app.page.linkData();
+    var area = $("body");
+    app.eventPool["body"]("None", area);
+    app.dataPool["body"]("None", area);
+    renderTemplate(area);
+});
 
 
 function renderTemplate(area) {
@@ -35,24 +47,23 @@ function renderTemplate(area) {
         templateContainers = templateContainers.add(area);
     }
     templateContainers.each(function () {
-            var templateContainer = this;
-            var template = $(templateContainer).attr("template");
-            var status = $(templateContainer).attr("status");
-            var localDataBind = $(templateContainer).attr("localDataBind");
-            var nTemplate = getTemplate(template, status);
-            if (nTemplate == null) {
-                return;
-            }
-            resolveServerData(nTemplate, function () {
-                resolveLocalData(nTemplate, localDataBind, function (localData) {
-                    $(templateContainer).html(nTemplate.render(localData));
-                    app.eventPool[nTemplate.eventPool](status, templateContainer);
-                    var innerTemplateContainers = $(".templateContainer", $(templateContainer));
-                    renderTemplate(innerTemplateContainers);
-                });
-            });
+        var templateContainer = this;
+        var template = $(templateContainer).attr("template");
+        var status = $(templateContainer).attr("status");
+        var localDataBind = $(templateContainer).attr("localDataBind");
+        var nTemplate = getTemplate(template, status);
+        if (nTemplate == null) {
+            return;
         }
-    );
+        resolveServerData(nTemplate, function () {
+            resolveLocalData(nTemplate, localDataBind, function (localData) {
+                $(templateContainer).html(nTemplate.render(localData));
+                app.eventPool[nTemplate.eventPool](status, templateContainer);
+                var innerTemplateContainers = $(".templateContainer", $(templateContainer));
+                renderTemplate(innerTemplateContainers);
+            });
+        });
+    });
 }
 
 

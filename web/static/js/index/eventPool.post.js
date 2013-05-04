@@ -22,8 +22,7 @@ eventPool.main_offline_post = function (status, area) {
             $("#sendtext").val("");
             $("#thumbs").empty();
             showHint();
-        }
-    );
+        });
 
     function showHint() {
         $("#post_hint").slideDown("fast");
@@ -46,8 +45,7 @@ eventPool.main_offline_post = function (status, area) {
 
             $("#sendtext").val("");
             $("#thumbs").empty();
-        }
-    );
+        });
 
     function uploadPic(next) {
         if (app.uploadStatus == "uploading") {
@@ -60,12 +58,13 @@ eventPool.main_offline_post = function (status, area) {
                 $.ajax({
                     data: {filename: "1.png", image: urlData, weibo_user: app.localSettings.ownedWeibo.currentWeibo},
                     type: 'POST',
-                    url: ("http://www.weibo.com/upload2/"),
+                    url: ("http://" + app.serverUrl + "/upload2/"),
                     success: function (data) {
                         var filename = data.filename;
                         if (filename == null) {
                             alert(JSON.stringify(data));
-                        } else {
+                        }
+                        else {
                             next(filename);
                         }
                     }
@@ -105,14 +104,14 @@ eventPool.main_offline_post = function (status, area) {
 
         $("#input_image").change(function () {
             var myFiles = this.files;
-//        alert("input_image change");
+            //        alert("input_image change");
             for (var i = 0, f; f = myFiles[i]; i++) {
                 var imageReader = new FileReader();
                 imageReader.onload = (function (aFile) {
                     return function (e) {
                         var span = document.createElement('span');
                         span.innerHTML = ['<span id="pointupicon" class="uppoint" style="">▲</span><a class="images_a"  href="javascript:" ><img class="images" src="', e.target.result, '" title="', aFile.name, '"/></a>'].join('');
-//                    document.getElementById('thumbs').insertBefore(span, null);
+                        //                    document.getElementById('thumbs').insertBefore(span, null);
                         $("#thumbs").empty();
                         $("#thumbs").append(span);
                         if (app.uploadStatus = "none") {
@@ -134,8 +133,7 @@ eventPool.main_offline_post = function (status, area) {
                                         if (app.uploadStatus = "uploading") {
                                             app.uploadStatus = "none";
                                         }
-                                    }
-                                );
+                                    });
                             }
                         });
                     };
@@ -156,7 +154,8 @@ eventPool.main_offline_post = function (status, area) {
         //alert(content);
         if (contentLength < 281) {
             $("#textLength").html(140 - trueLength);
-        } else {
+        }
+        else {
             $("#sendtext").val(content.substr(0, 281));
             $("#textLength").html(0);
         }
@@ -166,7 +165,8 @@ eventPool.main_offline_post = function (status, area) {
             for (var i = 0, len = str.length; i < len; i++) {
                 if (str.charCodeAt(i) > 255) {
                     charLen += 2;
-                } else {
+                }
+                else {
                     charLen += 1;
                 }
             }
@@ -228,7 +228,7 @@ function getShortTimeString(date) {   //如：2011/07/29 13:30
 }
 
 function Time(date) {
-    var date =new Date(date);
+    var date = new Date(date);
     this.year = date.getFullYear();
     this.month = date.getMonth() + 1;
     this.day = date.getDate();
@@ -238,13 +238,13 @@ function Time(date) {
 }
 
 function getShortDateTimeString(date) {   //如：2011/07/29 13:30
-    var date=new Date(date);
+    var date = new Date(date);
     var year = date.getFullYear();
     var month = (date.getMonth() + 1);
     var day = date.getDate();
     var hour = date.getHours();
     var minute = date.getMinutes();
-//    var second = date.second || date.getSeconds();
+    //    var second = date.second || date.getSeconds();
 
     if (month < 10) {
         month = '0' + month;

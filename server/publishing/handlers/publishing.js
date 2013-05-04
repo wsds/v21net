@@ -12,6 +12,8 @@ var weibo_post = require('./weibo_post');
 
 var globaldata = root.globaldata;
 
+
+
 var nextPostTime = new Date("2020/01/28 18:28:18");
 var nextPostPointer = {};
 var nextPost = {};

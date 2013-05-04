@@ -17,10 +17,10 @@ var ajax = require('./lib/ajax');
 /**
  * init weibo api settings
  */
+var serverSetting = root.globaldata.serverSetting;
 
-weibo.init('weibo', '2445517113', 'c50cd576bd3b7ba0228998831ff5f267', '');
+weibo.init('weibo', serverSetting.appkey, serverSetting.secret, '');
 
-//weibo.init('weibo', '3098146785', '26341ce28c3b9cfc913b8d7f8ab13cf9', '');
 weibo.init('github', '8e14edfda73a71f1f226', '1796ac639a8ada0dff6acfee2d63390440ca0f3b');
 weibo.init('tqq', '801196838', '9f1a88caa8709de7dccbe3cae4bdc962');
 
@@ -28,32 +28,27 @@ weibo.init('tqq', '801196838', '9f1a88caa8709de7dccbe3cae4bdc962');
  * Create a web application.
  */
 
-var app = connect(
-    connect.query(),
-    connect.cookieParser('oh year a cookie secret'),
-    connect.session({ secret:"oh year a secret" }),
-    // using weibo.oauth middleware for use login
+var app = connect(connect.query(), connect.cookieParser('oh year a cookie secret'), connect.session({ secret: "oh year a secret" }), // using weibo.oauth middleware for use login
     // will auto save user in req.session.oauthUser
     weibo.oauth({
-        loginPath:'/login',
-        logoutPath:'/logout',
-        callbackPath:'/oauth/callback',
-        blogtypeField:'type',
-        afterLogin:function (req, res, callback) {
+        loginPath: '/login',
+        logoutPath: '/logout',
+        callbackPath: '/oauth/callback',
+        blogtypeField: 'type',
+        afterLogin: function (req, res, callback) {
             console.log(req.session.oauthUser && req.session.oauthUser.screen_name, 'login success');
             process.nextTick(callback);
         },
-        beforeLogout:function (req, res, callback) {
+        beforeLogout: function (req, res, callback) {
             console.log(req.session.oauthUser && req.session.oauthUser.screen_name, 'loging out');
             process.nextTick(callback);
         }
-    })
-);
+    }));
 
 
 app.use('/sendpost/', function (req, res, next) {
     var user = req.session.oauthUser;
-    res.writeHeader(200, { 'Content-Type':'text/html' });
+    res.writeHeader(200, { 'Content-Type': 'text/html' });
     if (!user) {
         res.end('please login!');
         return;
@@ -74,7 +69,7 @@ app.use('/sendpost/', function (req, res, next) {
 
 app.use('/sendpostpic/', function (req, res, next) {
     var user = req.session.oauthUser;
-    res.writeHeader(200, { 'Content-Type':'text/html' });
+    res.writeHeader(200, { 'Content-Type': 'text/html' });
     if (!user) {
         res.end('please login!');
         return;
@@ -83,14 +78,14 @@ app.use('/sendpostpic/', function (req, res, next) {
         res.end('you have login!sendpostpic');
         var text = '这是 upload(user, status, pic, callback)  with latitude and longitude 的单元测试，当前时间 ' + new Date();
         var status = {
-            status:text,
-            long:'113.421234',
-            lat:22.354231
+            status: text,
+            long: '113.421234',
+            lat: 22.354231
         };
         var picpath = "E:\\codespace\\photos\\image5.jpg";
         var pic = {
-            data:fs.createReadStream(picpath),
-            name:picpath
+            data: fs.createReadStream(picpath),
+            name: picpath
         };
 
         weibo.upload(user, status, pic, function (err, status) {
@@ -104,7 +99,7 @@ app.use('/sendpostpic/', function (req, res, next) {
 
 app.use('/sendpostpicurl/', function (req, res, next) {
     var user = req.session.oauthUser;
-    res.writeHeader(200, { 'Content-Type':'text/html' });
+    res.writeHeader(200, { 'Content-Type': 'text/html' });
     if (!user) {
         res.end('please login!');
         return;
@@ -113,14 +108,14 @@ app.use('/sendpostpicurl/', function (req, res, next) {
         res.end('you have login!sendpostpic');
         var text = '这是 upload(user, status, pic, callback)  with latitude and longitude 的单元测试，当前时间 ' + new Date();
         var status = {
-            status:text,
-            long:'113.421234',
-            lat:22.354231
+            status: text,
+            long: '113.421234',
+            lat: 22.354231
         };
         var picpath = "E:\\codespace\\photos\\image5.jpg";
         var pic = {
-            data:fs.createReadStream(picpath),
-            name:picpath
+            data: fs.createReadStream(picpath),
+            name: picpath
         };
 
         weibo.upload(user, status, pic, function (err, status) {
@@ -136,7 +131,7 @@ var postList = [];
 
 app.use('/addpost/', function (req, res, next) {
     var user = req.session.oauthUser;
-    res.writeHeader(200, { 'Content-Type':'text/html' });
+    res.writeHeader(200, { 'Content-Type': 'text/html' });
     if (!user) {
         res.end('please login!');
         return;
@@ -156,11 +151,11 @@ app.use('/addpost/', function (req, res, next) {
         }
         res.end(response);
 
-//        var text = '这是 update(user, status, callback) ++!--% &amp; \\!@#$%^&*() + _ | / ? 的单元测试，当前时间 ' + new Date();
-//        weibo.update(user, text, function (err, status) {
-//            console.log(err);
-//            console.log(status);
-//        });
+        //        var text = '这是 update(user, status, callback) ++!--% &amp; \\!@#$%^&*() + _ | / ? 的单元测试，当前时间 ' + new Date();
+        //        weibo.update(user, text, function (err, status) {
+        //            console.log(err);
+        //            console.log(status);
+        //        });
     }
 });
 
@@ -169,28 +164,28 @@ var weibo_users = {};
 
 app.use('/', function (req, res, next) {
     var user = req.session.oauthUser;
-    res.writeHeader(200, { 'Content-Type':'text/html' });
+    res.writeHeader(200, { 'Content-Type': 'text/html' });
     if (!user) {
         res.end('Login with <a href="/login?type=weibo">Weibo</a> ');
         return;
     }
     else {
         weibo_users[user.screen_name] = user;
-        var account=req.url.replace("/oauth/", "");
+        var account = req.url.replace("/oauth/", "");
         var response = "";
-//        for (weibo_user in weibo_users) {
-//            response += (weibo_user + "has logoed in!\n");
-//        }
+        //        for (weibo_user in weibo_users) {
+        //            response += (weibo_user + "has logoed in!\n");
+        //        }
         response += '授权管理微博账号已经添加成功，<a href="javascript:self.close()">关闭窗口</a>';
-//        response += JSON.stringify(user);
-        ajax.ajax( {
+        //        response += JSON.stringify(user);
+        ajax.ajax({
             data: {"weibo_user": JSON.stringify(user)},
-            success: function(data){
-                console.log("weibouseradd: "+data);
-                ajax.ajax( {
+            success: function (data) {
+                console.log("weibouseradd: " + data);
+                ajax.ajax({
                     data: {"account": account, "ownedWeibo": user.screen_name},
-                    success: function(data){
-                        console.log("accountownedweibo: "+data);
+                    success: function (data) {
+                        console.log("accountownedweibo: " + data);
                     },
                     type: 'POST',
                     url: "http://127.0.0.1:8061/api2/accountownedweibo/add"
@@ -201,10 +196,10 @@ app.use('/', function (req, res, next) {
         });
 
         res.end(response);
-//        res.end('Hello, <img src="' + user.profile_image_url + '" />\
-//    <a href="' + user.t_url +
-//            '" target="_blank">@' + user.screen_name + '</a>. ' +
-//            '<a href="/logout">Logout</a><hr/><pre><code>' + JSON.stringify(user, null, '  ') + '</code></pre>');
+        //        res.end('Hello, <img src="' + user.profile_image_url + '" />\
+        //    <a href="' + user.t_url +
+        //            '" target="_blank">@' + user.screen_name + '</a>. ' +
+        //            '<a href="/logout">Logout</a><hr/><pre><code>' + JSON.stringify(user, null, '  ') + '</code></pre>');
     }
 
 });

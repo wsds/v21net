@@ -7,7 +7,10 @@
 var weibo_post = {};
 
 var weibo = require('weibo');
-weibo.init('weibo', '2445517113', 'c50cd576bd3b7ba0228998831ff5f267', '');
+
+var serverSetting = root.globaldata.serverSetting;
+
+weibo.init('weibo', serverSetting.appkey, serverSetting.secret, '');
 
 var redis = require("redis");
 var client = redis.createClient();
@@ -29,7 +32,7 @@ weibo_post.postText = function (weibo_user_name, text) {
         weibo.update(weibo_user, text, function (err, status) {
             console.log(err);
             console.log(status);
-//        client.hset(["weibo_tools_postlist_success", publishing.id, JSON.stringify(publishing)], redis.print);
+            //        client.hset(["weibo_tools_postlist_success", publishing.id, JSON.stringify(publishing)], redis.print);
         });
     }
 }
@@ -44,14 +47,14 @@ weibo_post.post = function (post, postlist) {
                 post.status = "published";
                 client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
                 postlist.initializePostlist();
-//        client.hset(["weibo_tools_postlist_success", publishing.id, JSON.stringify(publishing)], redis.print);
+                //        client.hset(["weibo_tools_postlist_success", publishing.id, JSON.stringify(publishing)], redis.print);
             });
         }
         else {
-            var picpath = "E://nginx//upload//"+post.pid+".png";
+            var picpath = "E://nginx//upload//" + post.pid + ".png";
             var pic = {
-                data:fs.createReadStream(picpath),
-                name:picpath
+                data: fs.createReadStream(picpath),
+                name: picpath
             };
             weibo.upload(weibo_user, post.text, pic, function (err, status) {
                 console.log(err);
@@ -68,18 +71,19 @@ weibo_post.getTokenInfo = function (weibo_user_name, response) {
     weibo_user = globaldata.weibo_users[weibo_user_name];
     if (weibo_user != null) {
         var access_token = weibo_user.access_token;
-//        ajax.js.ajax.js( {
-//            data: {"access_token":access_token},
-//            success: function(data){
-//                response.write(JSON.stringify(data));
-//                console.log(data);
-//            },
-//            type: 'POST',
-//            url: "https://api.weibo.com/oauth2/get_token_info"
-//        });
-        response.write(JSON.stringify({"提示信息":"微博账号已授权", "access_token":access_token }));
-    } else {
-        response.write(JSON.stringify({"提示信息":"微博账号未授权"}));
+        //        ajax.js.ajax.js( {
+        //            data: {"access_token":access_token},
+        //            success: function(data){
+        //                response.write(JSON.stringify(data));
+        //                console.log(data);
+        //            },
+        //            type: 'POST',
+        //            url: "https://api.weibo.com/oauth2/get_token_info"
+        //        });
+        response.write(JSON.stringify({"提示信息": "微博账号已授权", "access_token": access_token }));
+    }
+    else {
+        response.write(JSON.stringify({"提示信息": "微博账号未授权"}));
     }
 }
 
