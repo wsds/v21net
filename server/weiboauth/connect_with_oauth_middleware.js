@@ -176,7 +176,7 @@ app.use('/', function (req, res, next) {
         //        for (weibo_user in weibo_users) {
         //            response += (weibo_user + "has logoed in!\n");
         //        }
-        response += '授权管理微博账号已经添加成功，<a href="javascript:self.close()">关闭窗口</a>';
+        response += '授权管理微博账号已经添加成功，请刷新。<a href="javascript:self.close()">关闭窗口</a>';
         //        response += JSON.stringify(user);
         ajax.ajax({
             data: {"weibo_user": JSON.stringify(user)},
