@@ -20,71 +20,53 @@ var ajax = require('./../lib/ajax');
 var fs = require('fs');
 var path = require('path');
 
-//var redis = require("redis");
-//var client = redis.createClient();
 
-var globaldata = root.globaldata;
-
-
-weibo_post.postText = function (weibo_user_name, text) {
-    weibo_user = globaldata.weibo_users[weibo_user_name];
-    if (weibo_user != null) {
-        weibo.update(weibo_user, text, function (err, status) {
-            console.log(err);
-            console.log(status);
-            //        client.hset(["weibo_tools_postlist_success", publishing.id, JSON.stringify(publishing)], redis.print);
-        });
-    }
-}
-
-weibo_post.post = function (post, postlist) {
-    weibo_user = globaldata.weibo_users[post.weibo_user];
-    if (weibo_user != null) {
-        if (post.pid == "none") {
-            weibo.update(weibo_user, post.text, function (err, status) {
-                console.log(err);
-                console.log(status);
-                post.status = "published";
-                client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
-                postlist.initializePostlist();
-                //        client.hset(["weibo_tools_postlist_success", publishing.id, JSON.stringify(publishing)], redis.print);
-            });
+function getWeiboUser(weibo_user_name, next) {
+    client.hget("weibo_users", weibo_user_name, function (err, userStr) {
+        if (userStr != null) {
+            var user = JSON.parse(userStr);
+            next(user);
         }
         else {
-            var picpath = "E://nginx//upload//" + post.pid + ".png";
-            var pic = {
-                data: fs.createReadStream(picpath),
-                name: picpath
-            };
-            weibo.upload(weibo_user, post.text, pic, function (err, status) {
-                console.log(err);
-                console.log(status);
-                post.status = "published";
-                client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
-                postlist.initializePostlist();
-            });
+            next(null);
         }
-    }
+    });
 }
 
-weibo_post.getTokenInfo = function (weibo_user_name, response) {
-    weibo_user = globaldata.weibo_users[weibo_user_name];
-    if (weibo_user != null) {
-        var access_token = weibo_user.access_token;
-        //        ajax.js.ajax.js( {
-        //            data: {"access_token":access_token},
-        //            success: function(data){
-        //                response.write(JSON.stringify(data));
-        //                console.log(data);
-        //            },
-        //            type: 'POST',
-        //            url: "https://api.weibo.com/oauth2/get_token_info"
-        //        });
-        response.write(JSON.stringify({"提示信息": "微博账号已授权", "access_token": access_token }));
-    }
-    else {
-        response.write(JSON.stringify({"提示信息": "微博账号未授权"}));
-    }
+
+weibo_post.post = function (post) {
+    getWeiboUser(post.weibo_user, function (weibo_user) {
+        if (weibo_user != null) {
+            if (post.forwardID != null) {
+                weibo.repost(weibo_user, post.forwardID, post.text, callback);
+            }
+            else if (post.pid == "none") {
+                weibo.update(weibo_user, post.text, callback);
+            }
+            else {
+                var picpath = serverSetting.imageFolder + post.pid + ".png";
+                var pic = {
+                    data: fs.createReadStream(picpath),
+                    name: picpath
+                };
+                weibo.upload(weibo_user, post.text, pic, callback);
+            }
+            function callback(err, status) {
+                if (err) {
+                    console.error("发布出错，出错原因：")
+                    console.log(err);
+                    post.status = "failed";
+                    client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
+                }
+                else {
+                    console.warn("发布成功：");
+                    console.log(status.user.screen_name, status.text);
+                    post.status = "published";
+                    client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
+                }
+            }
+        }
+    });
 }
 
 

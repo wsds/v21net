@@ -8,21 +8,20 @@ eventPool.main_offline_post = function (status, area) {
     });
 
     $("#time_send").click(function () {
-            var text = $("#sendtext").val().trim();
-            if (text == "") {
-                window.alert("发布内容不能为空的。");
-                return;
-            }
-            var time = app.time.public_time;
+        var text = $("#sendtext").val().trim();
+        if (text == "") {
+            window.alert("发布内容不能为空的。");
+            return;
+        }
+        var time = app.time.public_time;
 
-            uploadPic(function (pic) {
-                var post = addPost(time, text, pic);
-            });
-
+        uploadPic(function (pic) {
+            var post = addPost(time, text, pic);
             $("#sendtext").val("");
             $("#thumbs").empty();
             showHint();
         });
+    });
 
     function showHint() {
         $("#post_hint").slideDown("fast");
@@ -32,20 +31,20 @@ eventPool.main_offline_post = function (status, area) {
     }
 
     $("#now_send").click(function () {
-            var text = $("#sendtext").val().trim();
-            if (text == "") {
-                window.alert("发布内容不能为空的。");
-                return;
-            }
-            var public_time = new Date($('#public_time').text());
+        var text = $("#sendtext").val().trim();
+        if (text == "") {
+            window.alert("发布内容不能为空的。");
+            return;
+        }
+        var public_time = new Date($('#public_time').text());
 
-            uploadPic(function (pic) {
-                var post = addPost(public_time.getTime(), text, pic);
-            });
-
+        uploadPic(function (pic) {
+            var post = addPost(public_time.getTime(), text, pic);
             $("#sendtext").val("");
             $("#thumbs").empty();
+            showHint();
         });
+    });
 
     function uploadPic(next) {
         if (app.uploadStatus == "uploading") {
@@ -128,12 +127,12 @@ eventPool.main_offline_post = function (status, area) {
                                 $("#pointupicon").toggleClass("uppointclick");
                                 $(this).append('<a class="images_close_a" href="javascript:"><img class="images_close"  style="vertical-align: top;" src="/static/images/close_small.png"></a>')
                                 $('.images_close_a', $(this)).click(function () {
-                                        $(span).remove();
-                                        $("#pointupicon").remove();
-                                        if (app.uploadStatus = "uploading") {
-                                            app.uploadStatus = "none";
-                                        }
-                                    });
+                                    $(span).remove();
+                                    $("#pointupicon").remove();
+                                    if (app.uploadStatus = "uploading") {
+                                        app.uploadStatus = "none";
+                                    }
+                                });
                             }
                         });
                     };

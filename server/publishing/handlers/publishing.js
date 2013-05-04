@@ -39,29 +39,42 @@ publishing.load = function (next) {
 
 function getPost(postID, next) {
     client.hget("publishing", postID, function (err, postPointerStr) {
-        var postPointer = JSON.parse(postPointerStr);
-        var postTime = postPointer.publishTime;
-        client.hget("weibo_tools_postlist", postID, function (err, postStr) {
-            var post = JSON.parse(postStr);
-            next(postPointer, postTime, post);
-        });
+        if (postPointerStr == null) {
+            next();
+        }
+        else {
+            var postPointer = JSON.parse(postPointerStr);
+            var postTime = postPointer.publishTime;
+            client.hget("weibo_tools_postlist", postID, function (err, postStr) {
+                var post = JSON.parse(postStr);
+                next(postPointer, postTime, post);
+            });
+        }
     });
 }
 
 publishing.start = function (response) {
     response.asynchronous = 1;
     publishing.load(function () {
-        status = "started";
-        startTimer(nextPostID);
-        response.write(JSON.stringify({
-            "提示信息": "定时发布器状态",
-            "status": status,
-            "nextPostID": nextPostID,
-            "nextPostPointer": nextPostPointer,
-            "nextPost": nextPost,
-            "nextPostTime": getShortDateTimeString(nextPostTime)
-        }));
-        response.end();
+        if (nextPost == null) {
+            response.write(JSON.stringify({
+                "提示信息": "定时发布器数据为空或尚未正常运行"
+            }));
+            response.end();
+        }
+        else {
+            status = "started";
+            startTimer(nextPostID);
+            response.write(JSON.stringify({
+                "提示信息": "定时发布器状态",
+                "status": status,
+                "nextPostID": nextPostID,
+                "nextPostPointer": nextPostPointer,
+                "nextPost": nextPost,
+                "nextPostTime": getShortDateTimeString(nextPostTime)
+            }));
+            response.end();
+        }
     });
 }
 
@@ -158,8 +171,7 @@ publishing.check = function (response) {
 }
 
 var timerPool = {
-
-
+    //todo several publishTimers
 };
 
 publishing.timer = function (response) {
@@ -202,42 +214,39 @@ function PublishTimer(postID, postPointer, postTime, post) {
     var now = new Date();
     this.timeout = postTime - now.getTime();
     this.timer = setTimeout(function () {
-        sendPost(post);
-        nextPostID = postPointer.next;
-        client.set("publishing_next_post_id", nextPostID, redis.print);
-        getPost(nextPostID, function (postPointer, postTime, post) {
-            nextPostPointer = postPointer;
-            nextPostTime = postTime;
-            nextPost = post;
+        getPost(postID, function (postPointer, postTime, post) {
+            sendPost(post);
+            if (postPointer.next == "tail") {
+                console.warn("发送列表已经为空", JSON.stringify(globaldata.publishing));
+                globaldata.nextPostID = "empty";
+                client.set("publishing_next_post_id", "empty", redis.print);
+                delete globaldata.publishing[postID];
+                client.hdel(["publishing", postID], redis.print);
+                publishTimer = null;
+                return;
+            }
+            nextPostID = postPointer.next;
+            globaldata.nextPostID = nextPostID;
+            client.set("publishing_next_post_id", nextPostID, redis.print);
+            getPost(nextPostID, function (postPointer, postTime, post) {
+                nextPostPointer = postPointer;
+                nextPostTime = postTime;
+                nextPost = post;
 
-            postPointer.previous = "head";
-            client.hset(["publishing", nextPostID, JSON.stringify(postPointer)], redis.print);
-            client.hdel(["publishing", postID], redis.print);
-            startTimer(nextPostID);
+                postPointer.previous = "head";
+                globaldata.publishing[nextPostID].previous = "head";
+                client.hset(["publishing", nextPostID, JSON.stringify(postPointer)], redis.print);
+                delete globaldata.publishing[postID];
+                client.hdel(["publishing", postID], redis.print);
+                startTimer(nextPostID);
+            });
         });
-
     }, this.timeout);
-
 }
 
-//var timer_alert = setInterval(function () {
-//    resolvePostList();
-//}, 1000 * 1);// check the postList every 1 second.
-
-//function resolvePostList() {
-//    var now = new Date();
-//    var remainTime = parseInt((nextPostTime.getTime() - now.getTime()) / (1000));
-//    //    console.log("还剩：" + remainTime+"     nextPostTime:"+getShortDateTimeString(nextPostTime)+"    nextPostlist:"+JSON.stringify(nextPostlist));
-//    if (remainTime == 0) {
-//        for (var index in nextPostlist) {
-//            var post = nextPostlist[index];
-//            sendPost(post);
-//        }
-//    }
-//}
 
 function sendPost(post) {
-    //    weibo_post.post(post, postlist);
+    weibo_post.post(post);
     console.log(JSON.stringify(post) + " has been posted!");
 }
 
