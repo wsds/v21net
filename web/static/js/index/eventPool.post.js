@@ -13,13 +13,20 @@ eventPool.main_offline_post = function (status, area) {
             window.alert("发布内容不能为空的。");
             return;
         }
-        var time = app.time.public_time;
+        var public_time = new Date($('#public_time').text());
 
         uploadPic(function (pic) {
-            var post = addPost(time, text, pic);
-            $("#sendtext").val("");
-            $("#thumbs").empty();
-            showHint();
+            var post = addPost(public_time.getTime(), text, pic, function (data) {
+                if (data["提示信息"] == "定时发布成功") {
+                    $("#sendtext").val("");
+                    $("#thumbs").empty();
+                    $("#post_hint").html(data["提示信息"]);
+                }
+                else {
+                    $("#post_hint").html(data["提示信息"]);
+                }
+                showHint();
+            });
         });
     });
 
@@ -36,13 +43,19 @@ eventPool.main_offline_post = function (status, area) {
             window.alert("发布内容不能为空的。");
             return;
         }
-        var public_time = new Date($('#public_time').text());
 
         uploadPic(function (pic) {
-            var post = addPost(public_time.getTime(), text, pic);
-            $("#sendtext").val("");
-            $("#thumbs").empty();
-            showHint();
+            var post = addPost("now", text, pic, function (data) {
+                if (data["提示信息"] == "定时发布成功") {
+                    $("#sendtext").val("");
+                    $("#thumbs").empty();
+                    $("#post_hint").html(data["提示信息"]);
+                }
+                else {
+                    $("#post_hint").html(data["提示信息"]);
+                }
+                showHint();
+            });
         });
     });
 
@@ -77,16 +90,13 @@ eventPool.main_offline_post = function (status, area) {
         }
     }
 
-    function addPost(time, text, pic) {
+    function addPost(time, text, pic, next) {
         $.ajax({
             data: {"text": text, "weibo_user": app.localSettings.ownedWeibo.currentWeibo, "time": time, "pic": pic},
             type: 'POST',
             url: ("http://" + app.serverUrl + "/api2/post/add"),
             success: function (data) {
-                if (data["提示信息"] == "成功") {
-                }
-                else {
-                }
+                next(data);
             }
         });
     }

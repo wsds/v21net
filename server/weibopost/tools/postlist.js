@@ -54,7 +54,7 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, resp
     var publishTime = 0;
 
     if (publishTimeString == "now") {
-        publishTime = now.getTime() + 5000;
+        publishTime = now.getTime() + 5001;
     }
     else {
         publishTime = parseInt(publishTimeString);
