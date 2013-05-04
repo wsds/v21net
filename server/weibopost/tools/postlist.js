@@ -8,6 +8,7 @@ var postlist = {};
 var redis = require("redis");
 var client = redis.createClient();
 
+var ajax = require('../lib/ajax');
 
 var globaldata = root.globaldata;
 globaldata.publishing = {};
@@ -37,6 +38,7 @@ postlist.initializePublishing = function () {
                 globaldata.publishing[postID] = postPointer;
             }
             console.log("publishing initialized.")
+            startPublishing();
         });
     });
 };
@@ -160,9 +162,31 @@ postlist.addPost = function (weibo_user_name, text, publishTimeString, pic, resp
     return post;
 }
 
+
+function startPublishing() {
+    ajax.ajax({
+        data: {},
+        type: 'GET',
+        url: "http://127.0.0.1:8063/api2/publishing/start",
+        success: function (dataStr) {
+            var data = JSON.parse(dataStr);
+            console.log("startPublishing set as: ", data.nextPostTime);
+        }
+    });
+}
+
 function reloadPublishing(needReload, postID) {
     if (needReload) {
         console.log("needReload", postID);
+        ajax.ajax({
+            data: {},
+            type: 'GET',
+            url: "http://127.0.0.1:8063/api2/publishing/reload",
+            success: function (dataStr) {
+                var data = JSON.parse(dataStr);
+                console.log("needReload set as: ", data.nextPostTime);
+            }
+        });
     }
     else {
         console.log("not needReload", postID);

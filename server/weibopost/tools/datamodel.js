@@ -5,7 +5,6 @@ HSET "weibo_tools_accounts:"
 HSET "weibo_users:"
         weibo_user.name : weibo_user
 
-
 HSET "weibo_tools_postlist:"
         post.id : post
 

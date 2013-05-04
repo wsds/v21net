@@ -156,6 +156,20 @@ eventPool.body = function (status, area) {
             });
     });
 
+    $("#stop_publishing").click(function () {
+        $.ajax({
+            data: {},
+            type: 'GET',
+            url: ("http://" + app.serverUrl + "/api2/publishing/stop"),
+            success: function (data) {
+                if (data["提示信息"] == "成功") {
+                }
+                else {
+                }
+            }
+        });
+    });
+
     $("#check_publishing").click(function () {
         $.ajax({
             data: {},
@@ -176,6 +190,19 @@ eventPool.body = function (status, area) {
             data: {},
             type: 'GET',
             url: ("http://" + app.serverUrl + "/api2/publishing/status/aa"),
+            success: function (data) {
+                if (data["提示信息"] == "成功") {
+                }
+                else {
+                }
+            }
+        });
+    });
+    $("#timer_status").click(function () {
+        $.ajax({
+            data: {},
+            type: 'GET',
+            url: ("http://" + app.serverUrl + "/api2/publishing/timer"),
             success: function (data) {
                 if (data["提示信息"] == "成功") {
                 }

@@ -13,11 +13,18 @@ requestHandlers.publishing = function (request, response, pathObject, getParam) 
     var operation = pathObject["operation"];
     if (operation == "start") {
         publishing.start(response);
-    } else if (operation == "reload") {
+    }
+    else if (operation == "reload") {
         publishing.reload(response);
     }
     else if (operation == "check") {
         publishing.check(response);
+    }
+    else if (operation == "stop") {
+        publishing.stop(response);
+    }
+    else if (operation == "timer") {
+        publishing.timer(response);
     }
 };
 
