@@ -12,7 +12,7 @@ if (serverSetting.environment == "local") {
 }
 else if (serverSetting.environment == "server") {
     serverSetting.appkey = "3322737363";
-    serverSetting.secret = "26341ce28c3b9cfc913b8d7f8ab13cf9";
+    serverSetting.secret = "37e14bdd7ce808fae43539a6cc39375d";
     serverSetting.callbackUrl = "http://offline.wlm1001.com/oauth2/callback";
     serverSetting.imageFolder = "//upload//weibo//";
 }
