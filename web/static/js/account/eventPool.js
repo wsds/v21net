@@ -9,22 +9,19 @@ eventPool.body = function (status, area) {
     $("#slide_ctrls li a").click(function () {
             $("#slide_ctrls li a").removeClass("current");
             $(this).toggleClass("current");
-        }
-    );
+        });
 
     $(".normalTitle h2").click(function () {
             $(".nav").slideToggle("fast");
             $(".subnav").slideToggle("fast");
-        }
-    );
+        });
 
     $(".container").click(function () {
             droppedElements = $(".drop");
             droppedElements.toggleClass("drop");
             $(".afterlogin", droppedElements).toggleClass("hide");
             $(".afterlogin", droppedElements).toggleClass("shouldHide");
-        }
-    );
+        });
 };
 
 
@@ -35,17 +32,16 @@ eventPool.login_bar = function (status, area) {
                 $(".afterlogin", $(this)).toggleClass("hide");
                 $(".afterlogin", $(this)).toggleClass("shouldHide");
                 return false;//block event message loop pop this message to its father element.
-            }
-        );
+            });
 
-    } else if (status == "NotLoggedIn") {
+    }
+    else if (status == "NotLoggedIn") {
         $(".account", area).click(function () {
                 $(this).toggleClass("drop");
                 $(".afterlogin", $(this)).toggleClass("hide");
                 $(".afterlogin", $(this)).toggleClass("shouldHide");
                 return false;//block event message loop pop this message to its father element.
-            }
-        );
+            });
 
         $(".login_bar_li", area).click(function () {
                 var operation = $(this).attr("operation");
@@ -58,7 +54,8 @@ eventPool.login_bar = function (status, area) {
                     if (main_panel_container.attr("status") == "main_login") {
                         main_panel_container.attr("status", "main_register")
                         $("a", this).html("已是会员");
-                    } else {
+                    }
+                    else {
                         main_panel_container.attr("status", "main_login");
                         $("a", this).html("还不是会员");
                     }
@@ -66,8 +63,7 @@ eventPool.login_bar = function (status, area) {
                 renderTemplate(main_panel_container);
                 return false;
 
-            }
-        );
+            });
     }
 }
 
@@ -118,8 +114,7 @@ eventPool.main_login = function (status, area) {
                 type: 'GET',
                 url: ("http://" + app.serverUrl + "/api2/authaccount/a")
             });
-        }
-    );
+        });
 };
 
 
@@ -157,28 +152,25 @@ eventPool.main_register = function (status, area) {
                 data: {"account": account, "password": password1, "invite": invite},
                 success: function (data) {
                     if (data["提示信息"] == "账户注册成功") {
-                        settings.key = data.key;
-                        settings.authTip = data["提示信息"];
-                        settings.account = account;
-                        saveSettings();
-                        resolveOwnedWeibo();
-                        renderLoginBar();
+                        app.localSettings.key = data.key;
+                        app.localSettings.authTip = data["提示信息"];
+                        app.localSettings.account = account;
+                        saveLocalSettings();
+                        window.location.href = "/";
                     }
                     else {
-                        settings.key = undefined;
-                        settings.account = undefined;
-                        settings.authTip = data["提示信息"];
+                        app.localSettings.key = undefined;
+                        app.localSettings.account = undefined;
+                        app.localSettings.authTip = data["提示信息"];
                         $("#main_register_authTip").show();
-                        $("#main_register_authTip").html("注册失败：" + settings.authTip);
-                        saveSettings();
-                        renderLoginBar();
+                        $("#main_register_authTip").html("注册失败：" + app.localSettings.authTip);
+                        saveLocalSettings();
                     }
                 },
                 type: 'GET',
                 url: ("http://" + app.serverUrl + "/api2/addaccount/a")
             });
-        }
-    );
+        });
 };
 
 

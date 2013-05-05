@@ -117,7 +117,8 @@
 
                 <div class="current_weibo" style="display: inline-block"><?js if (data.ownedWeibo!=null) { ?><?js if (data.ownedWeibo.currentWeibo==null) { ?>添加授权管理微博账号<?js }else { ?>#{ data.ownedWeibo.currentWeibo }<?js } ?><?js } ?>
                 </div>
-                <img weibo_user_id="#{ data.ownedWeibo.ownedWeiboList[data.ownedWeibo.currentWeibo].id}" class="current_weibo_image" src="#{ data.ownedWeibo.ownedWeiboList[data.ownedWeibo.currentWeibo].profile_image_url}"/>
+                <?js if (data.ownedWeibo!=null) { ?><?js if (data.ownedWeibo.currentWeibo!=null) { ?>
+                <img weibo_user_id="#{ data.ownedWeibo.ownedWeiboList[data.ownedWeibo.currentWeibo].id}" class="current_weibo_image" src="#{ data.ownedWeibo.ownedWeiboList[data.ownedWeibo.currentWeibo].profile_image_url}"/><?js } ?><?js } ?>
             </a>
 
             <div id="data_menu" class="afterlogin hide" style="left:0px">
@@ -222,10 +223,8 @@
                 <div style="float:left;">
                     <a class="" href="javascript:">
                         <?js if(post.pid=="none") { ?>
-                        <img class="images" src="/static/images/logo_tools.png">
-                        <?js }else { ?>
-                        <img class="images" src="#{data.imageServerUrl}#{ post.pid }.png">
-                        <?js } ?>
+                        <img class="images" src="/static/images/logo_tools.png"><?js }else { ?>
+                        <img class="images" src="#{data.imageServerUrl}#{ post.pid }.png"><?js } ?>
                     </a>
                 </div>
                 <div class="row columnDisplay">
@@ -247,9 +246,7 @@
                             <b class="icon16 sending_am"></b><label style="color:#097c25;">等待发送</label><?js }else if(data.postlist[index].status=="failed"){?>
                             <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败</label><?js }else if(data.postlist[index].status=="timeout"){?>
                             <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败（定时超时）</label><?js }else {?>
-                            <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label><?js }?>
-                            <!--<b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>-->
-                            <!--$(".post_show").toggleClass("hide")--><!--$(".post_modify").toggleClass("hide")-->
+                            <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label><?js }?><!--<b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>--><!--$(".post_show").toggleClass("hide")--><!--$(".post_modify").toggleClass("hide")-->
                         </div>
                         <div class="time_change_op">
                             <a style="color:#fff;" class="save_post_modify ok_button size46  post_modify hide" href="javascript:;" postID="#{ post.id }">保存</a>
@@ -466,8 +463,7 @@
                             <input class="text textMiddle inputQ" id="main_password_modify_account" value="#{data.account}">
                         </div>
                         <div class="column">
-                            <label>验证码</label>
-                            <input class="text textMiddle inputQ" id="main_verification_code">
+                            <label>验证码</label> <input class="text textMiddle inputQ" id="main_verification_code">
                         </div>
                         <div class="column">
                             <label>密码</label>
@@ -480,8 +476,7 @@
                     </div>
                     <div class="operator">
                         <a href="javascript:;" class="login_btn_wrapper">
-                            <input id="change_password" name="btlogin" type="submit" value="提交"
-                                   class="login_btn">
+                            <input id="change_password" name="btlogin" type="submit" value="提交" class="login_btn">
                         </a>
 
                         <div style="display: none;" id="switch4" class="lineright"></div>

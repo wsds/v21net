@@ -7,7 +7,7 @@ serverSetting.environment = "local";//local or server
 if (serverSetting.environment == "local") {
     serverSetting.appkey = "2445517113";//魔方石的诱惑
     serverSetting.secret = "c50cd576bd3b7ba0228998831ff5f267";
-    serverSetting.callbackUrl = "//http://offline.wlm1001.com/oauth/callback";
+    serverSetting.callbackUrl = "http://www.weibo.com/oauth/callback";
     serverSetting.imageFolder = "E://nginx//upload//";
 }
 else if (serverSetting.environment == "server") {
