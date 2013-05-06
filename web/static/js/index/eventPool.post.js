@@ -9,6 +9,10 @@ eventPool.main_offline_post = function (status, area) {
 
     $("#time_send").click(function () {
         var text = $("#sendtext").val().trim();
+        if (app.localSettings.ownedWeibo.currentWeibo == null) {
+            window.alert("请先绑定微博");
+            return;
+        }
         if (text == "") {
             window.alert("发布内容不能为空的。");
             return;
@@ -39,6 +43,10 @@ eventPool.main_offline_post = function (status, area) {
 
     $("#now_send").click(function () {
         var text = $("#sendtext").val().trim();
+        if (app.localSettings.ownedWeibo.currentWeibo == null) {
+            window.alert("请先绑定微博");
+            return;
+        }
         if (text == "") {
             window.alert("发布内容不能为空的。");
             return;
@@ -73,11 +81,11 @@ eventPool.main_offline_post = function (status, area) {
                     url: ("http://" + app.serverUrl + "/upload2/"),
                     success: function (data) {
                         var filename = data.filename;
-                        if (filename == null) {
-                            alert(JSON.stringify(data));
+                        if (filename != null && data["提示信息"] == "图片上传成功") {
+                            next(filename);
                         }
                         else {
-                            next(filename);
+                            alert(JSON.stringify(data));
                         }
                     }
                 });

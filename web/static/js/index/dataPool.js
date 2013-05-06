@@ -102,23 +102,34 @@ dataPool.main_forward = function (next) {
     }
     var url;
     if (data.statusList == "mine") {
+        data.statusList_screen_name = app.localSettings.ownedWeibo.currentWeibo;
         url = "2/statuses/user_timeline.json";
     }
-    else if (data.statusList = "friends") {
+    else if (data.statusList == "friends") {
         url = "2/statuses/friends_timeline.json";
+    }
+    else if (data.statusList == "id") {
+        url = "2/statuses/show.json";
+    }
+    else if (data.statusList == "screen_name") {
+        url = "2/statuses/user_timeline.json";
     }
     $.ajax({
         data: {
             url: url,
-            screen_name: app.localSettings.ownedWeibo.currentWeibo,
+            id: data.statusList_id,
+            screen_name: data.statusList_screen_name,
             abc: "abc@163.com",
             efg: {a: 1, b: 2, c: {a: 1, b: 2}}
-        },
-        type: 'POST',
-        url: ("http://" + app.serverUrl + "/api2/weiboInterface/weibo"),
-        success: function (serverData) {
-
-            data.statuses = serverData.statuses;
+        }, type: 'POST', url: ("http://" + app.serverUrl + "/api2/weiboInterface/weibo"), success: function (serverData) {
+            if (serverData == null) {
+            }
+            else if (serverData.statuses == null) {
+                data.statuses = {"0": serverData};
+            }
+            else {
+                data.statuses = serverData.statuses;
+            }
             next();
         }
     });

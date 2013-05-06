@@ -45,6 +45,10 @@
                         <a href="javascript:;" slide="main_offline_post_list" subSlide="main_offline_forward_list">转发记录</a>
                     </li>
                 </ul>
+                <div class="operating">
+                    <a class="operat_del" title="批量删除" href="#"></a>
+                    <a class="operat_order" title="时间排序" href="#"></a>
+                </div>
             </div>
             <div class="subnav" slide="main_forward" style="padding-left:270px;">
                 <ul>
@@ -55,6 +59,11 @@
                         <a href="javascript:;" slide="main_forward" subSlide="forward_friend">我关注的人</a>
                     </li>
                 </ul>
+                <div class="search_input">
+                    <input type="text" class="search_input_text" value="请输入微博昵称或ID或URL">
+
+                    <a class="searchtext search_button" href="javascript:">搜索</a>
+                </div>
             </div>
             <div class="appContent normalContent">
                 <div class="templateContainer" template="main_panel" status="main_offline_post" statusSet="main_login main_register"></div>
@@ -127,7 +136,7 @@
                     <li class="owned_weibo_li" weibo="#{ ownedWeibo }">
                         <a href="javascript:;">
                             <img weibo_user_id="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].id}" class="weibo_image" src="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].profile_image_url}"/> #{ ownedWeibo }
-                            <img class="owned_weibo_del hide" weibo="#{ ownedWeibo }" style="margin: 15px 0 0 0;float:right;" src="/static/images/close_small.png">
+                            <img class="owned_weibo_del hide" weibo="#{ ownedWeibo }" style="margin: 15px 0 0 0;float:right;" src="/static/images/delete00000.gif">
                         </a>
                     </li>
                     <?js } ?><?js } ?>
@@ -495,6 +504,7 @@
 <script type="text/javascript" src="/static/js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="/static/js/nTenjin.js"></script>
 <script type="text/javascript" src="/static/js/webapp.js"></script>
+<script type="text/javascript" src="/static/js/index/base62.js"></script>
 <script type="text/javascript" src="/static/js/index/index.js"></script>
 <script type="text/javascript" src="/static/js/index/eventPool.js"></script>
 <script type="text/javascript" src="/static/js/index/eventPool.post.js"></script>

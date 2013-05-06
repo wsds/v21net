@@ -57,6 +57,74 @@ eventPool.body = function (status, area) {
         main_panel_container.attr("status", main_panel);
         renderTemplate(main_panel_container);
     });
+
+
+    $(".search_input_text").focus(function () {
+        var text = $(this).val().trim();
+        if (text == "请输入微博昵称或ID或URL") {
+            $(this).val("");
+        }
+    });
+
+    $(".search_input_text").blur(function () {
+        var text = $(this).val().trim();
+        ;
+        if (text == "") {
+            $(this).val("请输入微博昵称或ID或URL");
+        }
+    });
+
+
+    $(".search_button").click(function () {
+        var text = $(".search_input_text").val().trim();
+
+        var id = text.match( /^\d{16}$/);
+        if (text == "请输入微博昵称或ID或URL") {
+            return;
+        }
+        else if (text.indexOf("weibo.com") != -1) {
+            var index = text.search(/\/\d{10}\//);
+            var mid = text.substring(index + 12);
+
+            var url = "2/statuses/queryid.json";
+            $.ajax({
+                data: {
+                    url: url,
+                    type: 1,
+                    mid: mid,
+                    isBase62: 1,
+                    abc: "abc@163.com"
+                },
+                type: 'POST',
+                url: ("http://" + app.serverUrl + "/api2/weiboInterface/weibo"),
+                success: function (serverData) {
+                    data.statusList = "id";
+                    data.statusList_id = serverData.id;
+                    next();
+                }
+            });
+        }
+        else if (id != null) {
+            data.statusList = "id";
+            data.statusList_id = id;
+            next();
+        }
+        else {
+            data.statusList = "screen_name";
+            data.statusList_screen_name = text;
+            next();
+        }
+
+        function next() {
+            var main_panel = "main_forward"
+            var main_panel_container = $(".templateContainer[template='main_panel']");
+            main_panel_container.attr("status", main_panel);
+            renderTemplate(main_panel_container);
+        }
+
+    });
+
+
     $(".normalTitle h2").click(function () {
         $(".nav").slideToggle("fast");
         $(".subnav.current").slideToggle("fast");
@@ -164,25 +232,25 @@ eventPool.owned_weibo = function (status, area) {
 
     $(".owned_weibo_del", area).click(function () {
 
-            var willDel = confirm("删除授权管理微博账号，确定？");
-            if (willDel == false) {
-                return false;
-            }
-            else {
-                var delWeibo = $(this).attr("weibo");
-                $.ajax({
-                    data: {"account": app.localSettings.account, "ownedWeibo": delWeibo},
-                    success: function (data) {
-                        delete app.localSettings.ownedWeibo.ownedWeiboList[delWeibo];
-                        renderTemplate(area);
-                    },
-                    type: 'GET',
-                    url: ("http://" + app.serverUrl + "/api2/accountownedweibo/del")
-                });
+        var willDel = confirm("删除授权管理微博账号，确定？");
+        if (willDel == false) {
+            return false;
+        }
+        else {
+            var delWeibo = $(this).attr("weibo");
+            $.ajax({
+                data: {"account": app.localSettings.account, "ownedWeibo": delWeibo},
+                success: function (data) {
+                    delete app.localSettings.ownedWeibo.ownedWeiboList[delWeibo];
+                    renderTemplate(area);
+                },
+                type: 'GET',
+                url: ("http://" + app.serverUrl + "/api2/accountownedweibo/del")
+            });
 
-                return false;
-            }
-        });
+            return false;
+        }
+    });
 };
 
 

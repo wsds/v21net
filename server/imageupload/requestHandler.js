@@ -17,13 +17,13 @@ function start(response, postData) {
 
 function upload(response, postDataObject) {
 
-//    console.log("requestHandler upload: " + JSON.stringify(serverSetting));
+    //    console.log("requestHandler upload: " + JSON.stringify(serverSetting));
     response.writeHead(200, {"Content-Type": "application/json; charset=UTF-8"});
     var fs = require('fs');
     var postData = postDataObject.image;
     var weibo_user = postDataObject.weibo_user;
     if (postData == null || weibo_user == null) {
-        response.write(JSON.stringify({"a": "失败", b: "失败"}));
+        response.write(JSON.stringify({"提示信息": "图片上传失败", b: "图片上传失败"}));
         response.end();
         return;
     }
@@ -36,7 +36,7 @@ function upload(response, postDataObject) {
 
     fs.writeFile(serverSetting.imageFolder + filename + ".png", dataBuffer, function (err) {
     });
-    response.write(JSON.stringify({"filename": filename, b: "888你好"}));
+    response.write(JSON.stringify({"filename": filename, b: "888你好", "提示信息": "图片上传成功"}));
     response.end();
 }
 var handle = [];

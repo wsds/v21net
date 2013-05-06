@@ -10,3 +10,5 @@ workspace.xml
 /.idea/dictionaries/Administrator.xml
 
 /.idea
+
+/node_modules/log4js
