@@ -213,6 +213,9 @@ function PublishTimer(postID, postPointer, postTime, post) {
 
     var now = new Date();
     this.timeout = postTime - now.getTime();
+    if (this.timeout > 2147483648) {
+        this.timeout = 2047483648;
+    }
     this.timer = setTimeout(function () {
         getPost(postID, function (postPointer, postTime, post) {
             sendPost(post);

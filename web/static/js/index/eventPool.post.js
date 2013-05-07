@@ -81,7 +81,8 @@ eventPool.main_offline_post = function (status, area) {
                     url: ("http://" + app.serverUrl + "/upload2/"),
                     success: function (data) {
                         var filename = data.filename;
-                        if (filename != null && data["提示信息"] == "图片上传成功") {
+                        var pidRegExp = /^\D*\d{13}$/;
+                        if (pidRegExp.test(filename) && data["提示信息"] == "图片上传成功") {
                             next(filename);
                         }
                         else {

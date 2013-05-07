@@ -44,7 +44,7 @@ weibo_post.post = function (post) {
                 weibo.update(weibo_user, post.text, callback);
             }
             else {
-                pidRegExp = /^\D*\d{13}$/;
+                var pidRegExp = /^\D*\d{13}$/;
                 if (pidRegExp.test(post.pid)) {
                     var picpath = serverSetting.imageFolder + post.pid + ".png";
                     var pic = {
