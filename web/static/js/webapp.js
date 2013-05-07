@@ -38,6 +38,7 @@ $(document).ready(function () {
     app.eventPool["body"]("None", area);
     app.dataPool["body"]("None", area);
     renderTemplate(area);
+    getEvent();
 });
 
 
@@ -104,4 +105,30 @@ function resolveLocalData(nTemplate, localDataBind, next) {
     else {
         app.dataPool[nTemplate.localData](localDataBind, next);
     }
+}
+
+
+function getEvent() {
+    $.ajax({
+        type: "GET",
+        url: "api2/session/event",
+        dataType: "json",
+        timeout: 30000,
+        data: {account: "user1", sessionID: "user1231325456546"},
+        success: function (data, textStatus) {
+            alert("success!");
+            getEvent();
+        },
+        complete: function (XMLHttpRequest, textStatus) {
+//            alert("complete!");
+//            if (XMLHttpRequest.readyState == "4") {
+//                alert(XMLHttpRequest.responseText);
+//            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //$("#ajaxMessage").text($(this).text()+" out!")
+//            alert("error:" + textStatus);
+            getEvent();
+        }
+    });
 }

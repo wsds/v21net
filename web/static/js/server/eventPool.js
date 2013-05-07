@@ -143,17 +143,17 @@ eventPool.body = function (status, area) {
     });
 
     $("#start_publishing").click(function () {
-            $.ajax({
-                data: {},
-                type: 'GET',
-                url: ("http://" + app.serverUrl + "/api2/publishing/start"),
-                success: function (data) {
-                    if (data["提示信息"] == "成功") {
-                    }
-                    else {
-                    }
+        $.ajax({
+            data: {},
+            type: 'GET',
+            url: ("http://" + app.serverUrl + "/api2/publishing/start"),
+            success: function (data) {
+                if (data["提示信息"] == "成功") {
                 }
-            });
+                else {
+                }
+            }
+        });
     });
 
     $("#stop_publishing").click(function () {
@@ -236,6 +236,30 @@ eventPool.body = function (status, area) {
                 data: {screen_name: "冯志成plus"},
                 type: 'GET',
                 url: ("http://" + app.serverUrl + "/api2/server/weibo_users"),
+                success: function (data) {
+                    if (data["提示信息"] == "成功") {
+                    }
+                    else {
+                    }
+                }
+            });
+        }
+    });
+
+    $("#session_notify").click(function () {
+        publish();
+        function publish() {
+            $.ajax({
+                data: {account: "user1",
+                    sessionID: "user1231325456546",
+                    eventID: "update",
+                    event: JSON.stringify({
+                        eventID: "add weibo user",
+                        data: {a: 1, b: 2}
+                    })
+                },
+                type: 'POST',
+                url: ("http://" + app.serverUrl + "/api2/session/notify"),
                 success: function (data) {
                     if (data["提示信息"] == "成功") {
                     }
