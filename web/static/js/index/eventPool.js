@@ -2,6 +2,21 @@ eventPool = {};
 app.eventPool = eventPool;
 
 
+eventPool.serverPush = eventDispatch;
+function eventDispatch(event) {
+    if (event == null) {
+        return;
+    }
+    if (event.eventID == "account_owned_weibo_add") {
+        var owned_weibo_container = $(".templateContainer[template='owned_weibo']");
+        renderTemplate(owned_weibo_container);
+    }
+    else if (event.eventID == "") {
+
+    }
+
+};
+
 eventPool.body = function (status, area) {
 
     if (app.localSettings.key == null || app.localSettings.account == null) {
@@ -78,7 +93,7 @@ eventPool.body = function (status, area) {
     $(".search_button").click(function () {
         var text = $(".search_input_text").val().trim();
 
-        var id = text.match( /^\d{16}$/);
+        var id = text.match(/^\d{16}$/);
         if (text == "请输入微博昵称或ID或URL") {
             return;
         }

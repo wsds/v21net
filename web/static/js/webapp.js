@@ -33,7 +33,6 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
-    app.page.linkData();
     var area = $("body");
     app.eventPool["body"]("None", area);
     app.dataPool["body"]("None", area);
@@ -112,23 +111,20 @@ function getEvent() {
     $.ajax({
         type: "GET",
         url: "api2/session/event",
-        dataType: "json",
         timeout: 30000,
-        data: {account: "user1", sessionID: "user1231325456546"},
-        success: function (data, textStatus) {
-            alert("success!");
+        data: {account: data.account, sessionID: data.sessionID},
+        success: function (event, textStatus) {
+            eventLoop(event)
             getEvent();
         },
         complete: function (XMLHttpRequest, textStatus) {
-//            alert("complete!");
-//            if (XMLHttpRequest.readyState == "4") {
-//                alert(XMLHttpRequest.responseText);
-//            }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            //$("#ajaxMessage").text($(this).text()+" out!")
-//            alert("error:" + textStatus);
             getEvent();
         }
     });
+}
+
+function eventLoop(event){
+    app.eventPool.serverPush(event);
 }

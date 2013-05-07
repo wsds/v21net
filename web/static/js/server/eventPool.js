@@ -1,6 +1,10 @@
 eventPool = {};
 app.eventPool = eventPool;
 
+eventPool.serverPush = eventDispatch;
+function eventDispatch(event) {
+
+}
 
 eventPool.body = function (status, area) {
     if (app.localSettings.key == null || app.localSettings.account == null) {
@@ -250,11 +254,37 @@ eventPool.body = function (status, area) {
         publish();
         function publish() {
             $.ajax({
-                data: {account: "user1",
-                    sessionID: "user1231325456546",
+                data: {
+                    account: data.account,
+                    sessionID: data.sessionID,
                     eventID: "update",
                     event: JSON.stringify({
                         eventID: "add weibo user",
+                        data: {a: 1, b: 2}
+                    })
+                },
+                type: 'POST',
+                url: ("http://" + app.serverUrl + "/api2/session/notify"),
+                success: function (data) {
+                    if (data["提示信息"] == "成功") {
+                    }
+                    else {
+                    }
+                }
+            });
+        }
+    });
+
+    $("#session_notify_all").click(function () {
+        publish();
+        function publish() {
+            $.ajax({
+                data: {
+                    account: data.account,
+                    sessionID: "*",
+                    eventID: "update",
+                    event: JSON.stringify({
+                        eventID: "session_notify_all",
                         data: {a: 1, b: 2}
                     })
                 },

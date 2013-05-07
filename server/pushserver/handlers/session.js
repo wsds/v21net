@@ -26,7 +26,8 @@ session.event = function (account, sessionID, response) {
     accountSession[account][sessionID] = response;
 }
 
-session.notify = function (account, sessionID, eventID, event, response) {
+session.notify = notify;
+function notify(account, sessionID, eventID, event, response) {
 
     event = event || {eventID: eventID};
     if (sessionID == "*") {

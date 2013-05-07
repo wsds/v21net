@@ -8,6 +8,9 @@ dataPool.body = function (status, area) {
     data.ownedWeibo = app.localSettings.ownedWeibo;
     data.time = {};
 
+    var now = new Date();
+    data.sessionID = data.account + now.getTime();
+
     data.serverUrl = app.serverUrl;
     data.imageServerUrl = app.imageServerUrl;
     data.appkey = app.appkey;

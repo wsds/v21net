@@ -8,6 +8,8 @@ var accounts = {};
 var redis = require("redis");
 var client = redis.createClient();
 
+var push = require('../lib/push');
+
 var globaldata = root.globaldata;
 
 accounts.initializeAccounts = function () {
@@ -42,9 +44,9 @@ accounts.addAccount = function (accountName, password, response) {
 }
 
 accounts.modifyAccount = function (accountName, password, response) {
-    var account =globaldata.accounts[accountName]
+    var account = globaldata.accounts[accountName]
     if (account != null) {
-        account.password=password;
+        account.password = password;
         var now = new Date();
         account.key = "key:" + now.getTime();
         client.hset(["weibo_tools_accounts", account.accountName, JSON.stringify(account)], redis.print);
@@ -103,6 +105,10 @@ accounts.addAccountOwnedWeibo = function (accountName, ownedWeibo, response) {
             account.ownedWeibo[ownedWeibo] = "true";
             client.hset(["weibo_tools_accounts", account.accountName, JSON.stringify(account)], redis.print);
             response.write(JSON.stringify({"提示信息": "添加授权管理微博账号成功"}));
+            push.notify(accountName, "*", {
+                eventID: "account_owned_weibo_add",
+                data: {a: 1, b: 2}
+            });
         }
         else {
             console.log(JSON.stringify(account.ownedWeibo));
@@ -121,6 +127,7 @@ accounts.delAccountOwnedWeibo = function (accountName, ownedWeibo, response) {
             account.ownedWeibo[ownedWeibo] = undefined;
             client.hset(["weibo_tools_accounts", account.accountName, JSON.stringify(account)], redis.print);
             response.write(JSON.stringify({"提示信息": "删除授权管理微博账号成功"}));
+
         }
         else {
             response.write(JSON.stringify({"提示信息": "授权管理微博账号已删除，请勿重复操作"}));
@@ -147,9 +154,9 @@ accounts.getallAccountOwnedWeibo = function (accountName, response) {
             var ownedWeibos = account.ownedWeibo;
             for (var ownedWeibo in ownedWeibos) {
                 var weibo_user = weibo_users[ownedWeibo];
-                ownedWeibos[ownedWeibo]={
-                    id:weibo_user.id,
-                    profile_image_url:weibo_user.profile_image_url
+                ownedWeibos[ownedWeibo] = {
+                    id: weibo_user.id,
+                    profile_image_url: weibo_user.profile_image_url
                 };
             }
             response.write(JSON.stringify({ "ownedWeiboList": account.ownedWeibo, "currentWeibo": null}));
