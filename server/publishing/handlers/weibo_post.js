@@ -56,7 +56,7 @@ weibo_post.post = function (post) {
                 else {
                     weibo.update(weibo_user, post.text);
                     console.error("状态异常：")
-                    console.error(err, JSON.stringify(post));
+                    console.error(JSON.stringify(post));
                     post.status = "error";
                     client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
                 }
