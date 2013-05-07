@@ -44,17 +44,27 @@ weibo_post.post = function (post) {
                 weibo.update(weibo_user, post.text, callback);
             }
             else {
-                var picpath = serverSetting.imageFolder + post.pid + ".png";
-                var pic = {
-                    data: fs.createReadStream(picpath),
-                    name: picpath
-                };
-                weibo.upload(weibo_user, post.text, pic, callback);
+                pidRegExp = /^\D*\d{13}$/;
+                if (pidRegExp.test(post.pid)) {
+                    var picpath = serverSetting.imageFolder + post.pid + ".png";
+                    var pic = {
+                        data: fs.createReadStream(picpath),
+                        name: picpath
+                    };
+                    weibo.upload(weibo_user, post.text, pic, callback);
+                }
+                else {
+                    weibo.update(weibo_user, post.text);
+                    console.error("状态异常：")
+                    console.error(err, JSON.stringify(post));
+                    post.status = "error";
+                    client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
+                }
             }
             function callback(err, status) {
                 if (err) {
                     console.error("发布出错，出错原因：")
-                    console.log(err);
+                    console.error(err, JSON.stringify(post));
                     post.status = "failed";
                     client.hset(["weibo_tools_postlist", post.id, JSON.stringify(post)], redis.print);
                 }
