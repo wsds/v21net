@@ -15,6 +15,9 @@ var globaldata = root.globaldata;
  */
 var session = require('./handlers/session');
 requestHandlers.session = function (request, response, pathObject, getParam) {
+    if (getParam == null) {
+        return;
+    }
     var operation = pathObject["operation"];
     if (operation == "event") {
         var account = getParam["account"];
