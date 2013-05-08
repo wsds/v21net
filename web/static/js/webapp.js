@@ -108,6 +108,9 @@ function resolveLocalData(nTemplate, localDataBind, next) {
 
 
 function getEvent() {
+    if (data.account == null || data.sessionID == null) {
+        return;
+    }
     $.ajax({
         type: "GET",
         url: "api2/session/event",
@@ -120,11 +123,13 @@ function getEvent() {
         complete: function (XMLHttpRequest, textStatus) {
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            getEvent();
+            if (textStatus == "timeout") {
+                getEvent();
+            }
         }
     });
 }
 
-function eventLoop(event){
+function eventLoop(event) {
     app.eventPool.serverPush(event);
 }
