@@ -93,10 +93,11 @@ eventPool.main_login = function (status, area) {
             var account = $("#auth_account").val();
             var password = $("#auth_password").val();
             $.ajax({
-                data: {"account": account, "password": password},
+                data: {"accountName": account, "password": password},
                 success: function (data) {
-                    if (data["提示信息"] == "登录成功") {
-                        app.localSettings.key = data.key;
+                    if (data["提示信息"] == "账号登录成功") {
+                        app.localSettings.key = data.acccesskey;
+                        app.localSettings.uid = data.uid;
                         app.localSettings.authTip = data["提示信息"];
                         app.localSettings.account = account;
                         saveLocalSettings();
@@ -112,7 +113,7 @@ eventPool.main_login = function (status, area) {
                     }
                 },
                 type: 'GET',
-                url: ("http://" + app.serverUrl + "/api2/authaccount/a")
+                url: ("http://" + app.serverUrl + "/api2/account/auth")
             });
         });
 };
@@ -149,10 +150,11 @@ eventPool.main_register = function (status, area) {
             }
 
             $.ajax({
-                data: {"account": account, "password": password1, "invite": invite},
+                data: {"accountName": account, "password": password1, "invite": invite},
                 success: function (data) {
-                    if (data["提示信息"] == "账户注册成功") {
-                        app.localSettings.key = data.key;
+                    if (data["提示信息"] == "账号注册成功") {
+                        app.localSettings.key = data.acccesskey;
+                        app.localSettings.uid = data.uid;
                         app.localSettings.authTip = data["提示信息"];
                         app.localSettings.account = account;
                         saveLocalSettings();
@@ -168,7 +170,7 @@ eventPool.main_register = function (status, area) {
                     }
                 },
                 type: 'GET',
-                url: ("http://" + app.serverUrl + "/api2/addaccount/a")
+                url: ("http://" + app.serverUrl + "/api2/account/add")
             });
         });
 };

@@ -19,7 +19,7 @@ eventPool.main_password = function (status, area) {
         }
 
         $.ajax({
-            data: {"account": account, "password": password1,"verification":verification},
+            data: {"accountName": account, "password": password1,"verification":verification},
             success: function (data) {
                 if (data["提示信息"] == "账户修改成功") {
                     app.localSettings.key = data.key;
@@ -34,7 +34,7 @@ eventPool.main_password = function (status, area) {
                 }
             },
             type: 'GET',
-            url: ("http://" + app.serverUrl + "/api2/modifyaccount/a")
+            url: ("http://" + app.serverUrl + "/api2/account/modify")
         });
     });
 

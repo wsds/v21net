@@ -5,6 +5,7 @@ app.dataPool = dataPool;
 
 dataPool.body = function (status, area) {
     data.account = app.localSettings.account;
+    data.uid = app.localSettings.uid;
     data.ownedWeibo = app.localSettings.ownedWeibo;
     data.time = {};
 

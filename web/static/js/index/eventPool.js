@@ -238,7 +238,7 @@ eventPool.owned_weibo = function (status, area) {
         url += "%26client_id=";
         url += data.appkey;
         url += "%26state=";
-        url += data.account;
+        url += data.uid;
         url += "%26response_type=code%23";
         window.open(url);
         return false;

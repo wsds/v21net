@@ -12,3 +12,5 @@ workspace.xml
 /.idea
 
 /node_modules/log4js
+
+/node_modules/neo4j

@@ -5,6 +5,7 @@ app.dataPool = dataPool;
 
 dataPool.body = function (status, area) {
     data.account = app.localSettings.account;
+    data.uid = app.localSettings.uid;
     data.ownedWeibo = app.localSettings.ownedWeibo;
     data.time = {};
 
@@ -28,9 +29,9 @@ dataPool.owned_weibo = function (next) {
         return;
     }
     $.ajax({
-        data: {"account": app.localSettings.account},
+        data: {"account": app.localSettings.account, "uid":app.localSettings.uid},
         type: 'GET',
-        url: ("http://" + app.serverUrl + "/api2/accountownedweibo/getall"),
+        url: ("http://" + app.serverUrl + "/api2/weibo/getall"),
         success: function (serverData) {
             app.localSettings.ownedWeibo = serverData;
             data.ownedWeibo = app.localSettings.ownedWeibo;
