@@ -5,9 +5,11 @@
 
 var accountManage = {};
 
+var serverSetting = root.globaldata.serverSetting;
+
 var neo4j = require('neo4j');
 
-var db = new neo4j.GraphDatabase('http://localhost:7474');
+var db = new neo4j.GraphDatabase(serverSetting.neo4jUrl);
 var RSA = require('./../tools/RSA');
 
 

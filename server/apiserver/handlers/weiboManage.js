@@ -5,9 +5,9 @@
 
 var weiboManage = {};
 
+var serverSetting = root.globaldata.serverSetting;
 var neo4j = require('neo4j');
-
-var db = new neo4j.GraphDatabase('http://localhost:7474');
+var db = new neo4j.GraphDatabase(serverSetting.neo4jUrl);
 
 /***************************************
  *     URL：/api2/weixinuer/add
@@ -42,6 +42,26 @@ weiboManage.add = function (data, response) {
             "JSON":weiboStr
         };
 
+
+        var query = [
+            'START weibo=node:weibo(name = "{weiboName}"), account=node({uid})',
+            'CREATE UNIQUE account-[r:HAS_WEIBO]->weibo',
+            'RETURN r'
+        ].join('\n');
+
+        var params = {
+            weiboName:weibo.name,
+            uid:uid
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) throw err;
+            var likes = results.map(function (result) {
+                return result['other'];
+            });
+            // ...
+        });
+
         db.getIndexedNode("weibo", "name", weibo.name, function (err, node) {
             if (node == null) {
                 var weiboNode = db.createNode(weibo);
@@ -49,7 +69,7 @@ weiboManage.add = function (data, response) {
             }
             else {
                 var weiboNode = node;
-                weiboNode.data=weibo;
+                weiboNode.data = weibo;
                 weiboNode.data.weixinid = weiboNode.id;
                 weiboAdd(weiboNode);
             }
