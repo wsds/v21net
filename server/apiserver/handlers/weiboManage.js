@@ -43,25 +43,6 @@ weiboManage.add = function (data, response) {
         };
 
 
-        var query = [
-            'START weibo=node:weibo(name = "{weiboName}"), account=node({uid})',
-            'CREATE UNIQUE account-[r:HAS_WEIBO]->weibo',
-            'RETURN r'
-        ].join('\n');
-
-        var params = {
-            weiboName:weibo.name,
-            uid:uid
-        };
-
-        db.query(query, params, function (err, results) {
-            if (err) throw err;
-            var likes = results.map(function (result) {
-                return result['other'];
-            });
-            // ...
-        });
-
         db.getIndexedNode("weibo", "name", weibo.name, function (err, node) {
             if (node == null) {
                 var weiboNode = db.createNode(weibo);
@@ -75,13 +56,12 @@ weiboManage.add = function (data, response) {
             }
         });
         function weiboAdd(weiboNode) {
-
             weiboNode.save(function (err, weiboNode) {
                 weiboNode.data.weixinid = weiboNode.id;
                 weiboNode.index("weibo", "name", weibo.name);
                 weiboNode.save(function (err, weiboNode) {
 
-                    weiboNode.createRelationshipFrom(accountNode, "HAS_WEIBO");
+                    createRelationship();
                     response.write(JSON.stringify({
                         "提示信息":"添加微信绑定用户成功",
                         "node":weiboNode.data
@@ -90,9 +70,32 @@ weiboManage.add = function (data, response) {
                 });
             });
         }
+
+        function createRelationship() {
+//            var query = [
+//                'START weibo=node:weibo(name = "{weiboName}"), account=node({uid})',
+//                'CREATE UNIQUE account-[r:HAS_WEIBO]->weibo',
+//                'RETURN r'
+//            ].join('\n');
+            var query = [
+                'START  weibo=node:weibo(name = {weiboName}), account=node({uid})' ,
+                'CREATE UNIQUE account-[r:HAS_WEIBO]->weibo',
+                'RETURN  weibo, account, r'
+            ].join('\n');
+
+            var params = {
+                weiboName:weibo.name,
+                uid:parseInt(uid)
+            };
+
+            db.query(query, params, function (err, results) {
+                if (err) throw err;
+                var likes = results.map(function (result) {
+                    return result['other'];
+                });
+            });
+        }
     }
-
-
 }
 /***************************************
  *     URL：/api2/weixinuer/delete
