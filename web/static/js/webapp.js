@@ -37,7 +37,7 @@ $(document).ready(function () {
     app.eventPool["body"]("None", area);
     app.dataPool["body"]("None", area);
     renderTemplate(area);
-    getEvent();
+//    getEvent();
 });
 
 

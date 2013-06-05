@@ -254,13 +254,13 @@ eventPool.owned_weibo = function (status, area) {
         else {
             var delWeibo = $(this).attr("weibo");
             $.ajax({
-                data: {"account": app.localSettings.account, "ownedWeibo": delWeibo},
+                data: {"uid": app.localSettings.uid, "ownedWeibo": delWeibo},
                 success: function (data) {
                     delete app.localSettings.ownedWeibo.ownedWeiboList[delWeibo];
                     renderTemplate(area);
                 },
                 type: 'GET',
-                url: ("http://" + app.serverUrl + "/api2/accountownedweibo/del")
+                url: ("http://" + app.serverUrl + "/api2/weibo/delete")
             });
 
             return false;

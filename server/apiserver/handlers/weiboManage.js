@@ -98,29 +98,56 @@ weiboManage.add = function (data, response) {
  ***************************************/
 weiboManage.delete = function (data, response) {
     response.asynchronous = 1;
-    var weixin =
-    {
-        "type":"weixin",
-        "accesskey":data.accesskey,
-        "weixinOpenID":data.weixinOpenID,
-        "weixinName":data.weixinName
-    }
-    db.getIndexedNode("weixin", "weixinOpenID", weixin.weixinOpenID, function (err, node) {
-        if (node != null) {
-            node.delete();
+
+    var uid = data.uid;
+    var weiboName = data.ownedWeibo;
+
+    db.getNodeById(uid, function (err, accountNode) {
+        if (accountNode == null) {
             response.write(JSON.stringify({
-                "information":"删除微信绑定用户成功",
-                "node":node.data
-            }));
-            response.end();
-        } else {
-            response.write(JSON.stringify({
-                "提示信息":"删除微信绑定用户失败",
-                "reason":"微信用户不存在"
+                "提示信息":"获取所有微信绑定用户失败",
+                "失败原因":"账号不存在"
             }));
             response.end();
         }
+        else {
+            next(accountNode);
+        }
     });
+
+    function next(accountNode) {
+        deleteWeibo();
+    }
+
+    function deleteWeibo() {
+        var query = [
+            'START account=node({uid}), weibo=node:weibo(name = {weiboName})' ,
+            'MATCH account-[r]->weibo',
+            'DELETE weibo, r',
+            'RETURN weibo, r'
+        ].join('\n');
+
+        var params = {
+            weiboName:weiboName,
+            uid:parseInt(uid)
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) {
+                console.error(err);
+            }
+            response.write(JSON.stringify({
+                "提示信息":"删除授权管理微博账号成功"
+            }));
+            response.end();
+
+//            response.write(JSON.stringify({
+//                "提示信息": "授权管理微博账号已删除，请勿重复操作"
+//            }));
+//            response.end();
+
+        });
+    }
 }
 
 /***************************************
@@ -145,19 +172,6 @@ weiboManage.getall = function (data, response) {
     });
     function next(accountNode) {
         getAllWeibo();
-//        accountNode.getRelationshipNodes({type:'OWNED', direction:'out'}, function (err, weixinNodes) {
-//            var weixins = {};
-//            for (var index in weixinNodes) {
-//                var weixinNode = weixinNodes[index];
-//                weixins[weixinNode.data.weixinid] = weixinNode.data;
-//            }
-//
-//            response.write(JSON.stringify({
-//                "提示信息":"获取所有微博绑定用户成功",
-//                "weibos":weixins
-//            }));
-//            response.end();
-//        });
     }
 
     function getAllWeibo() {
