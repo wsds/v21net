@@ -10,7 +10,7 @@ var neo4j = require('neo4j');
 var db = new neo4j.GraphDatabase(serverSetting.neo4jUrl);
 
 /***************************************
- *     URL：/api2/weixinuer/add
+ *     URL：/api2/weibo/add
  ***************************************/
 weiboManage.add = function (data, response) {
     response.asynchronous = 1;
@@ -33,7 +33,7 @@ weiboManage.add = function (data, response) {
     function next(accountNode) {
         var weibo =
         {
-            "type":"weixin",
+            "type":"weibo",
             "name":weiboJSON.name,
             "token":weiboJSON.access_token,
             "expires_in":weiboJSON.expires_in,
@@ -94,7 +94,7 @@ weiboManage.add = function (data, response) {
     }
 }
 /***************************************
- *     URL：/api2/weixinuer/delete
+ *     URL：/api2/weibo/delete
  ***************************************/
 weiboManage.delete = function (data, response) {
     response.asynchronous = 1;
@@ -123,8 +123,7 @@ weiboManage.delete = function (data, response) {
         var query = [
             'START account=node({uid}), weibo=node:weibo(name = {weiboName})' ,
             'MATCH account-[r]->weibo',
-            'DELETE weibo, r',
-            'RETURN weibo, r'
+            'DELETE weibo, r'
         ].join('\n');
 
         var params = {
@@ -151,7 +150,7 @@ weiboManage.delete = function (data, response) {
 }
 
 /***************************************
- *     URL：/api2/weixinuer/gatall
+ *     URL：/api2/weibo/gatall
  ***************************************/
 weiboManage.getall = function (data, response) {
     response.asynchronous = 1;
