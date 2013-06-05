@@ -43,52 +43,52 @@ weiboManage.add = function (data, response) {
             "JSON":weiboStr
         };
 
-
         db.getIndexedNode("weibo", "name", weibo.name, function (err, node) {
-            if (node == null) {
-                var weiboNode = db.createNode(weibo);
-                weiboAdd(weiboNode);
+            var query;
+            if (node == null) {//uniqueness cannot be resolved by cypher.
+                var query = [
+                    'START account=node({uid})' ,
+                    'CREATE (weibo:Weibo{weibo})',
+                    'CREATE UNIQUE account-[r:HAS_WEIBO]->weibo',
+                    'SET weibo.weiboid=ID(weibo)',
+                    'RETURN  weibo, account, r'
+                ].join('\n');
+                createWeiboNode(query, null);
             }
             else {
-                var weiboNode = node;
-                weiboNode.data = weibo;
-                weiboNode.data.weixinid = weiboNode.id;
-                weiboAdd(weiboNode);
+                var query = [
+                    'START  weibo=node:weibo(name = {weiboName}), account=node({uid})' ,
+                    'CREATE UNIQUE account-[r:HAS_WEIBO]->weibo',
+                    'RETURN  weibo, account, r'
+                ].join('\n');
+                createWeiboNode(query, weibo);
             }
+
         });
-        function weiboAdd(weiboNode) {
-            weiboNode.save(function (err, weiboNode) {
-                weiboNode.data.weixinid = weiboNode.id;
-                weiboNode.index("weibo", "name", weibo.name);
-                weiboNode.save(function (err, weiboNode) {
 
-                    createRelationship();
-                    response.write(JSON.stringify({
-                        "提示信息":"添加微信绑定用户成功",
-                        "node":weiboNode.data
-                    }));
-                    response.end();
-                });
-            });
-        }
-
-        function createRelationship() {
-            var query = [
-                'START  weibo=node:weibo(name = {weiboName}), account=node({uid})' ,
-                'CREATE UNIQUE account-[r:HAS_WEIBO]->weibo',
-                'RETURN  weibo, account, r'
-            ].join('\n');
-
+        function createWeiboNode(query, updateWeibo) {
             var params = {
                 weiboName:weibo.name,
-                uid:parseInt(uid)
+                uid:parseInt(uid),
+                weibo:weibo
             };
 
             db.query(query, params, function (err, results) {
-                if (err) throw err;
-                var likes = results.map(function (result) {
-                    return result['other'];
-                });
+                if (err) {
+                    console.error(err);
+                }
+                var weiboNode=results[0].weibo;
+                weiboNode.index("weibo", "name", weibo.name);
+                if(updateWeibo!=null){
+                    weiboNode.data=updateWeibo;
+                    weiboNode.save();
+                }
+
+                response.write(JSON.stringify({
+                    "提示信息":"添加微博绑定用户成功",
+                    "node":weiboNode.data
+                }));
+                response.end();
             });
         }
     }
