@@ -38,7 +38,8 @@ weiboManage.add = function (data, response) {
             "token":weiboJSON.access_token,
             "expires_in":weiboJSON.expires_in,
             "status":"",
-            "profile_image":weiboJSON.profile_image_url,
+            "profile_image_url":weiboJSON.profile_image_url,
+            "id":weiboJSON.id,
             "JSON":weiboStr
         };
 
@@ -72,11 +73,6 @@ weiboManage.add = function (data, response) {
         }
 
         function createRelationship() {
-//            var query = [
-//                'START weibo=node:weibo(name = "{weiboName}"), account=node({uid})',
-//                'CREATE UNIQUE account-[r:HAS_WEIBO]->weibo',
-//                'RETURN r'
-//            ].join('\n');
             var query = [
                 'START  weibo=node:weibo(name = {weiboName}), account=node({uid})' ,
                 'CREATE UNIQUE account-[r:HAS_WEIBO]->weibo',
@@ -126,45 +122,6 @@ weiboManage.delete = function (data, response) {
         }
     });
 }
-/***************************************
- *     URL：/api2/weixinuer/modify
- ***************************************/
-weiboManage.modify = function (data, response) {
-    response.asynchronous = 1;
-    var weixin =
-    {
-        "type":"weixin",
-        "accesskey":data.accesskey,
-        "weixinOpenID":data.weixinOpenID,
-        "weixinName":data.weixinName,
-        "token":data.token
-    }
-    db.getIndexedNode("weixin", "weixinOpenID", weixin.weixinOpenID, function (err, node) {
-        if (node != null) {
-//            node.getRelationshipNodes("weixin", "weixinOpenID",weixin.weixinOpenID ,function(err, node){})
-            node.save(function (err, node) {
-                node.data.weixinName = weixin.weixinName;
-                node.data.token = weixin.token;
-                node.index("weixin", "weixinName", weixin.weixinName);
-                node.index("weixin", "token", weixin.token);
-                node.save(function (err, node) {
-                    response.write(JSON.stringify({
-                        "提示信息":"修改微信绑定用户成功",
-                        "node":node.data
-                    }));
-                    response.end();
-                });
-            });
-
-        } else {
-            response.write(JSON.stringify({
-                "提示信息":"修改微信绑定用户失败",
-                "reason":"微信用户不存在"
-            }));
-            response.end();
-        }
-    });
-}
 
 /***************************************
  *     URL：/api2/weixinuer/gatall
@@ -187,19 +144,55 @@ weiboManage.getall = function (data, response) {
         }
     });
     function next(accountNode) {
+        getAllWeibo();
+//        accountNode.getRelationshipNodes({type:'OWNED', direction:'out'}, function (err, weixinNodes) {
+//            var weixins = {};
+//            for (var index in weixinNodes) {
+//                var weixinNode = weixinNodes[index];
+//                weixins[weixinNode.data.weixinid] = weixinNode.data;
+//            }
+//
+//            response.write(JSON.stringify({
+//                "提示信息":"获取所有微博绑定用户成功",
+//                "weibos":weixins
+//            }));
+//            response.end();
+//        });
+    }
 
-        accountNode.getRelationshipNodes({type:'OWNED', direction:'out'}, function (err, weixinNodes) {
-            var weixins = {};
-            for (var index in weixinNodes) {
-                var weixinNode = weixinNodes[index];
-                weixins[weixinNode.data.weixinid] = weixinNode.data;
+    function getAllWeibo() {
+        var query = [
+            'START account=node({uid})' ,
+            'MATCH account-[:HAS_WEIBO]->weibo',
+            'RETURN weibo;'
+        ].join('\n');
+
+        var params = {
+            uid:parseInt(uid)
+        };
+
+        db.query(query, params, function (err, results) {
+
+            if (err) {
+                console.error(err);
             }
+            var weibos = {};
+            for (var index in results) {
+                var weiboNode = results[index].weibo;
+                var weibo = weiboNode.data;
 
+                weibos[weibo.name] = {
+                    id:weibo.id,
+                    profile_image_url:weibo.profile_image_url
+                };
+            }
             response.write(JSON.stringify({
-                "提示信息":"获取所有微信绑定用户成功",
-                "weixins":weixins
+                "提示信息":"获取所有微博绑定用户成功",
+                "ownedWeiboList":weibos,
+                "currentWeibo":null
             }));
             response.end();
+
         });
     }
 }
