@@ -95,10 +95,7 @@ requestHandlers.post = function (request, response, pathObject, data) {
         var post = postManage.del(weibo, postid, response);
     }
     else if (operation == "get") {
-        var weibo = getParam["weibo_user"];
-        var start = getParam["start"];
-        var end = getParam["end"];
-        postManage.get(weibo, start, end, response);
+        postManage.get(data, response);
     }
     else if (operation == "modify") {
         var weibo = getParam["weibo_user"];

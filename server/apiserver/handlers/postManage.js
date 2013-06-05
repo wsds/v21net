@@ -10,7 +10,7 @@ var neo4j = require('neo4j');
 var db = new neo4j.GraphDatabase(serverSetting.neo4jUrl);
 
 /***************************************
- *     URL：/api2/weixinuer/add
+ *     URL：/api2/post/add
  ***************************************/
 var RSA = require('./../tools/RSA');
 postManage.add = function (data, response) {
@@ -21,8 +21,8 @@ postManage.add = function (data, response) {
         "type":"post",
         "text":data.text,
         "time":data.time,
-        "pic":data.pic,
-        "status":"sending"
+        "pid":data.pic,
+        "status":"publishing"
     };
 
     var now = new Date();
@@ -37,7 +37,7 @@ postManage.add = function (data, response) {
         post.time = parseInt(post.time);
     }
     if (post.time < now.getTime() + 5000) {
-        response.write(JSON.stringify({"提示信息": "定时参数不正确。"}));
+        response.write(JSON.stringify({"提示信息":"定时参数不正确。"}));
         response.end();
         return;
     }
@@ -48,6 +48,7 @@ postManage.add = function (data, response) {
         var query = [
             'START  weibo=node:weibo(name = {weiboName})' ,
             'CREATE (post{post})',
+            'SET post.id=ID(post)',
             'CREATE UNIQUE weibo-[r:HAS_POST]->post',
             'RETURN  post, weibo, r'
         ].join('\n');
@@ -139,39 +140,52 @@ postManage.modify = function (data, response) {
 }
 
 /***************************************
- *     URL：/api2/weixinuer/gatall
+ *     URL：/api2/post/get
  ***************************************/
-postManage.getall = function (data, response) {
+postManage.get = function (data, response) {
     response.asynchronous = 1;
 
     var uid = data.uid;
+    var weiboName = data["weibo_user"];
+    var start = data["start"];
+    var end = data["end"];
 
-    db.getNodeById(uid, function (err, accountNode) {
-        if (accountNode == null) {
-            response.write(JSON.stringify({
-                "提示信息":"获取所有微信绑定用户失败",
-                "失败原因":"账号不存在"
-            }));
-            response.end();
-        }
-        else {
-            next(accountNode);
-        }
-    });
-    function next(accountNode) {
+    getAllPost();
 
-        accountNode.getRelationshipNodes({type:'OWNED', direction:'out'}, function (err, weixinNodes) {
-            var weixins = {};
-            for (var index in weixinNodes) {
-                var weixinNode = weixinNodes[index];
-                weixins[weixinNode.data.weixinid] = weixinNode.data;
+    function getAllPost() {
+        var query = [
+            'START weibo=node:weibo(name = {weiboName})' ,
+            'MATCH weibo-[:HAS_POST]->post',
+            'RETURN post',
+            'ORDER BY post.time' ,
+            'SKIP {begin}',
+            'LIMIT {count}'
+        ].join('\n');
+
+
+        var params = {
+            uid:parseInt(uid),
+            weiboName:weiboName,
+            count:end - start,
+            begin:start-0
+        };
+
+        db.query(query, params, function (err, results) {
+
+            if (err) {
+                console.error(err);
             }
+            var posts = {};
+            var i = 0;
+            for (var index in results) {
+                var postNode = results[index].post;
+                var post = postNode.data;
 
-            response.write(JSON.stringify({
-                "提示信息":"获取所有微信绑定用户成功",
-                "weixins":weixins
-            }));
+                posts[i++] = post;
+            }
+            response.write(JSON.stringify(posts));
             response.end();
+
         });
     }
 }

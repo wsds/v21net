@@ -54,10 +54,10 @@ dataPool.main_offline_post_list = function (next) {
         data: {
             "weibo_user": app.localSettings.ownedWeibo.currentWeibo,
             "start": 0,
-            "end": -1
+            "end": 5
         },
         type: 'GET',
-        url: ("http://" + app.serverUrl + "/api2/getpostlist/a"),
+        url: ("http://" + app.serverUrl + "/api2/post/get"),
         success: function (serverData) {
             data.postlist = serverData;
             next(serverData);
@@ -73,10 +73,10 @@ dataPool.main_offline_forward_list = function (next) {
         data: {
             "weibo_user": app.localSettings.ownedWeibo.currentWeibo,
             "start": 0,
-            "end": -1
+            "end": 5
         },
         type: 'GET',
-        url: ("http://" + app.serverUrl + "/api2/getforwardlist/a"),
+        url: ("http://" + app.serverUrl + "/api2/post/get"),
         success: function (serverData) {
             data.postlist = serverData;
             next(serverData);
