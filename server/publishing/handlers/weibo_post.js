@@ -9,11 +9,10 @@ var weibo_post = {};
 var weibo = require('weibo');
 
 var serverSetting = root.globaldata.serverSetting;
+var neo4j = require('neo4j');
+var db = new neo4j.GraphDatabase(serverSetting.neo4jUrl);
 
 weibo.init('weibo', serverSetting.appkey, serverSetting.secret, '');
-
-var redis = require("redis");
-var client = redis.createClient();
 
 var ajax = require('./../lib/ajax');
 
@@ -32,7 +31,6 @@ function getWeiboUser(weibo_user_name, next) {
         }
     });
 }
-
 
 weibo_post.post = function (post) {
     getWeiboUser(post.weibo_user, function (weibo_user) {

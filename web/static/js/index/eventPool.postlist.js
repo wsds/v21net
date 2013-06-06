@@ -17,7 +17,11 @@ eventPool.main_offline_post_list = function (status, area) {
 
     function delPost(postID, modify) {
         $.ajax({
-            data:{"postid":postID, "weibo_user":app.localSettings.ownedWeibo.currentWeibo},
+            data:{
+                "postid":postID,
+                "time":data.postlist[postID].time,
+                "weibo_user":app.localSettings.ownedWeibo.currentWeibo
+            },
             type:'GET',
             url:("http://" + app.serverUrl + "/api2/post/del"),
             success:function (data) {

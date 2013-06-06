@@ -77,10 +77,10 @@ weiboManage.add = function (data, response) {
                 if (err) {
                     console.error(err);
                 }
-                var weiboNode=results[0].weibo;
+                var weiboNode = results[0].weibo;
                 weiboNode.index("weibo", "name", weibo.name);
-                if(updateWeibo!=null){
-                    weiboNode.data=updateWeibo;
+                if (updateWeibo != null) {
+                    weiboNode.data = updateWeibo;
                     weiboNode.save();
                 }
 
@@ -209,5 +209,6 @@ weiboManage.getall = function (data, response) {
         });
     }
 }
+
 
 module.exports = weiboManage;

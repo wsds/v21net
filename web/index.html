@@ -251,7 +251,8 @@
                             <span class="post_status_tag_holder" status="published" publishtime="2013/04/07 18:45:00"></span>
 
                             <!-- 需要时行判断每种情况对应相应的状态显示--><?js if (post.status=="published") { ?>
-                            <b class="icon16 sendsuccess_aj"></b><label style="color:#097c25;">发送成功</label><?js }else if(post.status=="publishing"){?>
+                            <b class="icon16 sendsuccess_aj"></b><label style="color:#097c25;">发送成功</label><?js }else if(post.status=="queueing"){?>
+                            <b class="icon16 sending_am"></b><label style="color:#ff9000;">正在发送</label><?js }else if(post.status=="publishing"){?>
                             <b class="icon16 sending_am"></b><label style="color:#097c25;">等待发送</label><?js }else if(post.status=="failed"){?>
                             <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败</label><?js }else if(post.status=="timeout"){?>
                             <b class="icon16 sendError_ak"></b><label style="color:#D3544D;">发送失败（定时超时）</label><?js }else {?>

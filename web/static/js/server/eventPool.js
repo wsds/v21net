@@ -160,11 +160,11 @@ eventPool.body = function (status, area) {
         });
     });
 
-    $("#stop_publishing").click(function () {
+    $("#preStart_publishing").click(function () {
         $.ajax({
             data: {},
             type: 'GET',
-            url: ("http://" + app.serverUrl + "/api2/publishing/stop"),
+            url: ("http://" + app.serverUrl + "/api2/publishing/prestart"),
             success: function (data) {
                 if (data["提示信息"] == "成功") {
                 }

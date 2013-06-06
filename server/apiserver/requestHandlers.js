@@ -58,13 +58,6 @@ requestHandlers.weiboManage = function (request, response, pathObject, data) {
     }
 };
 
-var messageManage = require('./handlers/messageManage');
-requestHandlers.messageManage = function (request, response, pathObject, data) {
-    var operation = pathObject["operation"];
-    if (operation == "add") {
-        messageManage.add(data, response);
-    }
-};
 
 var postManage = require('./handlers/postManage');
 requestHandlers.post = function (request, response, pathObject, data) {

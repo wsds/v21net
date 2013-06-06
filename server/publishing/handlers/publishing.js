@@ -5,251 +5,165 @@
 
 
 var publishing = {};
-var redis = require("redis");
-var client = redis.createClient();
 
-var weibo_post = require('./weibo_post');
+var serverSetting = root.globaldata.serverSetting;
+var neo4j = require('neo4j');
+var db = new neo4j.GraphDatabase(serverSetting.neo4jUrl);
 
-var globaldata = root.globaldata;
+setTimeout(function () {
+    console.warn("the publishing engine is starting.");
+    publishing.preStart(response);
+    publishing.start(response);
+}, 3000);
 
-
-var nextPostTime = 123;
-var nextPostPointer = {};
-var nextPost = {};
-var nextPostID = "empty";
-var status = "stopped";
-
-
-publishing.load = function (next) {
-    client.get("publishing_next_post_id", function (err, postID) {
-        nextPostID = postID;
-        if (nextPostID == "empty") {
-            return;
-        }
-        getPost(nextPostID, function (postPointer, postTime, post) {
-            nextPostPointer = postPointer;
-            nextPostTime = postTime;
-            nextPost = post;
-            console.log("publishing initialized.");
-            next();
-        });
-    });
-
-};
-
-function getPost(postID, next) {
-    client.hget("publishing", postID, function (err, postPointerStr) {
-        if (postPointerStr == null) {
-            next();
-        }
-        else {
-            var postPointer = JSON.parse(postPointerStr);
-            var postTime = postPointer.publishTime;
-            client.hget("weibo_tools_postlist", postID, function (err, postStr) {
-                var post = JSON.parse(postStr);
-                next(postPointer, postTime, post);
-            });
-        }
-    });
+var response = {};
+response.write = function (string) {
+    console.warn(string);
+}
+response.end = function () {
 }
 
 publishing.start = function (response) {
     response.asynchronous = 1;
-    publishing.load(function () {
-        if (nextPost == null) {
-            response.write(JSON.stringify({
-                "提示信息": "定时发布器数据为空或尚未正常运行"
-            }));
-            response.end();
-        }
-        else {
-            status = "started";
-            startTimer(nextPostID);
-            response.write(JSON.stringify({
-                "提示信息": "定时发布器状态",
-                "status": status,
-                "nextPostID": nextPostID,
-                "nextPostPointer": nextPostPointer,
-                "nextPost": nextPost,
-                "nextPostTime": getShortDateTimeString(nextPostTime)
-            }));
-            response.end();
-        }
-    });
-}
 
-publishing.reload = function (response) {
-    if (publishTimer == null || status != "started") {
-        response.write(JSON.stringify({
-            "提示信息": "定时发布器尚未正常运行"
-        }));
-    }
-    else {
-        response.asynchronous = 1;
-        status = "reloading";
-        console.log("publishing reloading.");
-        clearTimeout(publishTimer.timer)
-        publishing.load(function () {
-            status = "started";
-            startTimer(nextPostID);
+    var nextPostData;
+    serverSetting.nextPostTime = 2370650800000;
+    getQueuePost();
+
+    function getQueuePost() {
+        var query = [
+            'MATCH weibo:Weibo-[r:HAS_POST]->post:Post',
+            'WHERE post.status="publishing" OR post.status="queueing" OR post.status="queueing_modified"',
+            'RETURN post, weibo',
+            'ORDER BY post.time' ,
+            'LIMIT 5'
+        ].join('\n');
+
+        var params = {
+        };
+        db.query(query, params, function (err, results) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            var posts = {};
+            //Build up data
+            for (var index in results) {
+                var postNode = results[index].post;
+                var weiboNode = results[index].weibo;
+                var weibo = JSON.parse(weiboNode.data.JSON);
+                var post = postNode.data;
+                posts[post.id] = {
+                    post:post,
+                    postNode:postNode,
+                    weibo:weibo
+                };
+            }
+
+            //Create newly added timer
+            for (var postID in posts) {
+                var postData = posts[postID];
+                if (postData.post.time < serverSetting.nextPostTime) {
+                    serverSetting.nextPostTime = postData.post.time;
+                    nextPostData = postData;
+                }
+
+                if (timerPool[postID] == null) {
+                    console.warn("Creat Timer for post：");
+                    console.warn(JSON.stringify(postData.post));
+                    postData.postNode.data.status = "queueing";
+                    postData.postNode.save();
+                    var publishTimer = new PublishTimer(postData);
+                    timerPool[postID] = publishTimer;
+                } else if (postData.postNode.data.status == "queueing_modified") {
+                    console.warn("Creat Timer for post(queueing_modified)：");
+                    console.warn(JSON.stringify(postData.post));
+                    postData.postNode.data.status = "queueing";
+                    postData.postNode.save();
+                    var publishTimer = new PublishTimer(postData);
+                    timerPool[postID] = publishTimer;
+                    clearTimeout(timerPool[postID].timer);
+                    delete timerPool[postID];
+                }
+            }
+            //Delete queue outed timer
+            for (var postID in timerPool) {
+                if (posts[postID] == null) {
+                    console.warn("Delete queue outed Timer for post(queueing)：");
+                    console.warn(JSON.stringify(timerPool[postID].post));
+                    clearTimeout(timerPool[postID].timer);
+                    delete timerPool[postID];
+                }
+            }
             response.write(JSON.stringify({
-                "提示信息": "定时发布器状态",
-                "status": status,
-                "nextPostID": nextPostID,
-                "nextPostPointer": nextPostPointer,
-                "nextPost": nextPost,
-                "nextPostTime": getShortDateTimeString(nextPostTime)
+                "提示信息":"定时器组已运行",
+                "nextPostTime":serverSetting.nextPostTime,
+                "下一条微博":nextPostData.post,
+                "发布时间":getShortDateTimeString(serverSetting.nextPostTime)
             }));
             response.end();
         });
     }
 }
 
-publishing.stop = function (response) {
-    if (publishTimer == null || status != "started") {
-        response.write(JSON.stringify({
-            "提示信息": "定时发布器尚未正常运行"
-        }));
-    }
-    else {
-        clearTimeout(publishTimer.timer)
-        status = "stopped";
-        console.log("publishing stopped.");
-        response.write(JSON.stringify({
-            "提示信息": "定时发布器状态",
-            "status": status,
-            "nextPostID": nextPostID,
-            "nextPostPointer": nextPostPointer,
-            "nextPost": nextPost,
-            "nextPostTime": getShortDateTimeString(nextPostTime)
-        }));
-    }
-}
 
-var publishList = {};
-publishing.check = function (response) {
+publishing.preStart = function (response) {
     response.asynchronous = 1;
-    client.hgetall("publishing", function (err, postPointerStr) {
-        for (var postID in postPointerStr) {
-            if (postID == "undefined") {
-                continue;
+    var now = new Date();
+    getQueuePost();
+
+    function getQueuePost() {
+        var query = [
+            'MATCH weibo:Weibo-[r:HAS_POST]->post:Post',
+            'WHERE  post.time<{time} AND (post.status="publishing" OR post.status="queueing" OR post.status="queueing_modified")',
+            'SET post.status="timeout"',
+            'RETURN post'
+        ].join('\n');
+
+        var params = {
+            time:now.getTime()
+        };
+        db.query(query, params, function (err, results) {
+            if (err) {
+                console.error(err);
+                return;
             }
-            var postPointer = JSON.parse(postPointerStr[postID]);
-            publishList[postID] = postPointer;
-        }
-        var result = check_publish_from_head(publishList);
-        response.write(JSON.stringify({
-            "提示信息": "定时链表检查",
-            "status": status,
-            "检查结果": result
-        }));
-        response.end();
-    });
 
-
-    function check_publish_from_head(publishList) {
-        var result1 = "head";
-
-        var head = publishList[nextPostID];
-        var post = head;
-        var postID = nextPostID;
-        while (post.next != "tail") {
-            result1 += ">>>";
-            result1 += postID;
-            postID = post.next;
-            post = publishList[postID];
-            if (post == null) {
-                result1 += ">>>###########error#############"
-                status = "error";
-                break;
-            }
-        }
-        result1 += ">>>tail"
-        return result1;
+            response.write(JSON.stringify({
+                "提示信息":"定时器组准备完毕",
+                "timerPool":timerPool
+            }));
+            response.end();
+        });
     }
-
 }
 
 var timerPool = {
-    //todo several publishTimers
 };
 
-publishing.timer = function (response) {
-    if (publishTimer == null || status != "started") {
-        response.write(JSON.stringify({
-            "提示信息": "定时发布器尚未正常运行"
-        }));
-    }
-    else {
-        response.write(JSON.stringify({
-            "提示信息": "定时发布器状态",
-            "timer": publishTimer.timeout,
-            "post": publishTimer.post,
-            "postTime": getShortDateTimeString(publishTimer.postTime)
-        }));
-    }
-
-}
-
-
-var publishTimer = null;
-
-function startTimer(postID) {
-    if (postID == "empty" || status != "started") {
-        return;
-    }
-    getPost(postID, function (postPointer, postTime, post) {
-        publishTimer = new PublishTimer(postID, postPointer, postTime, post);
-    });
-
-
-}
-
-function PublishTimer(postID, postPointer, postTime, post) {
-    this.postTime = postTime;
+function PublishTimer(postData) {
+    var post = postData.post;
+    var postNode = postData.postNode;
+    var weibo = postData.weibo;
+    this.postTime = post.time;
     this.post = post;
-    this.postPointer = postPointer;
-    this.postID = postID;
+    this.postID = post.id;
 
     var now = new Date();
-    this.timeout = postTime - now.getTime();
+    this.timeout = post.time - now.getTime();
     if (this.timeout > 2147483648) {
         this.timeout = 2047483648;
     }
     this.timer = setTimeout(function () {
-        getPost(postID, function (postPointer, postTime, post) {
-            sendPost(post);
-            if (postPointer.next == "tail") {
-                console.warn("发送列表已经为空", JSON.stringify(globaldata.publishing));
-                globaldata.nextPostID = "empty";
-                client.set("publishing_next_post_id", "empty", redis.print);
-                delete globaldata.publishing[postID];
-                client.hdel(["publishing", postID], redis.print);
-                publishTimer = null;
-                return;
-            }
-            nextPostID = postPointer.next;
-            globaldata.nextPostID = nextPostID;
-            client.set("publishing_next_post_id", nextPostID, redis.print);
-            getPost(nextPostID, function (postPointer, postTime, post) {
-                nextPostPointer = postPointer;
-                nextPostTime = postTime;
-                nextPost = post;
-
-                postPointer.previous = "head";
-                globaldata.publishing[nextPostID].previous = "head";
-                client.hset(["publishing", nextPostID, JSON.stringify(postPointer)], redis.print);
-                delete globaldata.publishing[postID];
-                client.hdel(["publishing", postID], redis.print);
-                startTimer(nextPostID);
-            });
-        });
+        sendPost(post);
+        clearTimeout(timerPool[post.id].timer);
+        delete timerPool[post.id];
     }, this.timeout);
 }
 
-
+//var weibo_post = require('./weibo_post');
 function sendPost(post) {
-    weibo_post.post(post);
+//    weibo_post.post(post);
     console.log(JSON.stringify(post) + " has been posted!");
 }
 
@@ -279,6 +193,5 @@ function getShortDateTimeString(date) {   //如：2011/07/29 13:30
     var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute;
     return str;
 }
-
 
 module.exports = publishing;

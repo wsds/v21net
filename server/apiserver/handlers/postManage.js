@@ -62,6 +62,10 @@ postManage.add = function (data, response) {
             if (error) {
                 console.error(error);
             }
+            if (parseInt(post.time) < serverSetting.nextPostTime + 1000) {
+                console.warn("restart publishing");
+                startPublishing();
+            }
             response.write(JSON.stringify({
                 "提示信息":"定时发布成功"
 //                , "post": post
@@ -78,6 +82,7 @@ postManage.del = function (data, response) {
     response.asynchronous = 1;
     var weiboName = data["weibo_user"];
     var postid = data["postid"]
+    var time = data["time"]
 
     deletePost();
 
@@ -96,6 +101,10 @@ postManage.del = function (data, response) {
         db.query(query, params, function (err, results) {
             if (err) {
                 console.error(err);
+            }
+            if (parseInt(time) < serverSetting.nextPostTime + 1000) {
+                console.warn("restart publishing");
+                startPublishing();
             }
             response.write(JSON.stringify({
                 "提示信息":"删除成功",
@@ -133,12 +142,21 @@ postManage.modify = function (data, response) {
         var params = {
             uid:parseInt(post.id),
             text:data.text,
-            time:parseInt(data.time)
+            time:parseInt(post.time)
         };
 
         db.query(query, params, function (err, results) {
             if (err) {
                 console.error(err);
+            }
+            var postNode = results.pop().post;
+            if (postNode.data.status == "queueing") {
+                postNode.data.status = "queueing_modified";
+                postNode.save();
+            }
+            if (parseInt(post.time) < serverSetting.nextPostTime + 1000) {
+                console.warn("restart publishing");
+                startPublishing();
             }
             response.write(JSON.stringify({
                 "提示信息":"修改成功",
@@ -205,6 +223,18 @@ postManage.get = function (data, response) {
             response.end();
         });
     }
+}
+
+var ajax = require('../lib/ajax');
+function startPublishing() {
+    ajax.ajax({
+        data:{},
+        type:'GET',
+        url:"http://127.0.0.1:8063/api2/publishing/start",
+        success:function (dataStr) {
+            console.log(dataStr);
+        }
+    });
 }
 
 module.exports = postManage;

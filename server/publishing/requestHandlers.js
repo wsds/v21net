@@ -14,8 +14,8 @@ requestHandlers.publishing = function (request, response, pathObject, getParam) 
     if (operation == "start") {
         publishing.start(response);
     }
-    else if (operation == "reload") {
-        publishing.reload(response);
+    else if (operation == "prestart") {
+        publishing.preStart(response);
     }
     else if (operation == "check") {
         publishing.check(response);
