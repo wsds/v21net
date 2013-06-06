@@ -71,72 +71,82 @@ postManage.add = function (data, response) {
     }
 }
 /***************************************
- *     URL：/api2/weixinuer/delete
+ *     URL：/api2/post/delete
  ***************************************/
-postManage.delete = function (data, response) {
+postManage.del = function (data, response) {
+
     response.asynchronous = 1;
-    var weixin =
-    {
-        "type":"weixin",
-        "accesskey":data.accesskey,
-        "weixinOpenID":data.weixinOpenID,
-        "weixinName":data.weixinName
+    var weiboName = data["weibo_user"];
+    var postid = data["postid"]
+
+    deletePost();
+
+    function deletePost() {
+        var query = [
+            'START post=node({uid}), weibo=node:weibo(name = {weiboName})' ,
+            'MATCH weibo:Weibo-[r:HAS_POST]->post:Post',
+            'DELETE post, r'
+        ].join('\n');
+
+        var params = {
+            weiboName:weiboName,
+            uid:parseInt(postid)
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) {
+                console.error(err);
+            }
+            response.write(JSON.stringify({
+                "提示信息":"删除成功",
+                "postID":postid
+            }));
+            response.end();
+        });
     }
-    db.getIndexedNode("weixin", "weixinOpenID", weixin.weixinOpenID, function (err, node) {
-        if (node != null) {
-            node.delete();
-            response.write(JSON.stringify({
-                "information":"删除微信绑定用户成功",
-                "node":node.data
-            }));
-            response.end();
-        } else {
-            response.write(JSON.stringify({
-                "提示信息":"删除微信绑定用户失败",
-                "reason":"微信用户不存在"
-            }));
-            response.end();
-        }
-    });
+
 }
 /***************************************
- *     URL：/api2/weixinuer/modify
+ *     URL：/api2/post/modify
  ***************************************/
 postManage.modify = function (data, response) {
     response.asynchronous = 1;
-    var weixin =
+    var weiboName = data.weibo_user;
+    var post =
     {
-        "type":"weixin",
-        "accesskey":data.accesskey,
-        "weixinOpenID":data.weixinOpenID,
-        "weixinName":data.weixinName,
-        "token":data.token
-    }
-    db.getIndexedNode("weixin", "weixinOpenID", weixin.weixinOpenID, function (err, node) {
-        if (node != null) {
-//            node.getRelationshipNodes("weixin", "weixinOpenID",weixin.weixinOpenID ,function(err, node){})
-            node.save(function (err, node) {
-                node.data.weixinName = weixin.weixinName;
-                node.data.token = weixin.token;
-                node.index("weixin", "weixinName", weixin.weixinName);
-                node.index("weixin", "token", weixin.token);
-                node.save(function (err, node) {
-                    response.write(JSON.stringify({
-                        "提示信息":"修改微信绑定用户成功",
-                        "node":node.data
-                    }));
-                    response.end();
-                });
-            });
+        "id":data.postid,
+        "type":"post",
+        "text":data.text,
+        "time":data.time
+    };
 
-        } else {
+    modifyPost();
+
+    function modifyPost() {
+        var query = [
+            'START post=node({uid})' ,
+            'SET post.text={text}',
+            'SET post.time={time}',
+            'RETURN post'
+        ].join('\n');
+
+        var params = {
+            uid:parseInt(post.id),
+            text:data.text,
+            time:parseInt(data.time)
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) {
+                console.error(err);
+            }
             response.write(JSON.stringify({
-                "提示信息":"修改微信绑定用户失败",
-                "reason":"微信用户不存在"
+                "提示信息":"修改成功",
+                "postID":post.id
             }));
             response.end();
-        }
-    });
+        });
+    }
 }
 
 /***************************************
@@ -166,9 +176,7 @@ postManage.get = function (data, response) {
             'RETURN count(post) AS post'
         ].join('\n');
 
-
         var params = {
-            uid:parseInt(uid),
             weiboName:weiboName,
             count:end - start,
             begin:start - 0
@@ -178,9 +186,10 @@ postManage.get = function (data, response) {
 
             if (err) {
                 console.error(err);
+                return;
             }
             var posts = {};
-            var postOrder=[];
+            var postOrder = [];
             var postCount = results.pop().post;
             for (var index in results) {
                 var postNode = results[index].post;
@@ -194,7 +203,6 @@ postManage.get = function (data, response) {
                 postCount:postCount
             }));
             response.end();
-
         });
     }
 }

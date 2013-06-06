@@ -90,18 +90,13 @@ requestHandlers.post = function (request, response, pathObject, data) {
         var post = postManage.add(weibo, text, time, pic, response, forwardID, forward);
     }
     else if (operation == "del") {
-        var weibo = getParam["weibo_user"];
-        var postid = getParam["postid"];
-        var post = postManage.del(weibo, postid, response);
+        var post = postManage.del(data, response);
     }
     else if (operation == "get") {
         postManage.get(data, response);
     }
     else if (operation == "modify") {
-        var weibo = getParam["weibo_user"];
-        var start = getParam["start"];
-        var end = getParam["end"];
-        postManage.modify(weibo, start, end, response);
+        postManage.modify(data, response);
     }
 };
 

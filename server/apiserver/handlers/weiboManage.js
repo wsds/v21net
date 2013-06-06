@@ -122,7 +122,7 @@ weiboManage.delete = function (data, response) {
     function deleteWeibo() {
         var query = [
             'START account=node({uid}), weibo=node:weibo(name = {weiboName})' ,
-            'MATCH account-[r]->weibo:Weibo',
+            'MATCH account-[r:HAS_WEIBO]->weibo:Weibo',
             'DELETE weibo, r'
         ].join('\n');
 
