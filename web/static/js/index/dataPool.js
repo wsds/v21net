@@ -59,7 +59,9 @@ dataPool.main_offline_post_list = function (next) {
         type: 'GET',
         url: ("http://" + app.serverUrl + "/api2/post/get"),
         success: function (serverData) {
-            data.postlist = serverData;
+            data.postlist = serverData.postlist;
+            data.postOrder = serverData.postOrder;
+            data.postCount = serverData.postCount;
             next(serverData);
         }
     });
@@ -78,7 +80,9 @@ dataPool.main_offline_forward_list = function (next) {
         type: 'GET',
         url: ("http://" + app.serverUrl + "/api2/post/get"),
         success: function (serverData) {
-            data.postlist = serverData;
+            data.postlist = serverData.postlist;
+            data.postOrder = serverData.postOrder;
+            data.postCount = serverData.postCount;
             next(serverData);
         }
     });

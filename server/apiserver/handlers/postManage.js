@@ -47,7 +47,7 @@ postManage.add = function (data, response) {
     function createPostNode() {
         var query = [
             'START  weibo=node:weibo(name = {weiboName})' ,
-            'CREATE (post{post})',
+            'CREATE (post:Post{post})',
             'SET post.id=ID(post)',
             'CREATE UNIQUE weibo-[r:HAS_POST]->post',
             'RETURN  post, weibo, r'
@@ -154,12 +154,16 @@ postManage.get = function (data, response) {
 
     function getAllPost() {
         var query = [
-            'START weibo=node:weibo(name = {weiboName})' ,
-            'MATCH weibo-[:HAS_POST]->post',
+            'MATCH weibo:Weibo-[:HAS_POST]->post:Post',
+            'WHERE weibo.name = {weiboName}',
             'RETURN post',
             'ORDER BY post.time' ,
             'SKIP {begin}',
-            'LIMIT {count}'
+            'LIMIT {count}',
+            'UNION ALL ',
+            'MATCH weibo:Weibo-[r:HAS_POST]->post:Post',
+            'WHERE weibo.name = {weiboName}',
+            'RETURN count(post) AS post'
         ].join('\n');
 
 
@@ -167,7 +171,7 @@ postManage.get = function (data, response) {
             uid:parseInt(uid),
             weiboName:weiboName,
             count:end - start,
-            begin:start-0
+            begin:start - 0
         };
 
         db.query(query, params, function (err, results) {
@@ -176,14 +180,19 @@ postManage.get = function (data, response) {
                 console.error(err);
             }
             var posts = {};
-            var i = 0;
+            var postOrder=[];
+            var postCount = results.pop().post;
             for (var index in results) {
                 var postNode = results[index].post;
                 var post = postNode.data;
-
-                posts[i++] = post;
+                postOrder.push(post.id);
+                posts[post.id] = post;
             }
-            response.write(JSON.stringify(posts));
+            response.write(JSON.stringify({
+                postlist:posts,
+                postOrder:postOrder,
+                postCount:postCount
+            }));
             response.end();
 
         });
