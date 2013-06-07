@@ -145,7 +145,7 @@ eventPool.body = function (status, area) {
         }
         else if (id != null) {
             data.statusList = "id";
-            data.statusList_id = id;
+            data.statusList_id = text;
             next();
         }
         else {

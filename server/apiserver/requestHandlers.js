@@ -67,20 +67,17 @@ requestHandlers.post = function (request, response, pathObject, data) {
         var post = postManage.add(data, response);
     }
     else if (operation == "addforward") {
-        var text = getParam["text"];
-        var weibo = getParam["weibo_user"];
-        var time = getParam["time"];
-        var forwardID = getParam["forwardid"];
+        var forwardID = data["forwardid"];
         if (forwardID != null) {
             var forward = {
-                forwardID:getParam["forwardid"],
-                forwardUser:getParam["forwarduser"],
-                forwardTime:getParam["forwardtime"],
-                forward_profile_image:getParam["profile_image"],
-                forwordText:getParam["forwordtext"]
+                forwardID:data["forwardid"],
+                forwardUser:data["forwarduser"],
+                forwardTime:data["forwardtime"],
+                forward_profile_image:data["profile_image"],
+                forwordText:data["forwordtext"]
             }
         }
-        var post = postManage.add(weibo, text, time, pic, response, forwardID, forward);
+        var post = postManage.add(data, response, forwardID, forward);
     }
     else if (operation == "del") {
         var post = postManage.del(data, response);

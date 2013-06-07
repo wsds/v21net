@@ -13,7 +13,7 @@ var db = new neo4j.GraphDatabase(serverSetting.neo4jUrl);
  *     URL：/api2/post/add
  ***************************************/
 var RSA = require('./../tools/RSA');
-postManage.add = function (data, response) {
+postManage.add = function (data, response, forwardID, forward) {
     response.asynchronous = 1;
     var weiboName = data.weibo_user;
     var post =
@@ -24,6 +24,10 @@ postManage.add = function (data, response) {
         "pid":data.pic,
         "status":"publishing"
     };
+    if (forwardID != null) {
+        post.forwardID = forwardID;
+        post.forwardJSON = JSON.stringify(forward);
+    }
 
     var now = new Date();
 
@@ -177,20 +181,25 @@ postManage.get = function (data, response) {
     var weiboName = data["weibo_user"];
     var start = data["start"];
     var end = data["end"];
+    var type = data["type"];
 
     getAllPost();
 
     function getAllPost() {
+        var filter = 'WHERE weibo.name = {weiboName} AND NOT(HAS(post.forwardID))'
+        if (type == "forward") {
+            filter = 'WHERE weibo.name = {weiboName} AND HAS(post.forwardID)'
+        }
         var query = [
             'MATCH weibo:Weibo-[:HAS_POST]->post:Post',
-            'WHERE weibo.name = {weiboName}',
+            filter,
             'RETURN post',
             'ORDER BY post.time' ,
             'SKIP {begin}',
             'LIMIT {count}',
             'UNION ALL ',
             'MATCH weibo:Weibo-[r:HAS_POST]->post:Post',
-            'WHERE weibo.name = {weiboName}',
+            filter,
             'RETURN count(post) AS post'
         ].join('\n');
 
@@ -212,6 +221,10 @@ postManage.get = function (data, response) {
             for (var index in results) {
                 var postNode = results[index].post;
                 var post = postNode.data;
+                if (type == "forward") {
+                    post.forward = JSON.parse(post.forwardJSON);
+                    post.forwardJSON = undefined;
+                }
                 postOrder.push(post.id);
                 posts[post.id] = post;
             }

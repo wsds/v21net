@@ -9,18 +9,21 @@
  *
  */
 var requestHandlers = require("./requestHandlers");
+var weiboInterface = require("./weiboInterface");
 
 var routemap = {
     "get":{
         "/api2/account/:operation":requestHandlers.accountManage,
         "/api2/weibo/:operation":requestHandlers.weiboManage,
         "/api2/message/:operation":requestHandlers.messageManage,
-        "/api2/post/:operation":requestHandlers.post
+        "/api2/post/:operation":requestHandlers.post,
+        "/api2/weiboInterface/*":weiboInterface.interface
     },
     "post":{
         "/api2/message/:operation":requestHandlers.messageManage,
         "/api2/weibo/:operation":requestHandlers.weiboManage,
-        "/api2/post/:operation":requestHandlers.post
+        "/api2/post/:operation":requestHandlers.post,
+        "/api2/weiboInterface/*":weiboInterface.interface
     },
     "put":{
     },

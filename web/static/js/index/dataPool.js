@@ -18,7 +18,7 @@ dataPool.body = function (status, area) {
     data.callbackUrl = app.callbackUrl;
 
     data.faceTitles = ["笑哈哈", "得意地笑", "转发", "江南style", "偷乐", "bm可爱", "gst耐你", "lt切克闹", "moc转发", "BOBO爱你", "ppb鼓掌", "ppb愚人节", "草泥马", "神马", "浮云", "给力", "围观", "威武", "熊猫", "兔子", "奥特曼", "囧", "互粉", "礼物", "呵呵", "嘻嘻", "哈哈", "可爱", "可怜", "挖鼻屎", "吃惊", "害羞", "挤眼", "闭嘴", "鄙视", "爱你", "泪", "偷笑", "亲亲", "生病", "太开心", "懒得理你", "右哼哼", "左哼哼", "嘘", "衰", "委屈", "吐", "打哈欠", "抱抱", "怒", "疑问", "馋嘴", "拜拜", "思考", "汗", "困", "睡觉", "钱", "失望", "酷", "花心", "哼", "鼓掌", "晕", "悲伤", "抓狂", "黑线", "阴险", "怒骂", "心", "伤心", "猪头", "ok", "耶", "good", "不要", "赞", "来", "弱", "蜡烛", "钟", "话筒", "蛋糕"];
-    data.postlist = {"0": {"id": "很破滴一口钟1365321734637", "time": "2013/04/07 18:45:00", "status": "published", "text": "夺去夺在", "pid": "none", "weibo_user": "很破滴一口钟", "remainTime": 6120}, "1": {"id": "很破滴一口钟1365321722141", "time": "2013/04/07 17:03:00", "status": "publishing", "text": "夺去夺  夺去夺  夺去夺", "pid": "none", "weibo_user": "很破滴一口钟"}, "2": {"id": "很破滴一口钟1365302946297", "time": "2013/04/07 10:49:16", "status": "failed", "text": "1", "pid": "none", "weibo_user": "很破滴一口钟"}, "3": {"id": "很破滴一口钟1365302946297", "time": "2013/04/07 10:49:16", "status": "timeout", "text": "1", "pid": "none", "weibo_user": "很破滴一口钟"}, "4": {"id": "很破滴一口钟1365302946297", "time": "2013/04/07 10:49:16", "status": "exception", "text": "1", "pid": "none", "weibo_user": "很破滴一口钟"}}
+    data.postlist = {"0":{"id":"很破滴一口钟1365321734637", "time":"2013/04/07 18:45:00", "status":"published", "text":"夺去夺在", "pid":"none", "weibo_user":"很破滴一口钟", "remainTime":6120}, "1":{"id":"很破滴一口钟1365321722141", "time":"2013/04/07 17:03:00", "status":"publishing", "text":"夺去夺  夺去夺  夺去夺", "pid":"none", "weibo_user":"很破滴一口钟"}, "2":{"id":"很破滴一口钟1365302946297", "time":"2013/04/07 10:49:16", "status":"failed", "text":"1", "pid":"none", "weibo_user":"很破滴一口钟"}, "3":{"id":"很破滴一口钟1365302946297", "time":"2013/04/07 10:49:16", "status":"timeout", "text":"1", "pid":"none", "weibo_user":"很破滴一口钟"}, "4":{"id":"很破滴一口钟1365302946297", "time":"2013/04/07 10:49:16", "status":"exception", "text":"1", "pid":"none", "weibo_user":"很破滴一口钟"}}
     data.statusList = "mine";//mine or friends
     data.list = "post";//post or forward
     data.listFilter = "all";//all or sending or failed or published
@@ -30,10 +30,10 @@ dataPool.owned_weibo = function (next) {
         return;
     }
     $.ajax({
-        data: {"account": app.localSettings.account, "uid":app.localSettings.uid},
-        type: 'GET',
-        url: ("http://" + app.serverUrl + "/api2/weibo/getall"),
-        success: function (serverData) {
+        data:{"account":app.localSettings.account, "uid":app.localSettings.uid},
+        type:'GET',
+        url:("http://" + app.serverUrl + "/api2/weibo/getall"),
+        success:function (serverData) {
             app.localSettings.ownedWeibo = serverData;
             data.ownedWeibo = app.localSettings.ownedWeibo;
 
@@ -52,14 +52,15 @@ dataPool.main_offline_post_list = function (next) {
         return;
     }
     $.ajax({
-        data: {
-            "weibo_user": app.localSettings.ownedWeibo.currentWeibo,
-            "start": 0,
-            "end": 20
+        data:{
+            "weibo_user":app.localSettings.ownedWeibo.currentWeibo,
+            "start":0,
+            "end":20,
+            "type":"original"
         },
-        type: 'GET',
-        url: ("http://" + app.serverUrl + "/api2/post/get"),
-        success: function (serverData) {
+        type:'GET',
+        url:("http://" + app.serverUrl + "/api2/post/get"),
+        success:function (serverData) {
             data.postlist = serverData.postlist;
             data.postOrder = serverData.postOrder;
             data.postCount = serverData.postCount;
@@ -73,14 +74,15 @@ dataPool.main_offline_forward_list = function (next) {
         return;
     }
     $.ajax({
-        data: {
-            "weibo_user": app.localSettings.ownedWeibo.currentWeibo,
-            "start": 0,
-            "end": 5
+        data:{
+            "weibo_user":app.localSettings.ownedWeibo.currentWeibo,
+            "start":0,
+            "end":5,
+            "type":"forward"
         },
-        type: 'GET',
-        url: ("http://" + app.serverUrl + "/api2/post/get"),
-        success: function (serverData) {
+        type:'GET',
+        url:("http://" + app.serverUrl + "/api2/post/get"),
+        success:function (serverData) {
             data.postlist = serverData.postlist;
             data.postOrder = serverData.postOrder;
             data.postCount = serverData.postCount;
@@ -123,18 +125,25 @@ dataPool.main_forward = function (next) {
     else if (data.statusList == "screen_name") {
         url = "2/statuses/user_timeline.json";
     }
+    var data1 = {
+        url:url,
+        id:data.statusList_id,
+        screen_name:data.statusList_screen_name,
+        abc:"abc@163.com",
+        efg:{a:1, b:2, c:{a:1, b:2}}
+    };
     $.ajax({
-        data: {
-            url: url,
-            id: data.statusList_id,
-            screen_name: data.statusList_screen_name,
-            abc: "abc@163.com",
-            efg: {a: 1, b: 2, c: {a: 1, b: 2}}
-        }, type: 'POST', url: ("http://" + app.serverUrl + "/api2/weiboInterface/weibo"), success: function (serverData) {
+        data:{
+            url:url,
+            id:data.statusList_id,
+            screen_name:data.statusList_screen_name,
+            abc:"abc@163.com",
+            efg:{a:1, b:2, c:{a:1, b:2}}
+        }, type:'POST', url:("http://" + app.serverUrl + "/api2/weiboInterface/weibo"), success:function (serverData) {
             if (serverData == null) {
             }
             else if (serverData.statuses == null) {
-                data.statuses = {"0": serverData};
+                data.statuses = {"0":serverData};
             }
             else {
                 data.statuses = serverData.statuses;
