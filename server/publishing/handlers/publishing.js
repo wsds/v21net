@@ -168,7 +168,7 @@ function PublishTimer(postData) {
     if (this.timeout > 2147483648) {
         this.timeout = 2047483648;
     }
-    else if (this.timeout <= 0 && this.timeout > -10000) {
+    else if (this.timeout <= 0 && this.timeout > -60000) {
         this.timeout = 1000;
     }
     this.timer = setTimeout(function () {

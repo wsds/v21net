@@ -55,7 +55,7 @@ dataPool.main_offline_post_list = function (next) {
         data:{
             "weibo_user":app.localSettings.ownedWeibo.currentWeibo,
             "start":0,
-            "end":20,
+            "end":50,
             "type":"original"
         },
         type:'GET',
@@ -77,7 +77,7 @@ dataPool.main_offline_forward_list = function (next) {
         data:{
             "weibo_user":app.localSettings.ownedWeibo.currentWeibo,
             "start":0,
-            "end":5,
+            "end":50,
             "type":"forward"
         },
         type:'GET',

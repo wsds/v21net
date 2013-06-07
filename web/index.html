@@ -333,7 +333,11 @@
 <div class="template" template="main_panel" status="main_offline_forward_list" eventPool="main_offline_forward_list"
      serverData="main_offline_forward_list">
     <div class="main_offline_post_list form">
-        <?js for (var index in data.postlist) { ?><?js var post=data.postlist[index]; ?><?js if(post==null) { ?><?js continue; ?><?js } ?>
+        <?js for (var index in data.postlist) { ?><?js var post=data.postlist[index]; ?>
+        <?js if(post==null) { ?><?js continue; ?><?js } ?>
+        <?js if(data.listFilter == "sending") { if(post.status!="queueing" && post.status!="publishing" ){ continue; } } ?>
+        <?js if(data.listFilter == "published") { if(post.status!="published"){ continue; } } ?>
+        <?js if(data.listFilter == "failed") { if(post.status=="queueing" || post.status=="publishing"|| post.status=="published" ){ continue; } } ?>
 
         <div class="row zhuanfa forward_list_row" postID="#{ post.id }">
             <div class="sendhead">
@@ -342,10 +346,27 @@
 
                     <a class="deletedate post_show delete_post" href="javascript:;" postID="#{ post.id }"
                        style="float: right;margin-left: 20px">删除</a>
-                                    <span class="forwardTime">
-                                        <b class="icon16 forwardTime_an"></b><label>转发时间:</label><label
-                                            class="posttime">#{getShortDateTimeString(post.time)}</label>
-                                    </span>
+                    <div style="float: right;margin-right: 20px">
+                        <!-- 需要时行判断每种情况对应相应的状态显示--><?js if (post.status=="published") { ?>
+                        <b class="icon16 sendsuccess_aj"></b><label
+                            style="color:#097c25;">发送成功</label><?js }else if(post.status=="queueing"){?>
+                        <b class="icon16 sending_am"></b><label
+                            style="color:#ff9000;">正在发送</label><?js }else if(post.status=="publishing"){?>
+                        <b class="icon16 sending_am"></b><label
+                            style="color:#097c25;">等待发送</label><?js }else if(post.status=="failed"){?>
+                        <b class="icon16 sendError_ak"></b><label
+                            style="color:#D3544D;">发送失败</label><?js }else if(post.status=="timeout"){?>
+                        <b class="icon16 sendError_ak"></b><label
+                            style="color:#D3544D;">发送失败（定时超时）</label><?js }else {?>
+                        <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label><?js }?>
+                        <!--<b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>-->
+                        <!--$(".post_show").toggleClass("hide")--><!--$(".post_modify").toggleClass("hide")-->
+                    </div>
+
+                    <span class="forwardTime">
+                        <b class="icon16 forwardTime_an"></b><label>转发时间:</label><label
+                            class="posttime">#{getShortDateTimeString(post.time)}</label>
+                    </span>
 
                 </p>
             </div>
