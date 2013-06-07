@@ -54,7 +54,7 @@ dataPool.main_offline_post_list = function (next) {
         data: {
             "weibo_user": app.localSettings.ownedWeibo.currentWeibo,
             "start": 0,
-            "end": 5
+            "end": 20
         },
         type: 'GET',
         url: ("http://" + app.serverUrl + "/api2/post/get"),

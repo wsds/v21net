@@ -12,8 +12,10 @@ var db = new neo4j.GraphDatabase(serverSetting.neo4jUrl);
 
 setTimeout(function () {
     console.warn("the publishing engine is starting.");
-    publishing.preStart(response);
-    publishing.start(response);
+    publishing.preStart(response, function () {
+        publishing.start(response);
+    });
+
 }, 3000);
 
 var response = {};
@@ -26,8 +28,6 @@ response.end = function () {
 publishing.start = function (response) {
     response.asynchronous = 1;
 
-    var nextPostData;
-    serverSetting.nextPostTime = 2370650800000;
     getQueuePost();
 
     function getQueuePost() {
@@ -42,8 +42,12 @@ publishing.start = function (response) {
         var params = {
         };
         db.query(query, params, function (err, results) {
+            serverSetting.nextPostTime = 3559870940000;
+            var nextPostData;
+
             if (err) {
                 console.error(err);
+                throw err;
                 return;
             }
             var posts = {};
@@ -91,6 +95,8 @@ publishing.start = function (response) {
                 if (posts[postID] == null) {
                     console.warn("Delete queue outed Timer for post(queueing)：");
                     console.warn(JSON.stringify(timerPool[postID].post));
+                    timerPool[postID].postNode.data.status = "publishing";
+                    timerPool[postID].postNode.save();
                     clearTimeout(timerPool[postID].timer);
                     delete timerPool[postID];
                 }
@@ -107,7 +113,7 @@ publishing.start = function (response) {
 }
 
 
-publishing.preStart = function (response) {
+publishing.preStart = function (response, next) {
     response.asynchronous = 1;
     var now = new Date();
     getQueuePost();
@@ -126,9 +132,13 @@ publishing.preStart = function (response) {
         db.query(query, params, function (err, results) {
             if (err) {
                 console.error(err);
+                throw err;
                 return;
             }
 
+            if (next != null) {
+                next();
+            }
             response.write(JSON.stringify({
                 "提示信息":"定时器组准备完毕",
                 "timerPool":timerPool
@@ -151,20 +161,20 @@ function PublishTimer(postData) {
 
     var now = new Date();
     this.timeout = post.time - now.getTime();
-    if (this.timeout > 2147483648) {
+    if (this.timeout > 2147483648 || this.timeout <= 0) {
         this.timeout = 2047483648;
     }
     this.timer = setTimeout(function () {
-        sendPost(post);
+        sendPost(postData);
         clearTimeout(timerPool[post.id].timer);
         delete timerPool[post.id];
     }, this.timeout);
 }
 
-//var weibo_post = require('./weibo_post');
-function sendPost(post) {
-//    weibo_post.post(post);
-    console.log(JSON.stringify(post) + " has been posted!");
+var weibo_post = require('./weibo_post');
+function sendPost(postData) {
+    weibo_post.post(postData);
+    console.log(JSON.stringify(postData.post) + "of" + postData.weibo.name + " has been posted!");
 }
 
 
