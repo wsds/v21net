@@ -43,7 +43,7 @@ publishing.start = function (response) {
         };
         db.query(query, params, function (err, results) {
             serverSetting.nextPostTime = 3559870940000;
-            var nextPostData;
+            var nextPostData={post:"timerPool为空"};
 
             if (err) {
                 console.error(err);
