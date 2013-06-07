@@ -198,7 +198,7 @@ app.use('/', function (req, res, next) {
 
 
 app.listen(8088);
-console.log('Server start on http://localhost.nodeweibo.com:8088/');
+console.log('OAuth Server is running.');
 
 
 

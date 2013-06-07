@@ -22,11 +22,11 @@ http.createServer(
         route(routemap, request.url, request, response);
 
         i++;
-        console.log("The times of the server has been accessed is i = " + i);
+        console.log("The API server is accessed " + i);
         if (response.asynchronous == null) {
             response.end();
         }
 
-    }).listen(8071);
+    }).listen(8061);
 
-console.log("The RESTful api server is running.");
+console.log("The API server is running.");

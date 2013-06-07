@@ -27,7 +27,7 @@ function start(route, handle) {
     }
 
     http.createServer(onRequest).listen(8062);
-    console.log("Server has started.");
+    console.log("Image Server is running.");
 }
 
 exports.start = start;
