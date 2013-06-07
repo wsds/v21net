@@ -95,6 +95,9 @@ publishing.start = function (response) {
                 if (posts[postID] == null) {
                     console.warn("Delete queue outed Timer for post(queueing)：");
                     console.warn(JSON.stringify(timerPool[postID].post));
+                    if (timerPool[postID].postNode.data.status == "sending") {
+                        continue;
+                    }
                     timerPool[postID].postNode.data.status = "publishing";
                     timerPool[postID].postNode.save();
                     clearTimeout(timerPool[postID].timer);
@@ -157,12 +160,16 @@ function PublishTimer(postData) {
     var weibo = postData.weibo;
     this.postTime = post.time;
     this.post = post;
+    this.postNode = postNode;
     this.postID = post.id;
 
     var now = new Date();
     this.timeout = post.time - now.getTime();
-    if (this.timeout > 2147483648 || this.timeout <= 0) {
+    if (this.timeout > 2147483648) {
         this.timeout = 2047483648;
+    }
+    else if (this.timeout <= 0 && this.timeout > -10000) {
+        this.timeout = 1000;
     }
     this.timer = setTimeout(function () {
         sendPost(postData);

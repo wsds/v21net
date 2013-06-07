@@ -22,6 +22,8 @@ var path = require('path');
 weibo_post.post = function (postData) {
     var post = postData.post;
     var postNode = postData.postNode;
+    postNode.data.status = "sending";
+    postNode.save();
     var weibo = postData.weibo;
     if (weibo != null) {
         if (post.forwardID != null) {

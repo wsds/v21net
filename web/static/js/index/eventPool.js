@@ -15,7 +15,8 @@ function eventDispatch(event) {
 
     }
 
-};
+}
+;
 
 eventPool.body = function (status, area) {
 
@@ -81,6 +82,29 @@ eventPool.body = function (status, area) {
         }
     });
 
+    $("#sending_list").click(function () {
+        data.listFilter = "sending";//all or sending or failed or published
+        var main_panel_container = $(".templateContainer[template='main_panel']");
+        renderTemplate(main_panel_container);
+    });
+
+    $("#published_list").click(function () {
+        data.listFilter = "published";//all or sending or failed or published
+        var main_panel_container = $(".templateContainer[template='main_panel']");
+        renderTemplate(main_panel_container);
+    });
+
+    $("#failed_list").click(function () {
+        data.listFilter = "failed";//all or sending or failed or published
+        var main_panel_container = $(".templateContainer[template='main_panel']");
+        renderTemplate(main_panel_container);
+    });
+    $("#all_list").click(function () {
+        data.listFilter = "all";//all or sending or failed or published
+        var main_panel_container = $(".templateContainer[template='main_panel']");
+        renderTemplate(main_panel_container);
+    });
+
     $(".search_input_text").blur(function () {
         var text = $(this).val().trim();
         ;
@@ -103,16 +127,16 @@ eventPool.body = function (status, area) {
 
             var url = "2/statuses/queryid.json";
             $.ajax({
-                data: {
-                    url: url,
-                    type: 1,
-                    mid: mid,
-                    isBase62: 1,
-                    abc: "abc@163.com"
+                data:{
+                    url:url,
+                    type:1,
+                    mid:mid,
+                    isBase62:1,
+                    abc:"abc@163.com"
                 },
-                type: 'POST',
-                url: ("http://" + app.serverUrl + "/api2/weiboInterface/weibo"),
-                success: function (serverData) {
+                type:'POST',
+                url:("http://" + app.serverUrl + "/api2/weiboInterface/weibo"),
+                success:function (serverData) {
                     data.statusList = "id";
                     data.statusList_id = serverData.id;
                     next();
@@ -254,13 +278,13 @@ eventPool.owned_weibo = function (status, area) {
         else {
             var delWeibo = $(this).attr("weibo");
             $.ajax({
-                data: {"uid": app.localSettings.uid, "ownedWeibo": delWeibo},
-                success: function (data) {
+                data:{"uid":app.localSettings.uid, "ownedWeibo":delWeibo},
+                success:function (data) {
                     delete app.localSettings.ownedWeibo.ownedWeiboList[delWeibo];
                     renderTemplate(area);
                 },
-                type: 'GET',
-                url: ("http://" + app.serverUrl + "/api2/weibo/delete")
+                type:'GET',
+                url:("http://" + app.serverUrl + "/api2/weibo/delete")
             });
 
             return false;

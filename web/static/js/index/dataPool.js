@@ -21,6 +21,7 @@ dataPool.body = function (status, area) {
     data.postlist = {"0": {"id": "很破滴一口钟1365321734637", "time": "2013/04/07 18:45:00", "status": "published", "text": "夺去夺在", "pid": "none", "weibo_user": "很破滴一口钟", "remainTime": 6120}, "1": {"id": "很破滴一口钟1365321722141", "time": "2013/04/07 17:03:00", "status": "publishing", "text": "夺去夺  夺去夺  夺去夺", "pid": "none", "weibo_user": "很破滴一口钟"}, "2": {"id": "很破滴一口钟1365302946297", "time": "2013/04/07 10:49:16", "status": "failed", "text": "1", "pid": "none", "weibo_user": "很破滴一口钟"}, "3": {"id": "很破滴一口钟1365302946297", "time": "2013/04/07 10:49:16", "status": "timeout", "text": "1", "pid": "none", "weibo_user": "很破滴一口钟"}, "4": {"id": "很破滴一口钟1365302946297", "time": "2013/04/07 10:49:16", "status": "exception", "text": "1", "pid": "none", "weibo_user": "很破滴一口钟"}}
     data.statusList = "mine";//mine or friends
     data.list = "post";//post or forward
+    data.listFilter = "all";//all or sending or failed or published
     data.statuses = {};
 };
 
