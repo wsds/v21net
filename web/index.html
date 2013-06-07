@@ -333,7 +333,7 @@
 <div class="template" template="main_panel" status="main_offline_forward_list" eventPool="main_offline_forward_list"
      serverData="main_offline_forward_list">
     <div class="main_offline_post_list form">
-        <?js for (var index in data.postlist) { ?><?js var post=data.postlist[index]; ?>
+        <?js for (var index in data.postOrder) { ?><?js var post=data.postlist[data.postOrder[index]]; ?>
         <?js if(post==null) { ?><?js continue; ?><?js } ?>
         <?js if(data.listFilter == "sending") { if(post.status!="queueing" && post.status!="publishing" ){ continue; } } ?>
         <?js if(data.listFilter == "published") { if(post.status!="published"){ continue; } } ?>
