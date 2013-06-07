@@ -57,6 +57,7 @@ weibo_post.post = function (postData) {
                 console.error(err, JSON.stringify(post));
                 if (err) {
                     if (postData.retryTimes < 5) {
+						postData.retryTimes;
                         setTimeout(function () {
                             console.error("失败重发：");
                             console.error(JSON.stringify(post));
