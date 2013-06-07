@@ -184,7 +184,7 @@ app.use('/', function (req, res, next) {
                 console.log("weibouseradd: " + data);
             },
             type: 'POST',
-            url: "http://127.0.0.1:8071/api2/weibo/add"
+            url: "http://127.0.0.1:8061/api2/weibo/add"
         });
 
         res.end(response);
