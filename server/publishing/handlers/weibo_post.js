@@ -20,6 +20,7 @@ var fs = require('fs');
 var path = require('path');
 
 weibo_post.post = function (postData) {
+    var postData = postData;
     var post = postData.post;
     var postNode = postData.postNode;
     postNode.data.status = "sending";
@@ -52,8 +53,17 @@ weibo_post.post = function (postData) {
         }
         function callback(err, status) {
             if (err) {
-                console.error("发布出错，出错原因：")
+                console.error("发布出错，出错原因：");
                 console.error(err, JSON.stringify(post));
+                if (err) {
+                    if (postData.retryTimes < 5) {
+                        setTimeout(function () {
+                            console.error("失败重发：");
+                            console.error(JSON.stringify(post));
+                            weibo_post.post(postData);
+                        }, 10000);
+                    }
+                }
                 postData.postNode.data.status = "failed";
                 postData.postNode.save(function (err, node) {
                     startPublishing();
@@ -62,7 +72,7 @@ weibo_post.post = function (postData) {
             else {
                 console.warn("发布成功：");
                 console.warn(status.user.screen_name, status.text);
-                if(postData.postNode.data.status != "error"){
+                if (postData.postNode.data.status != "error") {
                     postData.postNode.data.status = "published";
                     postData.postNode.save(function (err, node) {
                         startPublishing();
