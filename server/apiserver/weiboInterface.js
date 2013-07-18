@@ -46,7 +46,7 @@ weiboInterface.interface = function (request, response, pathObject, data) {
             data["access_token"] = weibo.access_token;
         }
         else {
-            data["access_token"] = "2.00nqyctCWOy8zD0a1efdd9ed86hq4E";
+            data["access_token"] = "2.00nqyctCWOy8zD873627d18ePqVd5C";
         }
         data["url"] = data["url"] || "2/statuses/user_timeline.json";
         ajax.ajax({
