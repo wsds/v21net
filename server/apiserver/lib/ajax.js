@@ -71,7 +71,7 @@ function ajax(settings) {
         for (var key in settings.data) {
             options.path = options.path + "&" + key + "=" + settings.data[key];
         }
-        console.log(options.path);
+//        console.log(options.path);
     }
 
     var httpUnity = http;

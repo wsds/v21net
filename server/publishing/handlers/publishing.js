@@ -182,7 +182,7 @@ var weibo_post = require('./weibo_post');
 function sendPost(postData) {
     postData.retryTimes = 0;
     weibo_post.post(postData);
-    console.log(JSON.stringify(postData.post) + "of" + postData.weibo.name + " has been posted!");
+//    console.log(JSON.stringify(postData.post) + "of" + postData.weibo.name + " has been posted!");
 }
 
 

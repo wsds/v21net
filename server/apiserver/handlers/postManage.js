@@ -245,7 +245,7 @@ function startPublishing() {
         type:'GET',
         url:"http://127.0.0.1:8063/api2/publishing/start",
         success:function (dataStr) {
-            console.log(dataStr);
+//            console.log(dataStr);
         }
     });
 }

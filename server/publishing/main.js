@@ -22,7 +22,7 @@ http.createServer(
         route(routemap, request.url, request, response);
 
         i++;
-        console.log("The Publish server is accessed " + i);
+//        console.log("The Publish server is accessed " + i);
         if (response.asynchronous == null) {
             response.end();
         }
