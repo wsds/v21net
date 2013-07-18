@@ -45,7 +45,7 @@ weibo_post.post = function (postData) {
             }
             else {
                 weiboInterface.update(weibo, post.text, callback);
-                console.error("状态异常：")
+                console.error("状态异常：");
                 console.error(JSON.stringify(post));
                 postData.postNode.data.status = "error";
                 postData.postNode.save();

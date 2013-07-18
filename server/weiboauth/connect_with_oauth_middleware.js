@@ -164,7 +164,7 @@ var weibo_users = {};
 
 app.use('/', function (req, res, next) {
     var user = req.session.oauthUser;
-    res.writeHeader(200, { 'Content-Type': 'text/html' });
+    res.writeHeader(200, { 'Content-Type': 'text/html; charset=UTF-8'});
     if (!user) {
         res.end('Login with <a href="/login?type=weibo">Weibo</a> ');
         return;
