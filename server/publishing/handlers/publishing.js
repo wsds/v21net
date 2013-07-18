@@ -173,8 +173,10 @@ function PublishTimer(postData) {
     }
     this.timer = setTimeout(function () {
         sendPost(postData);
-        clearTimeout(timerPool[post.id].timer);
-        delete timerPool[post.id];
+        if(timerPool[post.id]!=null){
+            clearTimeout(timerPool[post.id].timer);
+            delete timerPool[post.id];
+        }
     }, this.timeout);
 }
 

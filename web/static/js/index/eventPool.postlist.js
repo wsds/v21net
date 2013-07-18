@@ -59,7 +59,7 @@ eventPool.main_offline_post_list = function (status, area) {
                 "time":time,
                 "text":text
             },
-            type:'GET',
+            type:'POST',
             url:("http://" + app.serverUrl + "/api2/post/modify"),
             success:function (data) {
                 if (data["提示信息"] == "修改成功") {
