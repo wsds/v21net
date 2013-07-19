@@ -22,7 +22,7 @@ eventPool.main_offline_post = function (status, area) {
             return;
         }
         lastText = text;
-        
+
         var public_time = new Date($('#public_time').text());
 
         uploadPic(function (pic) {

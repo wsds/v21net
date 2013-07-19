@@ -62,7 +62,7 @@ weibo_post.post = function (postData) {
                             console.error("失败重发：");
                             console.error(JSON.stringify(post));
                             weibo_post.post(postData);
-                        }, 10000);
+                        }, 10000 - 30000 + Math.round(Math.random() * 30000));
                     }
                 }
                 postData.postNode.data.status = "failed";
