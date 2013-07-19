@@ -228,6 +228,10 @@ postManage.get = function (data, response) {
                 postOrder.push(post.id);
                 posts[post.id] = post;
             }
+
+            /***************************************
+             *     data：       postlist
+             ***************************************/
             response.write(JSON.stringify({
                 postlist:posts,
                 postOrder:postOrder,

@@ -43,7 +43,7 @@ publishing.start = function (response) {
         };
         db.query(query, params, function (err, results) {
             serverSetting.nextPostTime = 3559870940000;
-            var nextPostData={post:"timerPool为空"};
+            var nextPostData = {post: "timerPool为空"};
 
             if (err) {
                 console.error(err);
@@ -58,9 +58,9 @@ publishing.start = function (response) {
                 var weibo = JSON.parse(weiboNode.data.JSON);
                 var post = postNode.data;
                 posts[post.id] = {
-                    post:post,
-                    postNode:postNode,
-                    weibo:weibo
+                    post: post,
+                    postNode: postNode,
+                    weibo: weibo
                 };
             }
 
@@ -105,10 +105,10 @@ publishing.start = function (response) {
                 }
             }
             response.write(JSON.stringify({
-                "提示信息":"定时器组已运行",
-                "nextPostTime":serverSetting.nextPostTime,
-                "下一条微博":nextPostData.post,
-                "发布时间":getShortDateTimeString(serverSetting.nextPostTime)
+                "提示信息": "定时器组已运行",
+                "nextPostTime": serverSetting.nextPostTime,
+                "下一条微博": nextPostData.post,
+                "发布时间": getShortDateTimeString(serverSetting.nextPostTime)
             }));
             response.end();
         });
@@ -130,7 +130,7 @@ publishing.preStart = function (response, next) {
         ].join('\n');
 
         var params = {
-            time:now.getTime()
+            time: now.getTime()
         };
         db.query(query, params, function (err, results) {
             if (err) {
@@ -143,8 +143,8 @@ publishing.preStart = function (response, next) {
                 next();
             }
             response.write(JSON.stringify({
-                "提示信息":"定时器组准备完毕",
-                "timerPool":timerPool
+                "提示信息": "定时器组准备完毕",
+                "timerPool": timerPool
             }));
             response.end();
         });
@@ -169,15 +169,15 @@ function PublishTimer(postData) {
         this.timeout = 2047483648;
     }
     else if (this.timeout <= 0 && this.timeout > -60000) {
-        this.timeout = 1000;
+        this.timeout = 1000 + Math.round(Math.random() * 10000);
     }
     this.timer = setTimeout(function () {
         sendPost(postData);
-        if(timerPool[post.id]!=null){
+        if (timerPool[post.id] != null) {
             clearTimeout(timerPool[post.id].timer);
             delete timerPool[post.id];
         }
-    }, this.timeout);
+    }, this.timeout - 3000 + Math.round(Math.random() * 3000));
 }
 
 var weibo_post = require('./weibo_post');

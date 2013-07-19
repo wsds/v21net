@@ -41,6 +41,7 @@ eventPool.main_offline_post = function (status, area) {
         }, 1000);
     }
 
+    var lastText = "";
     $("#now_send").click(function () {
         var text = $("#sendtext").val().trim();
         if (app.localSettings.ownedWeibo.currentWeibo == null) {
@@ -51,6 +52,11 @@ eventPool.main_offline_post = function (status, area) {
             window.alert("发布内容不能为空的。");
             return;
         }
+        if (lastText == text) {
+            window.alert("不能重复发布内容。");
+            return;
+        }
+        lastText = text;
 
         uploadPic(function (pic) {
             var post = addPost("now", text, pic, function (data) {
@@ -86,7 +92,7 @@ eventPool.main_offline_post = function (status, area) {
                             next(filename);
                         }
                         else {
-                            alert(JSON.stringify(data));
+                            alert("图片上传失败，请重新上传"+JSON.stringify(data));
                         }
                     }
                 });
