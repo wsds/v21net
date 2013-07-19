@@ -21,7 +21,7 @@ eventPool.main_offline_post = function (status, area) {
             window.alert("不能重复发布内容。");
             return;
         }
-        lastText = text;
+
 
         var public_time = new Date($('#public_time').text());
 
@@ -31,6 +31,7 @@ eventPool.main_offline_post = function (status, area) {
                     $("#sendtext").val("");
                     $("#thumbs").empty();
                     $("#post_hint").html(data["提示信息"]);
+//                    lastText = text;
                 }
                 else {
                     $("#post_hint").html(data["提示信息"]);

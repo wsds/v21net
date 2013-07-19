@@ -73,15 +73,15 @@ publishing.start = function (response) {
                 }
 
                 if (timerPool[postID] == null) {
-                    console.warn("Creat Timer for post：");
-                    console.warn(JSON.stringify(postData.post));
+//                    console.warn("Creat Timer for post：");
+//                    console.warn(JSON.stringify(postData.post));
                     postData.postNode.data.status = "queueing";
                     postData.postNode.save();
                     var publishTimer = new PublishTimer(postData);
                     timerPool[postID] = publishTimer;
                 } else if (postData.postNode.data.status == "queueing_modified") {
-                    console.warn("Creat Timer for post(queueing_modified)：");
-                    console.warn(JSON.stringify(postData.post));
+//                    console.warn("Creat Timer for post(queueing_modified)：");
+//                    console.warn(JSON.stringify(postData.post));
                     postData.postNode.data.status = "queueing";
                     postData.postNode.save();
                     var publishTimer = new PublishTimer(postData);
@@ -93,8 +93,8 @@ publishing.start = function (response) {
             //Delete queue outed timer
             for (var postID in timerPool) {
                 if (posts[postID] == null) {
-                    console.warn("Delete queue outed Timer for post(queueing)：");
-                    console.warn(JSON.stringify(timerPool[postID].post));
+//                    console.warn("Delete queue outed Timer for post(queueing)：");
+//                    console.warn(JSON.stringify(timerPool[postID].post));
                     if (timerPool[postID].postNode.data.status == "sending") {
                         continue;
                     }
@@ -171,13 +171,18 @@ function PublishTimer(postData) {
     else if (this.timeout <= 0 && this.timeout > -60000) {
         this.timeout = 1000 + Math.round(Math.random() * 10000);
     }
+
+    var timeout = this.timeout - 10000 + Math.round(Math.random() * 10000);
+
+    console.error("将在" + timeout / 1000 + "秒后发送" + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
+
     this.timer = setTimeout(function () {
         sendPost(postData);
         if (timerPool[post.id] != null) {
             clearTimeout(timerPool[post.id].timer);
             delete timerPool[post.id];
         }
-    }, this.timeout - 3000 + Math.round(Math.random() * 3000));
+    }, timeout);
 }
 
 var weibo_post = require('./weibo_post');
@@ -188,6 +193,7 @@ function sendPost(postData) {
 }
 
 
+
 function getShortDateTimeString(date) {   //如：2011/07/29 13:30
     var date = new Date(date);
     var year = date.getFullYear();
@@ -195,7 +201,7 @@ function getShortDateTimeString(date) {   //如：2011/07/29 13:30
     var day = date.getDate();
     var hour = date.getHours();
     var minute = date.getMinutes();
-    //    var second = date.second || date.getSeconds();
+    var second = date.getSeconds();
 
     if (month < 10) {
         month = '0' + month;
@@ -209,9 +215,11 @@ function getShortDateTimeString(date) {   //如：2011/07/29 13:30
     if (minute < 10) {
         minute = '0' + minute;
     }
+    if (second < 10) {
+        second = '0' + second;
+    }
 
-    var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute;
+    var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
     return str;
 }
-
 module.exports = publishing;

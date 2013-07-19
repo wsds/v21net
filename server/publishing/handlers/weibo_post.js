@@ -38,8 +38,8 @@ weibo_post.post = function (postData) {
             if (pidRegExp.test(post.pid)) {
                 var picpath = serverSetting.imageFolder + post.pid + ".png";
                 var pic = {
-                    data:fs.createReadStream(picpath),
-                    name:picpath
+                    data: fs.createReadStream(picpath),
+                    name: picpath
                 };
                 weiboInterface.upload(weibo, post.text, pic, callback);
             }
@@ -53,17 +53,19 @@ weibo_post.post = function (postData) {
         }
         function callback(err, status) {
             if (err) {
-                console.error("发布出错，出错原因：");
-                console.error(err, JSON.stringify(post));
-                if (err) {
-                    if (postData.retryTimes < 5) {
-						postData.retryTimes;
-                        setTimeout(function () {
-                            console.error("失败重发：");
-                            console.error(JSON.stringify(post));
-                            weibo_post.post(postData);
-                        }, 10000 - 30000 + Math.round(Math.random() * 30000));
-                    }
+                var now = new Date();
+                var timeout = Math.round(Math.random() * 30000);
+
+                console.error("发布失败。现在时间：" + getShortDateTimeString(now) + "----------------将在" + timeout / 1000 + "秒后重新发送" + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
+                console.error("出错原因：" + err);
+
+                if (postData.retryTimes < 5) {
+                    postData.retryTimes++;
+                    setTimeout(function () {
+                        var now = new Date();
+                        console.error("正在重发，现在时间：" + getShortDateTimeString(now)+"----------------失败次数：" + postData.retryTimes + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
+                        weibo_post.post(postData);
+                    }, timeout);
                 }
                 postData.postNode.data.status = "failed";
                 postData.postNode.save(function (err, node) {
@@ -71,8 +73,9 @@ weibo_post.post = function (postData) {
                 });
             }
             else {
-                console.warn("发布成功：");
-                console.warn(status.user.screen_name, status.text);
+                var now = new Date();
+                console.log("发布成功。现在时间：" + getShortDateTimeString(now) );
+                console.log(status.user.screen_name, status.text);
                 if (postData.postNode.data.status != "error") {
                     postData.postNode.data.status = "published";
                     postData.postNode.save(function (err, node) {
@@ -87,14 +90,42 @@ weibo_post.post = function (postData) {
 var ajax = require('../lib/ajax');
 function startPublishing() {
     ajax.ajax({
-        data:{},
-        type:'GET',
-        url:"http://127.0.0.1:8063/api2/publishing/start",
-        success:function (dataStr) {
+        data: {},
+        type: 'GET',
+        url: "http://127.0.0.1:8063/api2/publishing/start",
+        success: function (dataStr) {
 //            console.log(dataStr);
         }
     });
 }
 
+function getShortDateTimeString(date) {   //如：2011/07/29 13:30
+    var date = new Date(date);
+    var year = date.getFullYear();
+    var month = (date.getMonth() + 1);
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+
+    if (month < 10) {
+        month = '0' + month;
+    }
+    if (day < 10) {
+        day = '0' + day;
+    }
+    if (hour < 10) {
+        hour = '0' + hour;
+    }
+    if (minute < 10) {
+        minute = '0' + minute;
+    }
+    if (second < 10) {
+        second = '0' + second;
+    }
+
+    var str = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
+    return str;
+}
 
 module.exports = weibo_post;
