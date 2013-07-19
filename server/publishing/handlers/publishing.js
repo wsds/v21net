@@ -36,7 +36,7 @@ publishing.start = function (response) {
             'WHERE post.status="publishing" OR post.status="queueing" OR post.status="queueing_modified"',
             'RETURN post, weibo',
             'ORDER BY post.time' ,
-            'LIMIT 5'
+            'LIMIT 20'
         ].join('\n');
 
         var params = {
