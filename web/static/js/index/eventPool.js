@@ -107,7 +107,6 @@ eventPool.body = function (status, area) {
 
     $(".search_input_text").blur(function () {
         var text = $(this).val().trim();
-        ;
         if (text == "") {
             $(this).val("请输入微博昵称或ID或URL");
         }

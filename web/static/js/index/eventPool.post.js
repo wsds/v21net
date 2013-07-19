@@ -22,7 +22,7 @@ eventPool.main_offline_post = function (status, area) {
             return;
         }
 
-
+        lastText = text;
         var public_time = new Date($('#public_time').text());
 
         uploadPic(function (pic) {
@@ -31,10 +31,10 @@ eventPool.main_offline_post = function (status, area) {
                     $("#sendtext").val("");
                     $("#thumbs").empty();
                     $("#post_hint").html(data["提示信息"]);
-//                    lastText = text;
                 }
                 else {
                     $("#post_hint").html(data["提示信息"]);
+                    lastText = "";
                 }
                 showHint();
             });
@@ -64,7 +64,6 @@ eventPool.main_offline_post = function (status, area) {
             return;
         }
         lastText = text;
-
         uploadPic(function (pic) {
             var post = addPost("now", text, pic, function (data) {
                 if (data["提示信息"] == "定时发布成功") {
@@ -74,6 +73,7 @@ eventPool.main_offline_post = function (status, area) {
                 }
                 else {
                     $("#post_hint").html(data["提示信息"]);
+                    lastText = "";
                 }
                 showHint();
             });
