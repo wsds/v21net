@@ -24,67 +24,75 @@ weibo_post.post = function (postData) {
     var post = postData.post;
     var postNode = postData.postNode;
     postNode.data.status = "sending";
-    postNode.save();
-    var weibo = postData.weibo;
-    if (weibo != null) {
-        if (post.forwardID != null) {
-            weiboInterface.repost(weibo, post.forwardID, post.text, callback);
-        }
-        else if (post.pid == "none") {
-            weiboInterface.update(weibo, post.text, callback);
-        }
-        else {
-            var pidRegExp = /^\D*\d{13}$/;
-            if (pidRegExp.test(post.pid)) {
-                var picpath = serverSetting.imageFolder + post.pid + ".png";
-                var pic = {
-                    data: fs.createReadStream(picpath),
-                    name: picpath
-                };
-                weiboInterface.upload(weibo, post.text, pic, callback);
+    postNode.save(function (err, node) {
+        next();
+    });
+    function next() {
+        var weibo = postData.weibo;
+        if (weibo != null) {
+            if (post.forwardID != null) {
+                weiboInterface.repost(weibo, post.forwardID, post.text, callback);
+            }
+            else if (post.pid == "none") {
+                weiboInterface.update(weibo, post.text, callback);
             }
             else {
-                weiboInterface.update(weibo, post.text, callback);
-                console.error("状态异常：");
-                console.error(JSON.stringify(post));
-                postData.postNode.data.status = "error";
-                postData.postNode.save();
+                var pidRegExp = /^\D*\d{13}$/;
+                if (pidRegExp.test(post.pid)) {
+                    var picpath = serverSetting.imageFolder + post.pid + ".png";
+                    var pic = {
+                        data: fs.createReadStream(picpath),
+                        name: picpath
+                    };
+                    weiboInterface.upload(weibo, post.text, pic, callback);
+                }
+                else {
+                    weiboInterface.update(weibo, post.text, callback);
+                    console.error("状态异常：");
+                    console.error(JSON.stringify(post));
+                    postData.postNode.data.status = "error";
+                    postData.postNode.save();
+                }
             }
         }
-        function callback(err, status) {
-            if (err) {
-                var now = new Date();
-                var timeout = Math.round(Math.random() * 30000);
+    }
 
-                console.error("发布失败。现在时间：" + getShortDateTimeString(now) + "----------------将在" + timeout / 1000 + "秒后重新发送" + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
-                console.error("出错原因：" + err);
+    function callback(err, status) {
+        if (err) {
+            var now = new Date();
+            var timeout = Math.round(Math.random() * 30000);
 
-                if (postData.retryTimes < 5) {
-                    postData.retryTimes++;
-                    setTimeout(function () {
-                        var now = new Date();
-                        console.error("正在重发，现在时间：" + getShortDateTimeString(now)+"----------------失败次数：" + postData.retryTimes + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
-                        weibo_post.post(postData);
-                    }, timeout);
-                }
+            console.error("发布失败。现在时间：" + getShortDateTimeString(now) + "----------------将在" + timeout / 1000 + "秒后重新发送" + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
+            console.error("出错原因：" + err);
+
+            if (postData.retryTimes < 5) {
+                postData.retryTimes++;
+                setTimeout(function () {
+                    var now = new Date();
+                    console.error("正在重发，现在时间：" + getShortDateTimeString(now) + "----------------失败次数：" + postData.retryTimes + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
+                    weibo_post.post(postData);
+                }, timeout);
+            }
+            else {
                 postData.postNode.data.status = "failed";
                 postData.postNode.save(function (err, node) {
                     startPublishing();
                 });
             }
-            else {
-                var now = new Date();
-                console.log("发布成功。现在时间：" + getShortDateTimeString(now) );
-                console.log(status.user.screen_name, status.text);
-                if (postData.postNode.data.status != "error") {
-                    postData.postNode.data.status = "published";
-                    postData.postNode.save(function (err, node) {
-                        startPublishing();
-                    });
-                }
+        }
+        else {
+            var now = new Date();
+            console.log("发布成功。现在时间：" + getShortDateTimeString(now));
+            console.log(status.user.screen_name, status.text);
+            if (postData.postNode.data.status != "error") {
+                postData.postNode.data.status = "published";
+                postData.postNode.save(function (err, node) {
+                    startPublishing();
+                });
             }
         }
     }
+
 }
 
 var ajax = require('../lib/ajax');

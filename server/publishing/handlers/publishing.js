@@ -76,18 +76,26 @@ publishing.start = function (response) {
 //                    console.warn("Creat Timer for post：");
 //                    console.warn(JSON.stringify(postData.post));
                     postData.postNode.data.status = "queueing";
-                    postData.postNode.save();
-                    var publishTimer = new PublishTimer(postData);
-                    timerPool[postID] = publishTimer;
+                    postData.postNode.save(function (err, node) {
+                        next();
+                    });
+                    function next() {
+                        var publishTimer = new PublishTimer(postData);
+                        timerPool[postID] = publishTimer;
+                    }
                 } else if (postData.postNode.data.status == "queueing_modified") {
 //                    console.warn("Creat Timer for post(queueing_modified)：");
 //                    console.warn(JSON.stringify(postData.post));
                     postData.postNode.data.status = "queueing";
-                    postData.postNode.save();
-                    var publishTimer = new PublishTimer(postData);
-                    timerPool[postID] = publishTimer;
-                    clearTimeout(timerPool[postID].timer);
-                    delete timerPool[postID];
+                    postData.postNode.save(function (err, node) {
+                        next();
+                    });
+                    function next() {
+                        var publishTimer = new PublishTimer(postData);
+                        timerPool[postID] = publishTimer;
+                        clearTimeout(timerPool[postID].timer);
+                        delete timerPool[postID];
+                    }
                 }
             }
             //Delete queue outed timer
@@ -99,9 +107,13 @@ publishing.start = function (response) {
                         continue;
                     }
                     timerPool[postID].postNode.data.status = "publishing";
-                    timerPool[postID].postNode.save();
-                    clearTimeout(timerPool[postID].timer);
-                    delete timerPool[postID];
+                    timerPool[postID].postNode.save(function (err, node) {
+                        next();
+                    });
+                    function next() {
+                        clearTimeout(timerPool[postID].timer);
+                        delete timerPool[postID];
+                    }
                 }
             }
             response.write(JSON.stringify({
@@ -191,7 +203,6 @@ function sendPost(postData) {
     weibo_post.post(postData);
 //    console.log(JSON.stringify(postData.post) + "of" + postData.weibo.name + " has been posted!");
 }
-
 
 
 function getShortDateTimeString(date) {   //如：2011/07/29 13:30
