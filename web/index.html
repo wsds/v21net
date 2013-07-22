@@ -287,7 +287,9 @@
                         <b class="icon16 sending_am"></b><label
                             style="color:#ff9000;">正在发送</label><?js }else if(post.status=="publishing"){?>
                         <b class="icon16 sending_am"></b><label
-                            style="color:#097c25;">等待发送</label><?js }else if(post.status=="failed"){?>
+                            style="color:#097c25;">等待发送</label><?js }else if(post.status=="status_error"){?>
+                        <b class="icon16 sendError_ak"></b><label
+                            style="color:#097c25;">status_error发送失败</label><?js }else if(post.status=="failed"){?>
                         <b class="icon16 sendError_ak"></b><label
                             style="color:#D3544D;">发送失败</label><?js }else if(post.status=="timeout"){?>
                         <b class="icon16 sendError_ak"></b><label

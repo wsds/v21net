@@ -26,6 +26,9 @@ requestHandlers.publishing = function (request, response, pathObject, getParam) 
     else if (operation == "timer") {
         publishing.timer(response);
     }
+    else if (operation == "status") {
+        publishing.status(response);
+    }
 };
 
 

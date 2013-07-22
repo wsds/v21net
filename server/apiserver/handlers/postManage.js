@@ -67,7 +67,7 @@ postManage.add = function (data, response, forwardID, forward) {
                 console.error(error);
             }
             if (parseInt(post.time) < serverSetting.nextPostTime + 1000) {
-                console.warn("restart publishing");
+                console.warn("restart publishing(add)");
                 startPublishing();
             }
             response.write(JSON.stringify({
@@ -107,7 +107,7 @@ postManage.del = function (data, response) {
                 console.error(err);
             }
             if (parseInt(time) < serverSetting.nextPostTime + 1000) {
-                console.warn("restart publishing");
+                console.warn("restart publishing(delete)");
                 startPublishing();
             }
             response.write(JSON.stringify({
@@ -159,7 +159,7 @@ postManage.modify = function (data, response) {
                 postNode.save();
             }
             if (parseInt(post.time) < serverSetting.nextPostTime + 1000) {
-                console.warn("restart publishing");
+                console.warn("restart publishing(modify)");
                 startPublishing();
             }
             response.write(JSON.stringify({

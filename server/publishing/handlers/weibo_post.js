@@ -23,12 +23,19 @@ weibo_post.post = function (postData) {
     var postData = postData;
     var post = postData.post;
     var postNode = postData.postNode;
+    var weibo = postData.weibo;
+
+    if (postData.postNode.data.status != "resending" && postData.postNode.data.status != "queueing") {
+        postData.postNode.data.status = "status_error";
+        postData.postNode.save();
+        startPublishing();
+        return;
+    }
     postNode.data.status = "sending";
     postNode.save(function (err, node) {
         next();
     });
     function next() {
-        var weibo = postData.weibo;
         if (weibo != null) {
             if (post.forwardID != null) {
                 weiboInterface.repost(weibo, post.forwardID, post.text, callback);
@@ -48,6 +55,11 @@ weibo_post.post = function (postData) {
                 }
                 else {
                     weiboInterface.update(weibo, post.text, callback);
+                    if (postData.postNode.data.status != "sending") {
+                        postData.postNode.data.status = "status_error";
+                        postData.postNode.save();
+                        return;
+                    }
                     console.error("状态异常：");
                     console.error(JSON.stringify(post));
                     postData.postNode.data.status = "error";
@@ -67,13 +79,28 @@ weibo_post.post = function (postData) {
 
             if (postData.retryTimes < 5) {
                 postData.retryTimes++;
-                setTimeout(function () {
-                    var now = new Date();
-                    console.error("正在重发，现在时间：" + getShortDateTimeString(now) + "----------------失败次数：" + postData.retryTimes + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
-                    weibo_post.post(postData);
-                }, timeout);
+                if (postData.postNode.data.status != "sending") {
+                    postData.postNode.data.status = "status_error";
+                    postData.postNode.save();
+                    return;
+                }
+                postData.postNode.data.status = "resending";
+                postData.postNode.save(function (err, node) {
+                    setTimeout(function () {
+                        var now = new Date();
+                        console.error("正在重发，现在时间：" + getShortDateTimeString(now) + "----------------失败次数：" + postData.retryTimes + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
+                        weibo_post.post(postData);
+                    }, timeout);
+                });
+
             }
             else {
+                if (postData.postNode.data.status != "sending") {
+                    postData.postNode.data.status = "status_error";
+                    postData.postNode.save();
+                    startPublishing();
+                    return;
+                }
                 postData.postNode.data.status = "failed";
                 postData.postNode.save(function (err, node) {
                     startPublishing();
@@ -84,11 +111,15 @@ weibo_post.post = function (postData) {
             var now = new Date();
             console.log("发布成功。现在时间：" + getShortDateTimeString(now));
             console.log(status.user.screen_name, status.text);
-            if (postData.postNode.data.status != "error") {
+            if (postData.postNode.data.status == "sending") {
                 postData.postNode.data.status = "published";
                 postData.postNode.save(function (err, node) {
                     startPublishing();
                 });
+            }else{
+                postData.postNode.data.status = "status_error";
+                postData.postNode.save();
+                startPublishing();
             }
         }
     }
