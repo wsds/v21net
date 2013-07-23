@@ -79,6 +79,9 @@ weibo_post.post = function (postData, innerNext) {
 
             console.error("发布失败。现在时间：" + getShortDateTimeString(now) + "----------------将在" + timeout / 1000 + "秒后重新发送" + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
             console.error("出错原因：" + err);
+            if(err.message=="repeat content!"){
+                return;
+            }
 
             if (postData.retryTimes < 5) {
                 postData.retryTimes++;
