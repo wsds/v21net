@@ -19,7 +19,7 @@ var ajax = require('./../lib/ajax');
 var fs = require('fs');
 var path = require('path');
 
-weibo_post.post = function (postData) {
+weibo_post.post = function (postData, innerNext) {
     var postData = postData;
     var post = postData.post;
     var postNode = postData.postNode;
@@ -66,6 +66,9 @@ weibo_post.post = function (postData) {
                     postData.postNode.save();
                 }
             }
+        }
+        if (innerNext != null) {
+            innerNext();
         }
     }
 
@@ -116,7 +119,7 @@ weibo_post.post = function (postData) {
                 postData.postNode.save(function (err, node) {
                     startPublishing();
                 });
-            }else{
+            } else {
                 postData.postNode.data.status = "status_error";
                 postData.postNode.save();
                 startPublishing();

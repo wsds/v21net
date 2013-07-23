@@ -26,11 +26,11 @@ response.end = function () {
 }
 
 publishing.status = function (response) {
-        response.write(JSON.stringify({
-            "提示信息": "定时器组状态",
-            "nextPostTime":serverSetting.nextPostTime
-        }));
-        response.end();
+    response.write(JSON.stringify({
+        "提示信息": "定时器组状态",
+        "nextPostTime": serverSetting.nextPostTime
+    }));
+    response.end();
 }
 
 var starting = false;
@@ -223,18 +223,20 @@ function PublishTimer(postData) {
     console.error("将在" + timeout / 1000 + "秒后发送" + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
 
     this.timer = setTimeout(function () {
-        sendPost(postData);
-        if (timerPool[post.id] != null) {
-            clearTimeout(timerPool[post.id].timer);
-            delete timerPool[post.id];
+        sendPost(postData, next);
+        function next() {
+            if (timerPool[post.id] != null) {
+                clearTimeout(timerPool[post.id].timer);
+                delete timerPool[post.id];
+            }
         }
     }, timeout);
 }
 
 var weibo_post = require('./weibo_post');
-function sendPost(postData) {
+function sendPost(postData, next) {
     postData.retryTimes = 0;
-    weibo_post.post(postData);
+    weibo_post.post(postData, next);
 }
 
 
