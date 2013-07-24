@@ -213,6 +213,8 @@ weiboManage.getall = function (data, response) {
 }
 
 
+var weiboInterface = require('weibo');
+weiboInterface.init('weibo', serverSetting.appkey, serverSetting.secret, '');
 /***************************************
  *     URL：/api2/weibo/checktoken
  ***************************************/
@@ -238,6 +240,7 @@ weiboManage.checkToken = function (data, response) {
     }
 
     function checkTokenWeibo() {
+        var now = new Date();
         var query = [
             'START account=node({uid})' ,
             'MATCH account-[:HAS_WEIBO]->weibo:Weibo',
@@ -253,38 +256,36 @@ weiboManage.checkToken = function (data, response) {
             if (err) {
                 console.error(err);
             }
-            var weibos = {};
+            weiboNodes = {};
             for (var index in results) {
                 var weiboNode = results[index].weibo;
-                var weibo = JSON.parse(weiboNode.data.JSON);
-                weiboInterface.comment_create(weibo, 3603630047274317, "报道！", callback);
-//                weiboInterface({
-////                    access_token: weibo.access_token,
-//                    "id": "3603630047274317",
-//                    comment: "报道！",
-//                    url: "2/statuses/update.json",
-//                    status:"你好！"
-//                }, next, weiboNode)
-                function callback(serverData, weiboNode) {
-                    console.error(serverData);
-//                    if (serverData.id == null) {
-//                        console.error("不存在", weiboNode.data.name);
-//                        console.error(serverData);
-////                        console.error(serverData);
-////                        console.error("++++++++++++++++++++++=");
-////                        weiboNode.data.invalid_token = true;
-////                        weiboNode.save(function (err, node) {
-////                            console.log(err);
-////                        });
-//                    } else if (serverData.id) {
-//                        console.error("存在", weiboNode.data.name);
-//                        console.error(serverData);
-////                        weiboNode.data.invalid_token = false;·
-////                        weiboNode.save(function (err, node) {
-////                            console.log(err);
-////                            console.log(weiboNode.data);
-////                        });
-//                    }
+                weiboNodes[weiboNode.data.name] = weiboNode;
+
+                weiboNode.data.invalid_token = true;
+                weiboNode.save(function (err, node) {
+                    var name = node.data.name;
+                    var weiboNode = weiboNodes[name];
+                    var weibo = JSON.parse(weiboNode.data.JSON);
+                    next(weibo);
+                });
+                function next(weibo) {
+                    var comment = "报道！" + now.toLocaleTimeString() + "希尔伯特的空间";
+                    weiboInterface.comment_create(weibo, 3603630047274317, comment, callback);
+                }
+
+                function callback(error, serverData) {
+                    if (error) {
+                        console.log(error);
+                        console.log("权限不存在：");
+                    }
+                    else {
+                        console.log("权限存在：" + serverData.user.name);
+                        var weiboNode = weiboNodes[serverData.user.name]
+                        weiboNode.data.invalid_token = false;
+                        weiboNode.save(function (err, node) {
+                            console.log("权限已更新：" + serverData.user.name);
+                        });
+                    }
                 }
             }
             response.write(JSON.stringify({
@@ -295,23 +296,6 @@ weiboManage.checkToken = function (data, response) {
         });
     }
 }
-
-var weiboInterface = require('weibo');
-weiboInterface.init('weibo', serverSetting.appkey, serverSetting.secret, '');
-
-//var ajax = require('../lib/ajax');
-//function weiboInterface(data, next, weiboNode) {
-//    data["access_token"] = data["access_token"] || "2.00nqyctCWOy8zD873627d18ePqVd5C";
-//    data["url"] = data["url"] || "2/statuses/user_timeline.json";
-//    ajax.ajax({
-//        data: data,
-//        type: 'POST',
-//        url: "https://api.weibo.com/" + data["url"],
-//        success: function (serverData) {
-//            next(JSON.parse(serverData), weiboNode);
-//        }
-//    });
-//}
 
 
 module.exports = weiboManage;
