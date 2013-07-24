@@ -21,8 +21,8 @@ weiboManage.add = function (data, response) {
     db.getNodeById(uid, function (err, accountNode) {
         if (accountNode == null) {
             response.write(JSON.stringify({
-                "提示信息":"添加微博绑定用户失败",
-                "失败原因":"账号不存在"
+                "提示信息": "添加微博绑定用户失败",
+                "失败原因": "账号不存在"
             }));
             response.end();
         }
@@ -33,14 +33,14 @@ weiboManage.add = function (data, response) {
     function next(accountNode) {
         var weibo =
         {
-            "type":"weibo",
-            "name":weiboJSON.name,
-            "token":weiboJSON.access_token,
-            "expires_in":weiboJSON.expires_in,
-            "status":"",
-            "profile_image_url":weiboJSON.profile_image_url,
-            "id":weiboJSON.id,
-            "JSON":weiboStr
+            "type": "weibo",
+            "name": weiboJSON.name,
+            "token": weiboJSON.access_token,
+            "expires_in": weiboJSON.expires_in,
+            "status": "",
+            "profile_image_url": weiboJSON.profile_image_url,
+            "id": weiboJSON.id,
+            "JSON": weiboStr
         };
 
         db.getIndexedNode("weibo", "name", weibo.name, function (err, node) {
@@ -68,9 +68,9 @@ weiboManage.add = function (data, response) {
 
         function createWeiboNode(query, updateWeibo) {
             var params = {
-                weiboName:weibo.name,
-                uid:parseInt(uid),
-                weibo:weibo
+                weiboName: weibo.name,
+                uid: parseInt(uid),
+                weibo: weibo
             };
 
             db.query(query, params, function (err, results) {
@@ -81,12 +81,13 @@ weiboManage.add = function (data, response) {
                 weiboNode.index("weibo", "name", weibo.name);
                 if (updateWeibo != null) {
                     weiboNode.data = updateWeibo;
+                    weiboNode.data.invalid_token = false;
                     weiboNode.save();
                 }
 
                 response.write(JSON.stringify({
-                    "提示信息":"添加微博绑定用户成功",
-                    "node":weiboNode.data
+                    "提示信息": "添加微博绑定用户成功",
+                    "node": weiboNode.data
                 }));
                 response.end();
             });
@@ -105,8 +106,8 @@ weiboManage.delete = function (data, response) {
     db.getNodeById(uid, function (err, accountNode) {
         if (accountNode == null) {
             response.write(JSON.stringify({
-                "提示信息":"获取所有微信绑定用户失败",
-                "失败原因":"账号不存在"
+                "提示信息": "获取所有微信绑定用户失败",
+                "失败原因": "账号不存在"
             }));
             response.end();
         }
@@ -127,8 +128,8 @@ weiboManage.delete = function (data, response) {
         ].join('\n');
 
         var params = {
-            weiboName:weiboName,
-            uid:parseInt(uid)
+            weiboName: weiboName,
+            uid: parseInt(uid)
         };
 
         db.query(query, params, function (err, results) {
@@ -136,7 +137,7 @@ weiboManage.delete = function (data, response) {
                 console.error(err);
             }
             response.write(JSON.stringify({
-                "提示信息":"删除授权管理微博账号成功"
+                "提示信息": "删除授权管理微博账号成功"
             }));
             response.end();
 
@@ -160,8 +161,8 @@ weiboManage.getall = function (data, response) {
     db.getNodeById(uid, function (err, accountNode) {
         if (accountNode == null) {
             response.write(JSON.stringify({
-                "提示信息":"获取所有微信绑定用户失败",
-                "失败原因":"账号不存在"
+                "提示信息": "获取所有微信绑定用户失败",
+                "失败原因": "账号不存在"
             }));
             response.end();
         }
@@ -181,7 +182,7 @@ weiboManage.getall = function (data, response) {
         ].join('\n');
 
         var params = {
-            uid:parseInt(uid)
+            uid: parseInt(uid)
         };
 
         db.query(query, params, function (err, results) {
@@ -195,20 +196,122 @@ weiboManage.getall = function (data, response) {
                 var weibo = weiboNode.data;
 
                 weibos[weibo.name] = {
-                    id:weibo.id,
-                    profile_image_url:weibo.profile_image_url
+                    id: weibo.id,
+                    profile_image_url: weibo.profile_image_url,
+                    invalid_token: weibo.invalid_token
                 };
             }
             response.write(JSON.stringify({
-                "提示信息":"获取所有微博绑定用户成功",
-                "ownedWeiboList":weibos,
-                "currentWeibo":null
+                "提示信息": "获取所有微博绑定用户成功",
+                "ownedWeiboList": weibos,
+                "currentWeibo": null
             }));
             response.end();
 
         });
     }
 }
+
+
+/***************************************
+ *     URL：/api2/weibo/checktoken
+ ***************************************/
+weiboManage.checkToken = function (data, response) {
+    response.asynchronous = 1;
+
+    var uid = data.uid;
+
+    db.getNodeById(uid, function (err, accountNode) {
+        if (accountNode == null) {
+            response.write(JSON.stringify({
+                "提示信息": "获取所有微信绑定用户失败",
+                "失败原因": "账号不存在"
+            }));
+            response.end();
+        }
+        else {
+            next(accountNode);
+        }
+    });
+    function next(accountNode) {
+        checkTokenWeibo();
+    }
+
+    function checkTokenWeibo() {
+        var query = [
+            'START account=node({uid})' ,
+            'MATCH account-[:HAS_WEIBO]->weibo:Weibo',
+            'RETURN weibo;'
+        ].join('\n');
+
+        var params = {
+            uid: parseInt(uid)
+        };
+
+        db.query(query, params, function (err, results) {
+
+            if (err) {
+                console.error(err);
+            }
+            var weibos = {};
+            for (var index in results) {
+                var weiboNode = results[index].weibo;
+                var weibo = JSON.parse(weiboNode.data.JSON);
+                weiboInterface.comment_create(weibo, 3603630047274317, "报道！", callback);
+//                weiboInterface({
+////                    access_token: weibo.access_token,
+//                    "id": "3603630047274317",
+//                    comment: "报道！",
+//                    url: "2/statuses/update.json",
+//                    status:"你好！"
+//                }, next, weiboNode)
+                function callback(serverData, weiboNode) {
+                    console.error(serverData);
+//                    if (serverData.id == null) {
+//                        console.error("不存在", weiboNode.data.name);
+//                        console.error(serverData);
+////                        console.error(serverData);
+////                        console.error("++++++++++++++++++++++=");
+////                        weiboNode.data.invalid_token = true;
+////                        weiboNode.save(function (err, node) {
+////                            console.log(err);
+////                        });
+//                    } else if (serverData.id) {
+//                        console.error("存在", weiboNode.data.name);
+//                        console.error(serverData);
+////                        weiboNode.data.invalid_token = false;·
+////                        weiboNode.save(function (err, node) {
+////                            console.log(err);
+////                            console.log(weiboNode.data);
+////                        });
+//                    }
+                }
+            }
+            response.write(JSON.stringify({
+                "提示信息": "正在检测绑定微博token权限"
+            }));
+            response.end();
+
+        });
+    }
+}
+
+var weiboInterface = require('weibo');
+weiboInterface.init('weibo', serverSetting.appkey, serverSetting.secret, '');
+
+//var ajax = require('../lib/ajax');
+//function weiboInterface(data, next, weiboNode) {
+//    data["access_token"] = data["access_token"] || "2.00nqyctCWOy8zD873627d18ePqVd5C";
+//    data["url"] = data["url"] || "2/statuses/user_timeline.json";
+//    ajax.ajax({
+//        data: data,
+//        type: 'POST',
+//        url: "https://api.weibo.com/" + data["url"],
+//        success: function (serverData) {
+//            next(JSON.parse(serverData), weiboNode);
+//        }
+//    });
+//}
 
 
 module.exports = weiboManage;

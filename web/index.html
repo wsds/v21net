@@ -148,7 +148,11 @@
         <div id="data_menu" class="afterlogin hide" style="left:0px">
             <ul class="productlist">
                 <?js if (data.ownedWeibo!=null) { ?><?js for (var ownedWeibo in data.ownedWeibo.ownedWeiboList) { ?><?js if( data.ownedWeibo.ownedWeiboList[ownedWeibo]==null){continue;} ?>
-                <li class="owned_weibo_li" weibo="#{ ownedWeibo }">
+                <?js if( data.ownedWeibo.ownedWeiboList[ownedWeibo].invalid_token==true){ ?>
+                    <li class="owned_weibo_li invalid" weibo="#{ ownedWeibo }">
+                <?js } else{ ?>
+                    <li class="owned_weibo_li" weibo="#{ ownedWeibo }">
+                <?js } ?>
                     <a href="javascript:;">
                         <img weibo_user_id="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].id}" class="weibo_image"
                              src="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].profile_image_url}"/> #{ ownedWeibo }
@@ -157,6 +161,9 @@
                     </a>
                 </li>
                 <?js } ?><?js } ?>
+                <li class="loginout1 check_weibo_token">
+                    <a style="color: deepskyblue" target="_blank" href="javascript:;">检查账号权限</a>
+                </li>
                 <li class="loginout add_weibo_user">
                     <a target="_blank" href="">添加授权管理微博账号</a>
                 </li>
@@ -289,7 +296,13 @@
                         <b class="icon16 sending_am"></b><label
                             style="color:#097c25;">等待发送</label><?js }else if(post.status=="status_error"){?>
                         <b class="icon16 sendError_ak"></b><label
-                            style="color:#097c25;">status_error发送失败</label><?js }else if(post.status=="failed"){?>
+                            style="color:#097c25;">status_error发送失败</label><?js }else if(post.status=="failed(repeat_content)"){?>
+                        <b class="icon16 sendError_ak"></b><label
+                            style="color:#D3544D;">发送失败·内容重复</label><?js }else if(post.status=="failed(invalid_access_token)"){?>
+                        <b class="icon16 sendError_ak"></b><label
+                            style="color:#D3544D;">发送失败·权限过期</label><?js }else if(post.status=="failed(text_too_long)"){?>
+                        <b class="icon16 sendError_ak"></b><label
+                            style="color:#D3544D;">发送失败·字数超过</label><?js }else if(post.status=="failed"){?>
                         <b class="icon16 sendError_ak"></b><label
                             style="color:#D3544D;">发送失败</label><?js }else if(post.status=="timeout"){?>
                         <b class="icon16 sendError_ak"></b><label

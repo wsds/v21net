@@ -126,16 +126,16 @@ eventPool.body = function (status, area) {
 
             var url = "2/statuses/queryid.json";
             $.ajax({
-                data:{
-                    url:url,
-                    type:1,
-                    mid:mid,
-                    isBase62:1,
-                    abc:"abc@163.com"
+                data: {
+                    url: url,
+                    type: 1,
+                    mid: mid,
+                    isBase62: 1,
+                    abc: "abc@163.com"
                 },
-                type:'POST',
-                url:("http://" + app.serverUrl + "/api2/weiboInterface/weibo"),
-                success:function (serverData) {
+                type: 'POST',
+                url: ("http://" + app.serverUrl + "/api2/weiboInterface/weibo"),
+                success: function (serverData) {
                     data.statusList = "id";
                     data.statusList_id = serverData.id;
                     next();
@@ -277,13 +277,37 @@ eventPool.owned_weibo = function (status, area) {
         else {
             var delWeibo = $(this).attr("weibo");
             $.ajax({
-                data:{"uid":app.localSettings.uid, "ownedWeibo":delWeibo},
-                success:function (data) {
+                data: {"uid": app.localSettings.uid, "ownedWeibo": delWeibo},
+                success: function (data) {
                     delete app.localSettings.ownedWeibo.ownedWeiboList[delWeibo];
                     renderTemplate(area);
                 },
-                type:'GET',
-                url:("http://" + app.serverUrl + "/api2/weibo/delete")
+                type: 'GET',
+                url: ("http://" + app.serverUrl + "/api2/weibo/delete")
+            });
+
+            return false;
+        }
+    });
+    $(".check_weibo_token", area).click(function () {
+
+        var willCheck = confirm("检查绑定微博账号权限，确定？");
+        if (willCheck == false) {
+            return false;
+        }
+        else {
+            $.ajax({
+                data: {"uid": app.localSettings.uid},
+                success: function (data) {
+                    setTimeout(function () {
+                        renderTemplate(area);
+                    }, 3000);
+                    setTimeout(function () {
+                        $(".account", $(".templateContainer[template='owned_weibo']")).trigger("click");
+                    }, 5000);
+                },
+                type: 'GET',
+                url: ("http://" + app.serverUrl + "/api2/weibo/checktoken")
             });
 
             return false;

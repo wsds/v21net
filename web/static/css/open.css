@@ -45,6 +45,9 @@ a:hover, a:active {
     height: 1px;
     overflow: hidden;
 }
+.invalid{
+    background: cd99cd;
+}
 
 h1, h2, h3, h4 {
     font-family: "微软雅黑", Helvitica, Verdana, Arial, san-serif;

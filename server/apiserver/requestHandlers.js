@@ -15,8 +15,8 @@ requestHandlers.accountManage = function (request, response, pathObject, data) {
         var invite = data.invite;
         if (invite != "lejoying") {
             response.write(JSON.stringify({
-                "提示信息":"注册账号失败",
-                "reason":"邀请码不正确"
+                "提示信息": "注册账号失败",
+                "reason": "邀请码不正确"
             }));
             response.end();
         }
@@ -34,8 +34,8 @@ requestHandlers.accountManage = function (request, response, pathObject, data) {
         var verification = data.verification;
         if (verification != "lejoying1") {
             response.write(JSON.stringify({
-                "提示信息":"验证码不正确",
-                "reason":"验证码不正确"
+                "提示信息": "验证码不正确",
+                "reason": "验证码不正确"
             }));
             response.end();
         }
@@ -55,6 +55,8 @@ requestHandlers.weiboManage = function (request, response, pathObject, data) {
         weiboManage.delete(data, response);
     } else if (operation == "getall") {
         weiboManage.getall(data, response);
+    } else if (operation == "checktoken") {
+        weiboManage.checkToken(data, response);
     }
 };
 
@@ -70,11 +72,11 @@ requestHandlers.post = function (request, response, pathObject, data) {
         var forwardID = data["forwardid"];
         if (forwardID != null) {
             var forward = {
-                forwardID:data["forwardid"],
-                forwardUser:data["forwarduser"],
-                forwardTime:data["forwardtime"],
-                forward_profile_image:data["profile_image"],
-                forwordText:data["forwordtext"]
+                forwardID: data["forwardid"],
+                forwardUser: data["forwarduser"],
+                forwardTime: data["forwardtime"],
+                forward_profile_image: data["profile_image"],
+                forwordText: data["forwordtext"]
             }
         }
         var post = postManage.add(data, response, forwardID, forward);

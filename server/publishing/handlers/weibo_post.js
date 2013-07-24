@@ -6,12 +6,11 @@
 
 var weibo_post = {};
 
-var weiboInterface = require('weibo');
-
 var serverSetting = root.globaldata.serverSetting;
 var neo4j = require('neo4j');
 var db = new neo4j.GraphDatabase(serverSetting.neo4jUrl);
 
+var weiboInterface = require('weibo');
 weiboInterface.init('weibo', serverSetting.appkey, serverSetting.secret, '');
 
 var ajax = require('./../lib/ajax');
@@ -73,13 +72,33 @@ weibo_post.post = function (postData, innerNext) {
     }
 
     function callback(err, status) {
+
         if (err) {
             var now = new Date();
             var timeout = Math.round(Math.random() * 30000);
 
             console.error("发布失败。现在时间：" + getShortDateTimeString(now) + "----------------将在" + timeout / 1000 + "秒后重新发送" + "----------------发布内容text:" + post.text + "----------------发布者:" + weibo.name);
             console.error("出错原因：" + err);
-            if(err.message=="repeat content!"){
+            if (err.message == "repeat content!") {
+                startPublishing();
+                postData.postNode.data.status = "failed(repeat_content)";
+                postData.postNode.save(function (err, node) {
+                });
+                return;
+            } else if (err.message == "invalid_access_token") {
+                startPublishing();
+                postData.postNode.data.status = "failed(invalid_access_token)";
+                postData.postNode.save(function (err, node) {
+                });
+                postData.weiboNode.data.invalid_token = true;
+                postData.weiboNode.save(function (err, node) {
+                });
+                return;
+            } else if (err.message == "Text too long, please input text less than 140 characters!") {
+                startPublishing();
+                postData.postNode.data.status = "failed(text_too_long)";
+                postData.postNode.save(function (err, node) {
+                });
                 return;
             }
 
@@ -109,7 +128,6 @@ weibo_post.post = function (postData, innerNext) {
                 }
                 postData.postNode.data.status = "failed";
                 postData.postNode.save(function (err, node) {
-                    startPublishing();
                 });
             }
         }
@@ -117,19 +135,19 @@ weibo_post.post = function (postData, innerNext) {
             var now = new Date();
             console.log("发布成功。现在时间：" + getShortDateTimeString(now));
             console.log(status.user.screen_name, status.text);
-            if (postData.postNode.data.status == "sending") {
+            if (postData.postNode.data.status == "sending" || postData.postNode.data.status == "resending") {
                 postData.postNode.data.status = "published";
                 postData.postNode.save(function (err, node) {
-                    startPublishing();
                 });
             } else {
                 postData.postNode.data.status = "status_error";
                 postData.postNode.save();
-                startPublishing();
             }
+            startPublishing();
         }
     }
 
+    1
 }
 
 var ajax = require('../lib/ajax');
