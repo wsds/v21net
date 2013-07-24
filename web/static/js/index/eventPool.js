@@ -268,7 +268,7 @@ eventPool.owned_weibo = function (status, area) {
     });
 
 
-    $(".owned_weibo_del", area).click(function () {
+    $(".JS_owned_weibo_del", area).click(function () {
 
         var willDel = confirm("删除授权管理微博账号，确定？");
         if (willDel == false) {

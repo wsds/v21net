@@ -50,10 +50,15 @@
                     </li>
                 </ul>
                 <div class="operating">
-                    <b class="icon16 sendsuccess_aj" style="font-size: 12px;display:inline-block"></b><label id="all_list" style="cursor: pointer;display:inline-block;font-size: 12px;color:#ffffff;">全部列表</label>
-                    <b class="icon16 sending_am" style="font-size: 12px;display:inline-block"></b><label id="sending_list" style="cursor: pointer;display:inline-block;font-size: 12px;color:#ffffff;">正在发送</label>
-                    <b class="icon16 sendsuccess_aj" style="font-size: 12px;display:inline-block"></b><label id="published_list" style="cursor: pointer;display:inline-block;font-size: 12px;color:#00ff00;">发送成功</label>
-                    <b class="icon16 sendError_ak" style="font-size: 12px;display:inline-block"></b><label id="failed_list" style="cursor: pointer;display:inline-block;font-size: 12px;color:#ffffff;">发送失败</label>
+                    <b class="icon16 sendsuccess_aj" style="font-size: 12px;display:inline-block"></b><label
+                        id="all_list"
+                        style="cursor: pointer;display:inline-block;font-size: 12px;color:#ffffff;">全部列表</label>
+                    <b class="icon16 sending_am" style="font-size: 12px;display:inline-block"></b><label
+                        id="sending_list" style="cursor: pointer;display:inline-block;font-size: 12px;color:#ffffff;">正在发送</label>
+                    <b class="icon16 sendsuccess_aj" style="font-size: 12px;display:inline-block"></b><label
+                        id="published_list" style="cursor: pointer;display:inline-block;font-size: 12px;color:#00ff00;">发送成功</label>
+                    <b class="icon16 sendError_ak" style="font-size: 12px;display:inline-block"></b><label
+                        id="failed_list" style="cursor: pointer;display:inline-block;font-size: 12px;color:#ffffff;">发送失败</label>
                     <a class="operat_del" style="margin-left: 30px;" title="批量删除" href="#"></a>
                     <a class="operat_order" title="时间排序" href="#"></a>
                 </div>
@@ -149,15 +154,21 @@
             <ul class="productlist">
                 <?js if (data.ownedWeibo!=null) { ?><?js for (var ownedWeibo in data.ownedWeibo.ownedWeiboList) { ?><?js if( data.ownedWeibo.ownedWeiboList[ownedWeibo]==null){continue;} ?>
                 <?js if( data.ownedWeibo.ownedWeiboList[ownedWeibo].invalid_token==true){ ?>
-                    <li class="owned_weibo_li invalid" weibo="#{ ownedWeibo }">
-                <?js } else{ ?>
-                    <li class="owned_weibo_li" weibo="#{ ownedWeibo }">
-                <?js } ?>
+                <li class="owned_weibo_li invalid" weibo="#{ ownedWeibo }">
+                    <?js } else{ ?>
+                <li class="owned_weibo_li" weibo="#{ ownedWeibo }">
+                    <?js } ?>
                     <a href="javascript:;">
                         <img weibo_user_id="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].id}" class="weibo_image"
                              src="#{ data.ownedWeibo.ownedWeiboList[ownedWeibo].profile_image_url}"/> #{ ownedWeibo }
-                        <img class="owned_weibo_del hide" weibo="#{ ownedWeibo }"
+                        <?js if( data.ownedWeibo.ownedWeiboList[ownedWeibo].invalid_token==true){ ?>
+                        <img class="owned_weibo_del_invalid JS_owned_weibo_del" weibo="#{ ownedWeibo }" style="margin: 15px 0 0 0;float:right;"
+                             src="/static/images/delete00000.gif">
+                        <?js } else{ ?>
+                        <img class="owned_weibo_del hide JS_owned_weibo_del" weibo="#{ ownedWeibo }"
                              style="margin: 15px 0 0 0;float:right;" src="/static/images/delete00000.gif">
+                        <?js } ?>
+
                     </a>
                 </li>
                 <?js } ?><?js } ?>
@@ -222,7 +233,8 @@
                     </div>
                     <div style="float:right;">
                         <a href="javascript:" id="now_send" class="now_send sendbutton" style="color:#fff;">立即发布</a>
-                        <a href="javascript:" id="time_send" class="time_send sendbutton" style="color:#fff;width: 140px">定时发布</a>
+                        <a href="javascript:" id="time_send" class="time_send sendbutton"
+                           style="color:#fff;width: 140px">定时发布</a>
                     </div>
                 </div>
                 <div class="clearevery"></div>
@@ -361,22 +373,23 @@
 
                     <a class="deletedate post_show delete_post" href="javascript:;" postID="#{ post.id }"
                        style="float: right;margin-left: 20px">删除</a>
-                    <div style="float: right;margin-right: 20px">
-                        <!-- 需要时行判断每种情况对应相应的状态显示--><?js if (post.status=="published") { ?>
-                        <b class="icon16 sendsuccess_aj"></b><label
-                            style="color:#097c25;">发送成功</label><?js }else if(post.status=="queueing"){?>
-                        <b class="icon16 sending_am"></b><label
-                            style="color:#ff9000;">正在发送</label><?js }else if(post.status=="publishing"){?>
-                        <b class="icon16 sending_am"></b><label
-                            style="color:#097c25;">等待发送</label><?js }else if(post.status=="failed"){?>
-                        <b class="icon16 sendError_ak"></b><label
-                            style="color:#D3544D;">发送失败</label><?js }else if(post.status=="timeout"){?>
-                        <b class="icon16 sendError_ak"></b><label
-                            style="color:#D3544D;">发送失败（定时超时）</label><?js }else {?>
-                        <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label><?js }?>
-                        <!--<b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>-->
-                        <!--$(".post_show").toggleClass("hide")--><!--$(".post_modify").toggleClass("hide")-->
-                    </div>
+
+                <div style="float: right;margin-right: 20px">
+                    <!-- 需要时行判断每种情况对应相应的状态显示--><?js if (post.status=="published") { ?>
+                    <b class="icon16 sendsuccess_aj"></b><label
+                        style="color:#097c25;">发送成功</label><?js }else if(post.status=="queueing"){?>
+                    <b class="icon16 sending_am"></b><label
+                        style="color:#ff9000;">正在发送</label><?js }else if(post.status=="publishing"){?>
+                    <b class="icon16 sending_am"></b><label
+                        style="color:#097c25;">等待发送</label><?js }else if(post.status=="failed"){?>
+                    <b class="icon16 sendError_ak"></b><label
+                        style="color:#D3544D;">发送失败</label><?js }else if(post.status=="timeout"){?>
+                    <b class="icon16 sendError_ak"></b><label
+                        style="color:#D3544D;">发送失败（定时超时）</label><?js }else {?>
+                    <b class="icon16 sendexception_al"></b><label style="color:#ff9000;">状态异常</label><?js }?>
+                    <!--<b class="icon16 timingIcon"></b><label class="timingsend">还剩1222分钟34秒</label>-->
+                    <!--$(".post_show").toggleClass("hide")--><!--$(".post_modify").toggleClass("hide")-->
+                </div>
 
                     <span class="forwardTime">
                         <b class="icon16 forwardTime_an"></b><label>转发时间:</label><label

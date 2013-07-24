@@ -124,7 +124,7 @@ weiboManage.delete = function (data, response) {
         var query = [
             'START account=node({uid}), weibo=node:weibo(name = {weiboName})' ,
             'MATCH account-[r:HAS_WEIBO]->weibo:Weibo',
-            'DELETE weibo, r'
+            'DELETE r'
         ].join('\n');
 
         var params = {
@@ -263,6 +263,10 @@ weiboManage.checkToken = function (data, response) {
 
                 weiboNode.data.invalid_token = true;
                 weiboNode.save(function (err, node) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
                     var name = node.data.name;
                     var weiboNode = weiboNodes[name];
                     var weibo = JSON.parse(weiboNode.data.JSON);
@@ -275,15 +279,15 @@ weiboManage.checkToken = function (data, response) {
 
                 function callback(error, serverData) {
                     if (error) {
-                        console.log(error);
-                        console.log("权限不存在：");
+//                        console.log(error);
+//                        console.log("权限不存在：");
                     }
                     else {
-                        console.log("权限存在：" + serverData.user.name);
+//                        console.log("权限存在：" + serverData.user.name);
                         var weiboNode = weiboNodes[serverData.user.name]
                         weiboNode.data.invalid_token = false;
                         weiboNode.save(function (err, node) {
-                            console.log("权限已更新：" + serverData.user.name);
+//                            console.log("权限已更新：" + serverData.user.name);
                         });
                     }
                 }
